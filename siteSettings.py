@@ -303,7 +303,23 @@ STATICFILES_FINDERS = (
     'django_npm_apps.finders.NpmAppFinder',
 )
 
-PIPELINE = {'PIPELINE_ENABLED': False }
+PIPELINE = {'PIPELINE_ENABLED': True,
+            'JAVASCRIPT':{'simulator': {'source_filenames': ('xgds_braille_app/js/planner/kRex2Simulator.js'),
+                             'output_filename': 'js/simulator.js',
+                             },
+               'custom_map': {'source_filenames': ('xgds_planner2/js/uploadJson.js',
+                                                   'xgds_map_server/js/map_viewer/olShowMapCoords.js',
+                                                   'xgds_map_server/js/map_viewer/olInitialLayers.js',
+                                                   ),
+                              'output_filename': 'js/custom_map.js',
+                              },
+               },
+            'JS_COMPRESSOR':'pipeline.compressors.yuglify.YuglifyCompressor',
+            'CSS' : XGDS_PLANNER_PIPELINE_CSS,
+            'CSS_COMPRESSOR':'pipeline.compressors.yuglify.YuglifyCompressor',
+            'YUGLIFY_JS_ARGUMENTS': 'mangle:false --terminal',
+            'DISABLE_WRAPPER' :True,
+            }
 
 COMPRESS_ENABLED = True
 COMPRESS_CSSTIDY_BINARY = '/usr/bin/csstidy'
@@ -342,14 +358,14 @@ if DEBUG_TOOLBAR:
 
 VAR_ROOT = PROJ_ROOT + 'var/'
 
-# XGDS_PLANNER_SCHEMAS = {
-#    "EV": {
-#        "schemaSource": "apps/xgds_baseline_app/planner/evPlanSchema.json",
-#        "librarySource": "apps/xgds_baseline_app/planner/evPlanLibrary.json",
-#        "simulatorUrl": "xgds_baseline_app/js/planner/evSimulator.js",
-#        "simulator": "ev.Simulator",
-#    }
-#}
+XGDS_PLANNER_SCHEMAS = {
+   "KRex2": {
+       "schemaSource": "apps/xgds_braille_app/planner/kRex2PlanSchema.json",
+       "librarySource": "apps/xgds_braille_app/planner/kRex2PlanLibrary.json",
+       "simulatorUrl": "xgds_braille_app/js/planner/kRex2Simulator.js",
+       "simulator": "kRex2.Simulator",
+   }
+}
 
 # GEOCAM_TRACK_RESOURCE_MODEL = 'xgds_baseline_app.MyResource'
 # GEOCAM_TRACK_RESOURCE_VERBOSE_NAME = 'Asset'
