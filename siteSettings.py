@@ -34,7 +34,7 @@ from django.core.urlresolvers import reverse
 from geocamUtil.SettingsUtil import getOrCreateDict, getOrCreateArray, HOSTNAME
 
 
-XGDS_SITE_APP = "xgds_braille_app" # xgds_yoursitehere_app
+XGDS_SITE_APP = "xgds_braille_app"
 
 # Make this unique, and don't share it with anybody.
 SECRET_KEY = '***REMOVED***'
@@ -303,26 +303,27 @@ STATICFILES_FINDERS = (
     'django_npm_apps.finders.NpmAppFinder',
 )
 
-PIPELINE = {'PIPELINE_ENABLED': True,
-            'JAVASCRIPT':{'simulator': {'source_filenames': ('xgds_braille_app/js/planner/kRex2Simulator.js'),
-                             'output_filename': 'js/simulator.js',
-                             },
-               'custom_map': {'source_filenames': ('xgds_planner2/js/uploadJson.js',
-                                                   'xgds_map_server/js/map_viewer/olShowMapCoords.js',
-                                                   'xgds_map_server/js/map_viewer/olInitialLayers.js',
-                                                   ),
-                              'output_filename': 'js/custom_map.js',
-                              },
-               },
-            'JS_COMPRESSOR':'pipeline.compressors.yuglify.YuglifyCompressor',
-            'CSS' : XGDS_PLANNER_PIPELINE_CSS,
-            'CSS_COMPRESSOR':'pipeline.compressors.yuglify.YuglifyCompressor',
-            'YUGLIFY_JS_ARGUMENTS': 'mangle:false --terminal',
-            'DISABLE_WRAPPER' :True,
-            }
+PIPELINE = {'PIPELINE_ENABLED': False}
+# PIPELINE = {'PIPELINE_ENABLED': True,
+#             'JAVASCRIPT':{'simulator': {'source_filenames': ('xgds_braille_app/js/planner/kRex2Simulator.js'),
+#                              'output_filename': 'js/simulator.js',
+#                              },
+#                'custom_map': {'source_filenames': ('xgds_planner2/js/uploadJson.js',
+#                                                    'xgds_map_server/js/map_viewer/olShowMapCoords.js',
+#                                                    'xgds_map_server/js/map_viewer/olInitialLayers.js',
+#                                                    ),
+#                               'output_filename': 'js/custom_map.js',
+#                               },
+#                },
+#             'JS_COMPRESSOR':'pipeline.compressors.yuglify.YuglifyCompressor',
+#             'CSS' : XGDS_PLANNER_PIPELINE_CSS,
+#             'CSS_COMPRESSOR':'pipeline.compressors.yuglify.YuglifyCompressor',
+#             'YUGLIFY_JS_ARGUMENTS': 'mangle:false --terminal',
+#             'DISABLE_WRAPPER' :True,
+#             }
 
-COMPRESS_ENABLED = True
-COMPRESS_CSSTIDY_BINARY = '/usr/bin/csstidy'
+COMPRESS_ENABLED = False
+#COMPRESS_CSSTIDY_BINARY = '/usr/bin/csstidy'
 
 # PIPELINE_COMPILERS = ()
 
@@ -490,7 +491,7 @@ COMPASS_CORRECTION =  10
 
 PYRAPTORD_SERVICE = True
 
-XGDS_CURRENT_SITEFRAME_ID = 1  # Hawaii Lava Flows siteframe
+XGDS_CURRENT_SITEFRAME_ID = 1
 # XGDS_CURRENT_REGION_ID = 6 # sample region?
 # XGDS_DEFAULT_SAMPLE_TYPE = 2 #'Geology'
 XGDS_CORE_LIVE_INDEX_URL = '/' + XGDS_SITE_APP + '/live'
@@ -569,7 +570,7 @@ REST_FRAMEWORK = {
 # XGDS_SSE_TRACK_CHANNELS = ['EV1','EV2']
 # XGDS_SSE_CONDITION_CHANNELS = XGDS_SSE_TRACK_CHANNELS
 # XGDS_SSE_NOTE_CHANNELS = ['EV1', 'EV2', 'SA']
-# XGDS_NOTES_CURRENT_MAPPED_FUNCTION = 'xgds_baseline_app.views.currentMapNotes'
+# XGDS_NOTES_CURRENT_MAPPED_FUNCTION = 'xgds_baseline_app.views.currentMapNotes'F
 
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 SESSION_COOKIE_AGE = 43200 # 12 hours
