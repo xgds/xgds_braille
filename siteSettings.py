@@ -34,7 +34,7 @@ from django.core.urlresolvers import reverse
 from geocamUtil.SettingsUtil import getOrCreateDict, getOrCreateArray, HOSTNAME
 
 
-XGDS_SITE_APP = "xgds_baseline_app" # xgds_yoursitehere_app
+XGDS_SITE_APP = "xgds_braille_app" # xgds_yoursitehere_app
 
 # Make this unique, and don't share it with anybody.
 SECRET_KEY = '***REMOVED***'
@@ -50,13 +50,13 @@ INSTALLED_APPS = ['django_npm_apps',
                   XGDS_SITE_APP,
 
                   # TODO uncomment the submodules that you are including
-                  # 'xgds_sample',
-                  # 'xgds_instrument',
-                  # 'xgds_notes2',
-                  # 'xgds_planner2',
+                  'xgds_sample',
+                  'xgds_instrument',
+                  'xgds_notes2',
+                  'xgds_planner2',
                   'xgds_map_server',
                   # 'xgds_data',
-                  # 'xgds_image',
+                  'xgds_image',
                   # 'xgds_video',
                   # 'xgds_plot',
                   # 'xgds_status_board',
@@ -143,7 +143,7 @@ XGDS_MAP_SERVER_MAP_API_KEY = ""
 # although not all choices may be available on all operating systems.
 # If running in a Windows environment this must be set to the same as your
 # system time zone.
-TIME_ZONE = 'US/Hawaii'
+TIME_ZONE = 'America/Los_Angeles'
 
 # Language code for this installation. All choices can be found here:
 # http://www.i18nguy.com/unicode/language-identifiers.html
@@ -469,12 +469,12 @@ COMPASS_CORRECTION =  10
 #                                                        }
 
 # XGDS_MAP_SERVER_DEFAULT_ZOOM = 15
-XGDS_MAP_SERVER_SITE_MONIKER = 'Region'
+# XGDS_MAP_SERVER_SITE_MONIKER = 'Region'
 
 
 PYRAPTORD_SERVICE = True
 
-XGDS_CURRENT_SITEFRAME_ID = 2  # Hawaii Lava Flows siteframe
+XGDS_CURRENT_SITEFRAME_ID = 1  # Hawaii Lava Flows siteframe
 # XGDS_CURRENT_REGION_ID = 6 # sample region?
 # XGDS_DEFAULT_SAMPLE_TYPE = 2 #'Geology'
 XGDS_CORE_LIVE_INDEX_URL = '/' + XGDS_SITE_APP + '/live'
