@@ -303,24 +303,36 @@ STATICFILES_FINDERS = (
     'django_npm_apps.finders.NpmAppFinder',
 )
 
-PIPELINE = {'PIPELINE_ENABLED': False}
+
 # PIPELINE = {'PIPELINE_ENABLED': True,
-#             'JAVASCRIPT':{'simulator': {'source_filenames': ('xgds_braille_app/js/planner/kRex2Simulator.js'),
-#                              'output_filename': 'js/simulator.js',
-#                              },
-#                'custom_map': {'source_filenames': ('xgds_planner2/js/uploadJson.js',
+#             'JAVASCRIPT':
+#                 {'custom_map': {'source_filenames': ('xgds_planner2/js/uploadJson.js',
 #                                                    'xgds_map_server/js/map_viewer/olShowMapCoords.js',
 #                                                    'xgds_map_server/js/map_viewer/olInitialLayers.js',
 #                                                    ),
 #                               'output_filename': 'js/custom_map.js',
 #                               },
-#                },
+#                  },
 #             'JS_COMPRESSOR':'pipeline.compressors.yuglify.YuglifyCompressor',
-#             'CSS' : XGDS_PLANNER_PIPELINE_CSS,
 #             'CSS_COMPRESSOR':'pipeline.compressors.yuglify.YuglifyCompressor',
 #             'YUGLIFY_JS_ARGUMENTS': 'mangle:false --terminal',
 #             'DISABLE_WRAPPER' :True,
 #             }
+
+# SET UP PIPELINE
+PIPELINE = getOrCreateDict('PIPELINE')
+
+PIPELINE['PIPELINE_ENABLED'] = True
+PIPELINE['JS_COMPRESSOR'] = 'pipeline.compressors.yuglify.YuglifyCompressor'
+PIPELINE['CSS_COMPRESSOR'] = 'pipeline.compressors.yuglify.YuglifyCompressor'
+#PIPELINE['YUGLIFY_JS_ARGUMENTS'] = 'mangle:false --terminal'
+PIPELINE['DISABLE_WRAPPER'] = True
+
+#TODO if you are using planner, include something like this:
+# PIPELINE['JAVASCRIPT'] = getOrCreateDict('PIPELINE.JAVASCRIPT')
+# PIPELINE['JAVASCRIPT']['simulator'] = {'source_filenames': ('xgds_yoursitename_app/js/planner/yourvehicleSimulator.js'),
+#                                                             'output_filename': 'js/simulator.js',
+#                                                             }
 
 COMPRESS_ENABLED = False
 #COMPRESS_CSSTIDY_BINARY = '/usr/bin/csstidy'
