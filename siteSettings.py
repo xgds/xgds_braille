@@ -85,7 +85,7 @@ INSTALLED_APPS = ['django_npm_apps',
                   'django.contrib.staticfiles',
                   ]
 
-for app in INSTALLED_APPS:
+for app in reversed(INSTALLED_APPS):
     try:
         appSettings = importlib.import_module(app + ".defaultSettings")
         for key, val in vars(appSettings).iteritems():
@@ -325,14 +325,9 @@ PIPELINE = getOrCreateDict('PIPELINE')
 PIPELINE['PIPELINE_ENABLED'] = True
 PIPELINE['JS_COMPRESSOR'] = 'pipeline.compressors.yuglify.YuglifyCompressor'
 PIPELINE['CSS_COMPRESSOR'] = 'pipeline.compressors.yuglify.YuglifyCompressor'
-#PIPELINE['YUGLIFY_JS_ARGUMENTS'] = 'mangle:false --terminal'
+PIPELINE['YUGLIFY_JS_ARGUMENTS'] = 'mangle:false --terminal'
 PIPELINE['DISABLE_WRAPPER'] = True
 
-#TODO if you are using planner, include something like this:
-# PIPELINE['JAVASCRIPT'] = getOrCreateDict('PIPELINE.JAVASCRIPT')
-# PIPELINE['JAVASCRIPT']['simulator'] = {'source_filenames': ('xgds_yoursitename_app/js/planner/yourvehicleSimulator.js'),
-#                                                             'output_filename': 'js/simulator.js',
-#                                                             }
 
 COMPRESS_ENABLED = False
 #COMPRESS_CSSTIDY_BINARY = '/usr/bin/csstidy'
@@ -371,14 +366,14 @@ if DEBUG_TOOLBAR:
 
 VAR_ROOT = PROJ_ROOT + 'var/'
 
-XGDS_PLANNER_SCHEMAS = {
-   "KRex2": {
-       "schemaSource": "apps/xgds_braille_app/planner/kRex2PlanSchema.json",
-       "librarySource": "apps/xgds_braille_app/planner/kRex2PlanLibrary.json",
-       "simulatorUrl": "xgds_braille_app/js/planner/kRex2Simulator.js",
-       "simulator": "kRex2.Simulator",
-   }
-}
+# XGDS_PLANNER_SCHEMAS = {
+#    "KRex2": {
+#        "schemaSource": "apps/xgds_braille_app/planner/kRex2PlanSchema.json",
+#        "librarySource": "apps/xgds_braille_app/planner/kRex2PlanLibrary.json",
+#        "simulatorUrl": "xgds_braille_app/js/planner/kRex2Simulator.js",
+#        "simulator": "kRex2.Simulator",
+#    }
+# }
 
 # GEOCAM_TRACK_RESOURCE_MODEL = 'xgds_baseline_app.MyResource'
 # GEOCAM_TRACK_RESOURCE_VERBOSE_NAME = 'Asset'
