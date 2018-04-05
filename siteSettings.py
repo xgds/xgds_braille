@@ -211,8 +211,9 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
-            # os.path.join(PROJ_ROOT, 'apps/xgds_baseline_app/templates'),
-            # os.path.join(PROJ_ROOT, 'apps/xgds_baseline_app/templates/xgds_baseline_app'),
+            os.path.join(PROJ_ROOT, 'apps', XGDS_SITE_APP, 'templates'),
+            os.path.join(PROJ_ROOT, 'apps', XGDS_SITE_APP, 'templates', XGDS_SITE_APP),
+            os.path.join(PROJ_ROOT, 'apps/xgds_core/templates/registration'),
 
             # Templates for utility scripts
             os.path.join(PROJ_ROOT, 'bin/templates'),
