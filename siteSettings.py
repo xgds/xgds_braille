@@ -36,6 +36,8 @@ from geocamUtil.SettingsUtil import getOrCreateDict, getOrCreateArray, HOSTNAME
 
 XGDS_SITE_APP = "xgds_braille_app"
 
+SITE_TITLE = 'BRAILLE'
+
 # Make this unique, and don't share it with anybody.
 SECRET_KEY = '***REMOVED***'
 
