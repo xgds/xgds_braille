@@ -1,0 +1,120 @@
+[
+    {
+        "pk": 1,
+        "model": "xgds_notes2.role",
+        "fields": {
+            "value": "IRG",
+            "display_name": "IRG Staff"
+        }
+    },
+    {
+        "pk": 2,
+        "model": "xgds_notes2.role",
+        "fields": {
+            "value": "SBT",
+            "display_name": "Science Backroom Team"
+        }
+    },
+    {
+        "pk": 3,
+        "model": "xgds_notes2.role",
+        "fields": {
+            "value": "SBT_LEAD",
+            "display_name": "Science Backroom Lead"
+        }
+    },
+    {
+        "pk": 1,
+        "model": "xgds_notes2.location",
+        "fields": {
+            "value": "SBR",
+            "display_name": "Science Backroom"
+        }
+    },
+    {
+        "pk": 2,
+        "model": "xgds_notes2.location",
+        "fields": {
+            "value": "REM",
+            "display_name": "Remote"
+        }
+    },
+     {
+        "pk": 1,
+        "model": "xgds_planner2.vehicle",
+        "fields": {
+            "name": "KRex2",
+            "type": "KRex2"
+        }
+    },
+    {
+        "pk": "maplink_completedflights_1",
+        "model": "xgds_map_server.MapLink",
+        "fields": {
+                "creator": "root",
+                "name": " Flights",
+                "description": "Will contain all flight data.  Do not select this node; expand and select its children.",
+                "childNodesUrl": "/xgds_planner2/completedFlightsTreeNodes",
+                "parent": "mg1"
+        }
+    },
+    {
+        "pk": "maplink_plans",
+        "model": "xgds_map_server.MapLink",
+        "fields": {
+                "creator": "root",
+                "name": " Plans",
+                "description": "All saved plans",
+                "childNodesUrl": "/xgds_planner2/plansTreeNodes",
+                "parent": "mg1"
+        }
+    },
+
+    {
+        "pk": 1,
+        "model": "geocamTrack.linestyle",
+        "fields": {
+            "color": "ffffff00",
+            "width": 2,
+            "extras": "{}",
+            "name": "krex2_linestyle",
+            "uuid": "KREX2"
+        }
+    },
+    {
+        "pk": 1,
+        "model": "geocamUtil.SiteFrame",
+        "fields": {
+            "name": "Ames",
+            "displayName": "Ames",
+	           "east0": 582753.18,
+	           "north0": 4141805.69,
+	           "zone": "10S",
+	           "zoneNumber": 10,
+	           "south": 0,
+	           "axes": "NED",
+	           "north": "grid",
+	           "timezone": "America/Los_Angeles",
+	           "projCode": "EPSG:2227",
+           	   "projString": "+proj=utm +zone=10 +ellps=WGS84 +datum=WGS84 +units=m +no_defs"
+        }
+    },
+    {
+        "pk": 2,
+        "model": "geocamUtil.SiteFrame",
+        "fields": {
+            "name": "LAB",
+            "displayName": "Lava Beds",
+           	"east0": 626640.78,
+           	"north0": 4618612.41,
+           	"zone": "10T",
+           	"zoneNumber": 10,
+           	"south": 0,
+           	"axes": "ENU",
+           	"north": "grid",
+           	"timezone": "America/Los_Angeles",
+           	"projCode": "EPSG:32612",
+           	"projString": "+proj=utm +zone=10 +ellps=WGS84 +datum=WGS84 +units=m +no_defs"
+        }
+    }
+]
