@@ -260,9 +260,6 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.auth.middleware.RemoteUserMiddleware',
-
-#    'reversion.middleware.RevisionMiddleware',
-    #'geocamUtil.middleware.SecurityMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
 )
 
@@ -379,33 +376,16 @@ VAR_ROOT = PROJ_ROOT + 'var/'
 # }
 
 # GEOCAM_TRACK_RESOURCE_MODEL = 'xgds_baseline_app.MyResource'
-# GEOCAM_TRACK_RESOURCE_VERBOSE_NAME = 'Asset'
-# GEOCAM_TRACK_TRACK_MODEL = 'xgds_baseline_app.MyTrack'
-# GEOCAM_TRACK_TRACK_MONIKIER = 'Actual_Traverse'
-# GEOCAM_TRACK_POSITION_MODEL = 'xgds_baseline_app.CurrentPosition'
-# GEOCAM_TRACK_PAST_POSITION_MODEL = 'xgds_baseline_app.PastPosition'
+GEOCAM_TRACK_POSITION_MODEL = 'geocamTrack.ResourcePoseDepth'
+GEOCAM_TRACK_PAST_POSITION_MODEL = 'geocamTrack.PastResourcePoseDepth'
 # GEOCAM_TRACK_INTERPOLATE_MAX_SECONDS = 120
 
 # GEOCAM_TRACK_OPS_TIME_ZONE: split days at midnight in the specified time zone
 # TODO must support multiple time zones ...
+
 GEOCAM_TRACK_OPS_TIME_ZONE = TIME_ZONE
 
-COMPASS_EQUIPPED_VEHICLES = []
-# FOR HI IT IS
-COMPASS_CORRECTION =  10
-
 # XGDS_SAMPLE_SAMPLE_MODEL = 'xgds_baseline_app.MySample'
-
-# XGDS_PLANNER2_FLIGHT_MONIKER = "EVA"
-# XGDS_PLANNER2_GROUP_FLIGHT_MONIKER = "EVA"
-# XGDS_PLANNER2_PLAN_MONIKER = "Planned Traverse"
-# XGDS_PLANNER2_STATION_MONIKER = "Waypoint"
-# XGDS_PLANNER2_STATION_MONIKER_PLURAL = "Waypoints"
-# XGDS_PLANNER2_COMMAND_MONIKER = "Activity"
-# XGDS_PLANNER2_COMMAND_MONIKER_PLURAL = "Activities"
-# XGDS_PLANNER2_FLIGHT_MODEL = "xgds_baseline_app.MyFlight"
-# XGDS_PLANNER2_GROUP_FLIGHT_MODEL = "xgds_baseline_app.MyGroupFlight"
-# XGDS_PLANNER2_ACTIVE_FLIGHT_MODEL = "xgds_baseline_app.MyActiveFlight"
 
 #XGDS_PLANNER2_DEFAULT_SITE = ('HIL', 'Hawaii Lava Flows') #'Hawaii Lava Flows'
 

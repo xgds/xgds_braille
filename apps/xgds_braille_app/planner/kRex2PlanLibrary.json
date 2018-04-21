@@ -10,78 +10,54 @@
     "sites": [
         {
             "type": "Site",
-            "id": "MLA",
-            "name": "Moses Lake",
-            "notes": "Moses Lake, WA, 2008",
+            "id": "IRG",
+            "name": "Ames",
+            "notes": "NASA Ames Roverscape",
             "alternateCrs": {
                 "type": "roversw",
                 "properties": {
-                    "originNorthing": 5215600,
-                    "originEasting": 327000,
+                    "originNorthing": 4141835,
+                    "originEasting": 582724,
                     "projection": "utm",
-                    "zone": 11,
+                    "zone": 10,
                     "zoneLetter": "N",
-                    "frame": "MosesLake2008SiteFrameZDown",
+                    "frame": "RoverscapeSiteFrameZDown",
                     "zDirection": "down",
                     "label": "Site Frame",
-                    "coordinateLabel": "X, Y"
+                    "coordinateLabel": "X, Y",
+                    "coordinateNotes": "X=Northing Y=Easting",
+                    "coordinateMapping": "lat, lon",
+                    "timezone": "America/Los_Angeles"
                 }
-            }
+            },
+            "bbox": [37.420289, -122.064721,
+            		 37.419226, -122.065580]
         },
         {
             "type": "Site",
-            "id": "BPA",
-            "name": "Black Point",
-            "notes": "Black Point Lava Flow, AZ, 2009",
+            "id": "LAB",
+            "name": "Lava Beds",
+            "notes": "Lava Beds National Monument",
             "alternateCrs": {
                 "type": "roversw",
                 "properties": {
-                    "originNorthing": 3949752,
-                    "originEasting": 457797,
+                    "originNorthing": 4618612.41,
+                    "originEasting": 626640.78,
                     "projection": "utm",
-                    "zone": 12,
-                    "zoneLetter": "N",
-                    "frame": "BlackPoint2009SiteFrameZDown",
+                    "zone": 10,
+                    "zoneLetter": "T",
+                    "frame": "LavaBedsSiteFrameZDown",
                     "zDirection": "down",
                     "label": "Site Frame",
                     "coordinateLabel": "X, Y"
                 }
-            }
-        },
-        {
-            "type": "Site",
-            "id": "HMP",
-            "name": "HMP",
-            "notes": "HMP Research Station, Nunavut, Canada, 2007",
-            "alternateCrs": {
-                "type": "roversw",
-                "properties": {
-                    "originNorthing": 8373890,
-                    "originEasting": 419660,
-                    "projection": "utm",
-                    "zone": 16,
-                    "zoneLetter": "N",
-                    "frame": "HMP2007SiteFrameZDown",
-                    "zDirection": "down",
-                    "label": "Site Frame",
-                    "coordinateLabel": "X, Y"
-                }
-            }
-            
+            },
+            "bbox": [41.70680300818831, -121.4751488275,
+            		 41.7108635098101, -121.4814393412821]
         }
     ],
 
     "platforms": [
-        {
-            "type": "Platform",
-            "id": "R",
-            "name": "K10Red"
-        },
-        {
-            "type": "Platform",
-            "id": "B",
-            "name": "K10Black"
-        },
         {
             "type": "Platform",
             "id": "X",
