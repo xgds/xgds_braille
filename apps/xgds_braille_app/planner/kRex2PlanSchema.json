@@ -15,7 +15,7 @@
       "type": "ParamSpec",
       "id": "defaultSpeed",
       "valueType": "number",
-      "unit": "meters/sec",
+      "unit": "m/s",
       "notes": "The default speed for traverses",
       "required": false,
       "name": "Default Speed",

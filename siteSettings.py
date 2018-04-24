@@ -54,11 +54,11 @@ INSTALLED_APPS = ['django_npm_apps',
                   # TODO uncomment the submodules that you are including
                   'xgds_sample',
                   'xgds_instrument',
+                  'xgds_image',
                   'xgds_notes2',
                   'xgds_planner2',
                   'xgds_map_server',
                   'xgds_data',
-                  'xgds_image',
                   # 'xgds_video',
                   # 'xgds_plot',
                   # 'xgds_status_board',
@@ -368,7 +368,7 @@ XGDS_PLANNER_SCHEMAS = {
    }
 }
 
-XGDS_PLANNER2_DEFAULT_SITE = ('LAB', 'Lava Beds')
+XGDS_PLANNER_DEFAULT_SITE = ('LAB', 'Lava Beds')
 
 # GEOCAM_TRACK_RESOURCE_MODEL = 'xgds_baseline_app.MyResource'
 GEOCAM_TRACK_POSITION_MODEL = 'geocamTrack.ResourcePoseDepth'
@@ -378,25 +378,6 @@ GEOCAM_TRACK_PAST_POSITION_MODEL = 'geocamTrack.PastResourcePoseDepth'
 GEOCAM_TRACK_OPS_TIME_ZONE = TIME_ZONE
 
 
-# XGDS_PLANNER2_HANDLEBARS_DIRS = [os.path.join('xgds_planner2', 'templates', 'handlebars'),
-                                 # os.path.join('xgds_baseline_app', 'templates', 'xgds_planner2'),
-                                 # os.path.join('xgds_baseline_app', 'templates', 'xgds_sample'),
-                                 # os.path.join('xgds_map_server', 'templates', 'handlebars', 'search')]
-
-# XGDS_PLANNER2_EDITOR_CONTEXT_METHOD = 'basaltApp.views.addToPlannerContext'
-# XGDS_PLANNER2_SCHEDULE_EXTRAS_METHOD = 'basaltApp.views.addEVToPlanExecution'
-
-# XGDS_PLANNER2_PLOTS = getOrCreateDict('XGDS_PLANNER2_PLOTS')
-# XGDS_PLANNER2_PLOTS['Temp'] = 'hi_temp'
-
-
-# list of (formatCode, extension, exporterClass)
-# XGDS_PLANNER_PLAN_EXPORTERS = (
-#    ('xpjson', '.json', 'xgds_planner2.planExporter.XpjsonPlanExporter'),
-#    ('bearing_distance', '.bdj', 'xgds_planner2.planExporter.BearingDistanceJsonPlanExporter'),
-#    ('kml', '.kml', 'xgds_baseline_app.kmlPlanExporter.KmlPlanExporter'),
-#    ('pml', '.pml', 'xgds_planner2.pmlPlanExporter.PmlPlanExporter'),
-# )
 
 # XGDS_NOTES_OPS_TIME_ZONE = GEOCAM_TRACK_OPS_TIME_ZONE
 # XGDS_NOTES_USER_SESSION_MODEL = 'xgds_baseline_app.MyUserSession'
