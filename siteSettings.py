@@ -274,13 +274,6 @@ ROOT_URLCONF = 'urls'
 LOGIN_URL = SCRIPT_NAME + 'accounts/login/'
 LOGIN_REDIRECT_URL = '/'
 
-GEOCAM_UTIL_INSTALLER_USE_SYMLINKS = True
-GEOCAM_UTIL_SECURITY_ENABLED = not USING_DJANGO_DEV_SERVER
-GEOCAM_UTIL_SECURITY_SSL_REQUIRED_BY_DEFAULT = False
-GEOCAM_UTIL_SECURITY_REQUIRE_ENCRYPTED_PASSWORDS = False
-
-GEOCAM_UTIL_SECURITY_LOGIN_REQUIRED_BY_DEFAULT = 'write'
-
 # This is an optional setting but if you don't have it enabled then the map server and the xgds_data won't work
 XGDS_DATA_LOG_ENABLED = True
 
@@ -366,32 +359,24 @@ if DEBUG_TOOLBAR:
 
 VAR_ROOT = PROJ_ROOT + 'var/'
 
-# XGDS_PLANNER_SCHEMAS = {
-#    "KRex2": {
-#        "schemaSource": "apps/xgds_braille_app/planner/kRex2PlanSchema.json",
-#        "librarySource": "apps/xgds_braille_app/planner/kRex2PlanLibrary.json",
-#        "simulatorUrl": "xgds_braille_app/js/planner/kRex2Simulator.js",
-#        "simulator": "kRex2.Simulator",
-#    }
-# }
+XGDS_PLANNER_SCHEMAS = {
+   "KRex2": {
+       "schemaSource": "apps/xgds_braille_app/planner/kRex2PlanSchema.json",
+       "librarySource": "apps/xgds_braille_app/planner/kRex2PlanLibrary.json",
+       "simulatorUrl": "xgds_planner2/js/planner/genericVehicleSimulator.js",
+       "simulator": "genericVehicle.Simulator",  # the namespace within the simulator js
+   }
+}
+
+XGDS_PLANNER2_DEFAULT_SITE = ('LAB', 'Lava Beds')
 
 # GEOCAM_TRACK_RESOURCE_MODEL = 'xgds_baseline_app.MyResource'
 GEOCAM_TRACK_POSITION_MODEL = 'geocamTrack.ResourcePoseDepth'
 GEOCAM_TRACK_PAST_POSITION_MODEL = 'geocamTrack.PastResourcePoseDepth'
 # GEOCAM_TRACK_INTERPOLATE_MAX_SECONDS = 120
 
-# GEOCAM_TRACK_OPS_TIME_ZONE: split days at midnight in the specified time zone
-# TODO must support multiple time zones ...
-
 GEOCAM_TRACK_OPS_TIME_ZONE = TIME_ZONE
 
-# XGDS_SAMPLE_SAMPLE_MODEL = 'xgds_baseline_app.MySample'
-
-#XGDS_PLANNER2_DEFAULT_SITE = ('HIL', 'Hawaii Lava Flows') #'Hawaii Lava Flows'
-
-# XGDS_PLANNER2_SCHEDULE_INCLUDED = True
-# XGDS_PLANNER2_SITE_MONIKER = 'Zone'
-# XGDS_PLANNER2_PLAN_EXECUTION_MODEL = "xgds_baseline_app.MyPlanExecution"
 
 # XGDS_PLANNER2_HANDLEBARS_DIRS = [os.path.join('xgds_planner2', 'templates', 'handlebars'),
                                  # os.path.join('xgds_baseline_app', 'templates', 'xgds_planner2'),
@@ -420,17 +405,6 @@ GEOCAM_TRACK_OPS_TIME_ZONE = TIME_ZONE
 # XGDS_NOTES_POPULATE_NOTE_DATA = 'xgds_baseline_app.views.populateNoteData'
 # XGDS_NOTES_BUILD_NOTES_FORM = 'xgds_baseline_app.views.buildNotesForm'
 # XGDS_NOTES_TABLE_DEFAULT_COLUMNS = ['creation_time','event_time', 'event_timezone', 'flight_name', 'author_name', 'role_name', 'location_name', 'content', 'tag_names',  'link']
-
-# XGDS_SAMPLE_HANDLEBARS_DIR = [os.path.join('xgds_sample', 'templates', 'handlebars')]
-# XGDS_SAMPLE_PERM_LINK_PREFIX = "https://myapp.xgds.org"
-
-# XGDS_IMAGE_IMAGE_SET_MODEL = 'xgds_baseline_app.MyImageSet'
-# XGDS_IMAGE_SINGLE_IMAGE_MODEL = 'xgds_baseline_app.MySingleImage'
-# XGDS_IMAGE_ARROW_ANNOTATION_MODEL = 'xgds_baseline_app.ArrowAnnotation'
-# XGDS_IMAGE_ELLIPSE_ANNOTATION_MODEL = 'xgds_baseline_app.EllipseAnnotation'
-# XGDS_IMAGE_RECTANGLE_ANNOTATION_MODEL = 'xgds_baseline_app.RectangleAnnotation'
-# XGDS_IMAGE_TEXT_ANNOTATION_MODEL = 'xgds_baseline_app.TextAnnotation'
-# XGDS_IMAGE_DEFAULT_CREATE_DEEPZOOM = True
 
 # XGDS_INSTRUMENT_IMPORT_MODULE_PATH = 'xgds_baseline_app.instrumentDataImporters'
 

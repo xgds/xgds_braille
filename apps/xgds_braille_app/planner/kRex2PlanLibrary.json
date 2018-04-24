@@ -1,264 +1,128 @@
 {
-    "xpjson": "0.2",
-    "type": "PlanLibrary",
+  "xpjson": "0.2",
+  "type": "PlanLibrary",
 
-    "name": "K10 Command Library",
-    "notes": "Reusable elements for K10 plans",
-    "id": "http://example.com/k10PlanLibrary.json",
-    "schemaUrl": "http://example.com/k10PlanSchema.json",
+  "name": "K10 Command Library",
+  "notes": "Reusable elements for K10 plans",
+  "id": "http://example.com/k10PlanLibrary.json",
+  "schemaUrl": "http://example.com/k10PlanSchema.json",
 
-    "sites": [
-        {
-            "type": "Site",
-            "id": "IRG",
-            "name": "Ames",
-            "notes": "NASA Ames Roverscape",
-            "alternateCrs": {
-                "type": "roversw",
-                "properties": {
-                    "originNorthing": 4141835,
-                    "originEasting": 582724,
-                    "projection": "utm",
-                    "zone": 10,
-                    "zoneLetter": "N",
-                    "frame": "RoverscapeSiteFrameZDown",
-                    "zDirection": "down",
-                    "label": "Site Frame",
-                    "coordinateLabel": "X, Y",
-                    "coordinateNotes": "X=Northing Y=Easting",
-                    "coordinateMapping": "lat, lon",
-                    "timezone": "America/Los_Angeles"
-                }
-            },
-            "bbox": [37.420289, -122.064721,
-            		 37.419226, -122.065580]
-        },
-        {
-            "type": "Site",
-            "id": "LAB",
-            "name": "Lava Beds",
-            "notes": "Lava Beds National Monument",
-            "alternateCrs": {
-                "type": "roversw",
-                "properties": {
-                    "originNorthing": 4618612.41,
-                    "originEasting": 626640.78,
-                    "projection": "utm",
-                    "zone": 10,
-                    "zoneLetter": "T",
-                    "frame": "LavaBedsSiteFrameZDown",
-                    "zDirection": "down",
-                    "label": "Site Frame",
-                    "coordinateLabel": "X, Y"
-                }
-            },
-            "bbox": [41.70680300818831, -121.4751488275,
-            		 41.7108635098101, -121.4814393412821]
+  "sites": [
+    {
+      "type": "Site",
+      "id": "IRG",
+      "name": "Ames",
+      "notes": "NASA Ames Roverscape",
+      "alternateCrs": {
+        "type": "roversw",
+        "properties": {
+          "originNorthing": 4141835,
+          "originEasting": 582724,
+          "projection": "utm",
+          "zone": 10,
+          "zoneLetter": "N",
+          "frame": "RoverscapeSiteFrameZDown",
+          "zDirection": "down",
+          "label": "Site Frame",
+          "coordinateLabel": "X, Y",
+          "coordinateNotes": "X=Northing Y=Easting",
+          "coordinateMapping": "lat, lon",
+          "timezone": "America/Los_Angeles"
         }
-    ],
-
-    "platforms": [
-        {
-            "type": "Platform",
-            "id": "X",
-            "name": "KRex2"
+      },
+      "bbox": [37.420289, -122.064721,
+        37.419226, -122.065580]
+    },
+    {
+      "type": "Site",
+      "id": "LAB",
+      "name": "Lava Beds",
+      "notes": "Lava Beds National Monument",
+      "alternateCrs": {
+        "type": "roversw",
+        "properties": {
+          "originNorthing": 4618612.41,
+          "originEasting": 626640.78,
+          "projection": "utm",
+          "zone": 10,
+          "zoneLetter": "T",
+          "frame": "LavaBedsSiteFrameZDown",
+          "zDirection": "down",
+          "label": "Site Frame",
+          "coordinateLabel": "X, Y"
         }
-    ],
+      },
+      "bbox": [41.70680300818831, -121.4751488275,
+        41.7108635098101, -121.4814393412821]
+    }
+  ],
 
-    "commands":[
-        {
-            "type": "Gpr",
-            "presetName": "Gpr_Shallow",
-            "duration": 0.01666,
-            "frequencyMHz": 9000.0,
-            "samplesPerTrace": 200,
-            "numStackingRepeats": 16,
-            "traceSpacingMeters": 0.05,
-            "presetCode": "GPR"
-        },
-        {
-            "type": "Gpr",
-            "presetName": "Gpr_Medium",
-            "duration": 0.01666,
-            "frequencyMHz": 6000.0,
-            "samplesPerTrace": 350,
-            "numStackingRepeats": 8,
-            "traceSpacingMeters": 0.01,
-            "presetCode": "GPR"
-        },
-        {
-            "type": "Gpr",
-            "presetName": "Gpr_Deep",
-            "duration": 0.01666,
-            "frequencyMHz": 3000.0,
-            "samplesPerTrace": 512,
-            "numStackingRepeats": 4,
-            "traceSpacingMeters": 0.05,
-            "presetCode": "GPR"
-        },
-        {
-            "type": "XrfScan",
-            "presetName": "XrfScan_Standard",
-            "duration": 1.5,
-            "scanDuration": 60,
-            "presetCode": "XRL"
-        },
-        {
-            "type": "LidarPano",
-            "presetName": "LidarPano_HiRes",
-            "duration": 360,
-            "hfov": 360,
-            "shotSpacing": 15,
-            "widthDegrees": 360,
-            "overlapPercent": 25,
-            "range": 125,
-            "presetCode": "LPH"
-        },
-        {
-            "type": "LidarPano",
-            "presetName": "LidarPano_LowRes",
-            "duration": 24,
-            "hfov": 360,
-            "shotSpacing": 60,
-            "widthDegrees": 360,
-            "overlapPercent": 25,
-            "range": 125,
-            "presetCode": "LPL"
-        },
-        {
-            "type": "LidarPano",
-            "presetName": "LidarPano_MedRes",
-            "duration": 96,
-            "hfov": 360,
-            "shotSpacing": 30,
-            "widthDegrees": 360,
-            "overlapPercent": 25,
-            "range": 125,
-            "presetCode": "LPM"
-        },
-        {
-            "type": "LidarScan",
-            "presetName": "LidarScan_HiRes",
-            "duration": 20,
-            "hfov": 40,
-            "shotSpacing": 15,
-            "range": 125,
-            "presetCode": "LSH"
-        },
-        {
-            "type": "LidarScan",
-            "presetName": "LidarScan_LowRes",
-            "duration": 3.5,
-            "hfov": 40,
-            "shotSpacing": 60,
-            "range": 125,
-            "presetCode": "LSL"
-        },
-        {
-            "type": "LidarScan",
-            "presetName": "LidarScan_MedRes",
-            "duration": 8,
-            "hfov": 40,
-            "shotSpacing": 30,
-            "range": 125,
-            "presetCode": "LSM"
-        },
-        {
-            "type": "MicroImage",
-            "presetName": "MicroImage_Standard",
-            "duration": 0.16667,
-            "focalLengthMm": 22.04,
-            "whiteBalance": "Auto",
-            "useFlash": false,
-            "presetCode": "MIC"
-        },
-        {
-            "type": "PancamPano",
-            "presetName": "PancamPano_MedLow",
-            "duration": 1.5,
-            "hfov": 120,
-            "widthDegrees": 120,
-            "bottomDegrees": -30,
-            "topDegrees": 30,
-            "focalLengthMm": 7.44,
-            "overlapPercent": 20,
-            "whiteBalance": "Daylight",
-            "range": 75,
-            "presetCode": "PML"
-        },
-        {
-            "type": "PancamPano",
-            "presetName": "PancamPano_MedMed",
-            "duration": 6.75,
-            "hfov": 120,
-            "widthDegrees": 120,
-            "bottomDegrees": -30,
-            "topDegrees": 30,
-            "focalLengthMm": 25,
-            "overlapPercent": 20,
-            "whiteBalance": "Daylight",
-            "range": 100,
-            "presetCode": "PMM"
-        },
-        {
-            "type": "PancamPano",
-            "presetName": "PancamPano_NarrowHi",
-            "duration": 11,
-            "hfov": 40,
-            "widthDegrees": 40,
-            "bottomDegrees": -14,
-            "topDegrees": 14,
-            "focalLengthMm": 44,
-            "overlapPercent": 20,
-            "whiteBalance": "Daylight",
-            "range": 150,
-            "presetCode": "PNH"
-        },
-        {
-            "type": "PancamPano",
-            "presetName": "PancamPano_WideLow",
-            "duration": 2.25,
-            "hfov": 180,
-            "widthDegrees": 180,
-            "bottomDegrees": -45,
-            "topDegrees": 31,
-            "focalLengthMm": 7.44,
-            "overlapPercent": 20,
-            "whiteBalance": "Daylight",
-            "range": 75,
-            "presetCode": "PWL"
-        },
-        {
-            "type": "PancamPano",
-            "presetName": "PancamPano_WideMed",
-            "duration": 10,
-            "hfov": 180,
-            "widthDegrees": 180,
-            "bottomDegrees": -30,
-            "topDegrees": 30,
-            "focalLengthMm": 25,
-            "overlapPercent": 20,
-            "whiteBalance": "Daylight",
-            "range": 100,
-            "presetCode": "PWM"
-        },
-        {
-            "type": "Pause",
-            "presetName": "Pause_Standard",
-            "duration": 0.01666,
-            "presetCode": "WAI"
-        },
-        {
-            "type": "AdvNav",
-            "presetName": "AdvNav_Start",
-            "presetCode": "ANS",
-            "command": "Start"
-        },
-        {
-            "type": "AdvNav",
-            "presetName": "AdvNav_Stop",
-            "presetCode": "ANX",
-            "command": "Stop"
-        }
-    ]
+  "platforms": [
+    {
+      "type": "Platform",
+      "id": "KRex2",
+      "name": "KRex2"
+    }
+  ],
+
+  "commands":[
+    {
+      "type": "TiltCommand",
+      "presetName": "Tilt Angle",
+      "presetCode": "TLA"
+    },
+    {
+      "type": "IlluminateCommand",
+      "presetName": "Illuminate",
+      "presetCode": "ILS"
+    },
+    {
+      "type": "NirvssCaptureCommand",
+      "presetName": "NIRVSS One Shot",
+      "presetCode": "NOS"
+    },
+    {
+      "type": "NirvssContinuousCommand",
+      "presetName": "NIRVSS Continuous",
+      "presetCode": "NCS"
+    },
+    {
+      "type": "RealSenseCommand",
+      "presetName": "RealSense",
+      "presetCode": "RCS",
+      "id_rs": "FRONT",
+      "resolution": "1280x720",
+      "frame_rate": 1
+    },
+    {
+      "type": "DslrCommand",
+      "presetName": "DSLR",
+      "presetCode": "DOS",
+      "id_dslr": "LEFT",
+      "resolution": "tbdxtbdmed"
+    },
+    {
+      "type": "EnvCommand",
+      "presetName": "Environmental On",
+      "presetCode": "ECS",
+      "continuous": true
+    },
+    {
+      "type": "EnvCommand",
+      "presetName": "Environmental Off",
+      "presetCode": "ECD",
+      "continuous": false
+    },
+    {
+      "type": "NirCamCommand",
+      "presetName": "NirCam",
+      "presetCode": "COS"
+    },
+    {
+      "type": "Pause",
+      "presetName": "Pause_Standard",
+      "duration": 10,
+      "presetCode": "WAI"
+    }
+  ]
 }

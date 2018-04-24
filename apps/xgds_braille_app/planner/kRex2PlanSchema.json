@@ -1,385 +1,491 @@
 {
-    "xpjson": "0.2",
-    "type": "PlanSchema",
-    "name": "KnRover Plan Schema",
-    "notes": "Define KnRover plans",
-    "id": "http://example.com/knRoverPlanSchema.json",
+  "xpjson": "0.2",
+  "type": "PlanSchema",
+  "name": "KnRover Plan Schema",
+  "notes": "Define KnRover plans",
+  "id": "http://example.com/knRoverPlanSchema.json",
 
-    "planIdFormat": "{plan.site.id}{plan.platform.id}{plan.planNumber:03d}_{plan.planVersion}_PLAN",
-    "stationIdFormat": "{plan.site.id}{plan.platform.id}{plan.planNumber:03d}_{plan.planVersion}_STN{stationIndex:02d}",
-    "segmentIdFormat": "{plan.site.id}{plan.platform.id}{plan.planNumber:03d}_{plan.planVersion}_SEG{stationIndex:02d}",
-    "commandIdFormat": "{parent.id}_{commandIndex:01d}_{command.presetCode}",
+  "planIdFormat": "{plan.site.id}{plan.platform.id}{plan.planNumber:03d}_{plan.planVersion}_PLAN",
+  "stationIdFormat": "{plan.site.id}{plan.platform.id}{plan.planNumber:03d}_{plan.planVersion}_STN{stationIndex:02d}",
+  "segmentIdFormat": "{plan.site.id}{plan.platform.id}{plan.planNumber:03d}_{plan.planVersion}_SEG{stationIndex:02d}",
+  "commandIdFormat": "{parent.id}_{commandIndex:01d}_{command.presetCode}",
 
-    "planParams": [
+  "planParams": [
+    {
+      "type": "ParamSpec",
+      "id": "defaultSpeed",
+      "valueType": "number",
+      "unit": "meters/sec",
+      "notes": "The default speed for traverses",
+      "required": false,
+      "name": "Default Speed",
+      "default": 0.2,
+      "widget":"number"
+    }
+  ],
+  "paramSpecs": [
+    {
+      "type": "ParamSpec",
+      "id": "duration",
+      "widget":"h:m:s",
+      "valueType": "number",
+      "minimum": 0,
+      "default": 0,
+      "notes": "(Hours:)Minutes:Seconds"
+    },
+    {
+      "type": "ParamSpec",
+      "id": "instrument",
+      "valueType": "string",
+      "notes": "Instrument",
+      "editable": false,
+      "required": false
+    },
+    {
+      "type": "ParamSpec",
+      "id": "tilt",
+      "name": "Tilt",
+      "valueType": "integer",
+      "minimum": -25,
+      "maximum": 50,
+      "default": 0,
+      "units": "degrees",
+      "notes": "The tilt or pitch of the instrument pack"
+    },
+    {
+      "type": "ParamSpec",
+      "id": "light_top",
+      "name": "Light: Top",
+      "valueType": "boolean",
+      "notes": "Toggle top LED strip"
+    },
+    {
+      "type": "ParamSpec",
+      "id": "light_bottom",
+      "name": "Light: Bottom",
+      "valueType": "boolean",
+      "notes": "Toggle bottom LED strip"
+    },
+    {
+      "type": "ParamSpec",
+      "id": "light_left",
+      "name": "Light: Left",
+      "valueType": "boolean",
+      "notes": "Toggle left LED strip"
+    },
+    {
+      "type": "ParamSpec",
+      "id": "light_right",
+      "name": "Light: Right",
+      "valueType": "boolean",
+      "notes": "Toggle right LED strip"
+    },
+    {
+      "type": "ParamSpec",
+      "id": "continuous",
+      "name": "Continuous",
+      "valueType": "boolean",
+      "default": false,
+      "notes": "Toggle for continuous operation"
+    },
+    {
+      "type": "ParamSpec",
+      "id": "resolution_nirvss",
+      "name": "Resolution",
+      "choices": [["tbdxtbdlow","Low" ],
+        ["tbdxtbdmed","Medium"],
+        ["tbdxtbdhigh","High"]],
+      "valueType": "string",
+      "notes": "NIRVSS capture resolution"
+    },
+    {
+      "type": "ParamSpec",
+      "id": "scale_nirvss",
+      "name": "Scale",
+      "valueType": "integer",
+      "minimum": 1,
+      "maximum": 7,
+      "default": 4,
+      "units": "degrees",
+      "notes": "Scaling factor for image, larger = longer time to store"
+    },
+    {
+      "type": "ParamSpec",
+      "id": "id_rs",
+      "name": "Which",
+      "default": "FRONT",
+      "choices": [["FRONT", "Front"],
+        ["LEFT","Left"],
+        ["RIGHT", "Right"]],
+      "valueType": "string",
+      "notes": "Which RealSense is controlled"
+    },
+    {
+      "type": "ParamSpec",
+      "id": "resolution_rs",
+      "name": "Resolution",
+      "default": "Medium",
+      "choices": [["tbdxtbdlow", "Low"],
+        ["1280x720","Medium"],
+        ["tbdxtbdhigh","High"]],
+      "valueType": "string",
+      "notes": "Capture resolution"
+    },
+    {
+      "type": "ParamSpec",
+      "id": "frame_rate_rs",
+      "choices": [[1, "1"],
+        [6, "6"],
+        [30, "30"]],
+      "default": 1,
+      "valueType": "integer",
+      "notes": "Frames per second"
+    },
+    {
+      "type": "ParamSpec",
+      "id": "id_dslr",
+      "name": "Which",
+      "default": "LEFT",
+      "choices": [["LEFT", "Left"],
+        ["RIGHT", "Right"]],
+      "valueType": "string",
+      "notes": "Which DSLR is controlled"
+    },
+    {
+      "type": "ParamSpec",
+      "id": "resolution_dslr",
+      "name": "Resolution",
+      "default": "Medium",
+      "choices": [["tbdxtbdlow", "Low"],
+        ["tbdxtbdmed","Medium"],
+        ["tbdxtbdhigh","High"]],
+      "valueType": "string",
+      "notes": "Capture resolution"
+    },
+    {
+      "type": "ParamSpec",
+      "id": "tolerance",
+      "valueType": "number",
+      "minimum": 0,
+      "default": 1,
+      "notes": "The rover must arrive within this distance of the goal position (meters)."
+    },
+    {
+      "type": "ParamSpec",
+      "id": "driveSpeed",
+      "valueType": "number",
+      "required": false,
+      "minimum": 0,
+      "notes": "The speed to drive at."
+    },
+    {
+      "type": "ParamSpec",
+      "id": "target",
+      "valueType": "Point"
+    },
+    {
+      "type": "ParamSpec",
+      "id": "tolerance",
+      "default": 1,
+      "valueType": "number",
+      "required": false
+    },
+    {
+      "type": "ParamSpec",
+      "id": "switch",
+      "choices": [["START", "Start"],
+        ["STOP", "Stop"]],
+      "valueType": "string",
+      "notes": "Start or stop service"
+    }
+  ],
+
+  "stationParams": [
+    {
+      "type": "ParamSpec",
+      "id": "tolerance",
+      "parent": "tolerance"
+    }
+  ],
+
+  "segmentParams": [
+    {
+      "type": "ParamSpec",
+      "id": "hintedSpeed",
+      "valueType": "number",
+      "required": false,
+      "minimum": 0,
+      "notes": "Recommended rover driving speed. Actual driving speed may differ."
+    }
+  ],
+
+  "commandSpecs": [
+    {
+      "type": "CommandSpec",
+      "id": "KnRoverCommand",
+      "notes": "KnRover specific command",
+      "parent": "Command",
+      "abstract": true,
+      "params": [
         {
-            "type": "ParamSpec",
-            "id": "defaultSpeed",
-            "valueType": "number",
-            "unit": "meters/sec",
-            "notes": "The default speed for traverses",
-            "required": false,
-            "name": "Default Speed",
-            "default": 0.2,
-            "widget":"number"
+          "type": "ParamSpec",
+          "id": "duration",
+          "valueType": "number",
+          "minimum": 0,
+          "default": 0
+        },
+        {
+          "type": "ParamSpec",
+          "id": "presetCode",
+          "valueType": "string",
+          "required": true
+        },
+        {
+          "type": "ParamSpec",
+          "id": "presetName",
+          "valueType": "string",
+          "required": true
+        },
+        {
+          "type": "ParamSpec",
+          "id": "instrument",
+          "parent": "instrument"
         }
-    ],
-    "paramSpecs": [
+      ]
+    },
+    {
+      "type": "CommandSpec",
+      "id": "TiltCommand",
+      "name": "Tilt",
+      "notes": "Tilt Instrument Platform",
+      "parent": "KnRoverCommand",
+      "color": "#b0eab0",
+      "params": [
         {
-            "type": "ParamSpec",
-            "id": "instrument",
-            "valueType": "string",
-            "notes": "Instrument",
-            "editable": false,
-            "required": false
+          "type": "ParamSpec",
+          "id": "tilt",
+          "parent": "tilt"
         },
         {
-            "type": "ParamSpec",
-            "id": "tilt",
-            "name": "Tilt",
-            "valueType": "integer",
-            "minimum": -25,
-            "maximum": 50,
-            "default": 0,
-            "units": "degrees",
-            "notes": "The tilt or pitch of the instrument pack"
+          "type": "ParamSpec",
+          "id": "instrument",
+          "parent": "instrument",
+          "value": "Tilter"
         },
         {
-            "type": "ParamSpec",
-            "id": "light_top",
-            "name": "Light: Top",
-            "valueType": "boolean",
-            "notes": "Toggle top LED strip"
-        },
-        {
-            "type": "ParamSpec",
-            "id": "light_bottom",
-            "name": "Light: Bottom",
-            "valueType": "boolean",
-            "notes": "Toggle bottom LED strip"
-        },
-        {
-            "type": "ParamSpec",
-            "id": "light_left",
-            "name": "Light: Left",
-            "valueType": "boolean",
-            "notes": "Toggle left LED strip"
-        },
-        {
-            "type": "ParamSpec",
-            "id": "light_right",
-            "name": "Light: Right",
-            "valueType": "boolean",
-            "notes": "Toggle right LED strip"
-        },
-        {
-            "type": "ParamSpec",
-            "id": "continuous",
-            "name": "Continuous",
-            "valueType": "boolean",
-            "default": false,
-            "notes": "Toggle for continuous operation"
-        },
-        {
-            "type": "ParamSpec",
-            "id": "resolution_nirvss",
-            "name": "Resolution",
-            "choices": [["Low", "tbd x tbd"],
-                ["Medium", "tbd x tbd"],
-                ["High", "tbd x tbd"]],
-            "valueType": "string",
-            "notes": "NIRVSS capture resolution"
-        },
-        {
-            "type": "ParamSpec",
-            "id": "scale_nirvss",
-            "name": "Scale",
-            "valueType": "integer",
-            "minimum": 1,
-            "maximum": 7,
-            "default": 4,
-            "units": "degrees",
-            "notes": "Scaling factor for image, larger = longer time to store"
-        },
-        {
-            "type": "ParamSpec",
-            "id": "id_rs",
-            "name": "Which",
-            "default": "FRONT",
-            "choices": [["Front", "FRONT"],
-                ["Left", "LEFT"],
-                ["Right", "right"]],
-            "valueType": "string",
-            "notes": "Which RealSense is controlled"
-        },
-        {
-            "type": "ParamSpec",
-            "id": "resolution_rs",
-            "name": "Resolution",
-            "default": "Medium",
-            "choices": [["Low", "tbd x tbd"],
-                ["Medium", "1280 x 720"],
-                ["High", "tbd x tbd"]],
-            "valueType": "string",
-            "notes": "Capture resolution"
-        },
-        {
-            "type": "ParamSpec",
-            "id": "frame_rate_rs",
-            "choices": [[1, 1],
-                [6, 6],
-                [30, 30]],
-            "default": 1,
-            "valueType": "integer",
-            "notes": "Frames per second"
-        },
-        {
-            "type": "ParamSpec",
-            "id": "id_dslr",
-            "name": "Which",
-            "default": "LEFT",
-            "choices": [["Left", "LEFT"],
-                ["Right", "right"]],
-            "valueType": "string",
-            "notes": "Which DSLR is controlled"
-        },
-        {
-            "type": "ParamSpec",
-            "id": "resolution_dslr",
-            "name": "Resolution",
-            "default": "Medium",
-            "choices": [["Low", "tbd x tbd"],
-                ["Medium", "tbd x tbd"],
-                ["High", "tbd x tbd"]],
-            "valueType": "string",
-            "notes": "Capture resolution"
-        },
-        {
-            "type": "ParamSpec",
-            "id": "tolerance",
-            "valueType": "number",
-            "minimum": 0,
-            "default": 1,
-            "notes": "The rover must arrive within this distance of the goal position (meters)."
-        },
-        {
-            "type": "ParamSpec",
-            "id": "driveSpeed",
-            "valueType": "number",
-            "required": false,
-            "minimum": 0,
-            "notes": "The speed to drive at."
-        },
-        {
-            "type": "ParamSpec",
-            "id": "target",
-            "valueType": "Point"
-        },
-        {
-            "type": "ParamSpec",
-            "id": "tolerance",
-            "default": 1,
-            "valueType": "number",
-            "required": false
-        },
-        {
-            "type": "ParamSpec",
-            "id": "switch",
-            "choices": [["Start", "Start"],
-                ["Stop", "Stop"]],
-            "valueType": "string",
-            "notes": "Start or stop service"
+          "type": "ParamSpec",
+          "id": "duration",
+          "parent": "duration",
+          "default": 30
         }
-    ],
-
-    "stationParams": [
+      ]
+    },
+    {
+      "type": "CommandSpec",
+      "id": "IlluminationCommand",
+      "notes": "Control LED Strips",
+      "parent": "KnRoverCommand",
+      "color": "#f9f7b4",
+      "params": [
         {
-            "type": "ParamSpec",
-            "id": "tolerance",
-            "parent": "tolerance"
+          "type": "ParamSpec",
+          "id": "tilt",
+          "parent": "tilt"
+        },
+        {
+          "type": "ParamSpec",
+          "id": "instrument",
+          "parent": "instrument",
+          "value": "LightModule"
+        },
+        {
+          "type": "ParamSpec",
+          "id": "top",
+          "parent": "light_top",
+          "value": false
+        },
+        {
+          "type": "ParamSpec",
+          "id": "bottom",
+          "parent": "light_bottom",
+          "value": false
+        },
+        {
+          "type": "ParamSpec",
+          "id": "left",
+          "parent": "light_left",
+          "value": false
+        },
+        {
+          "type": "ParamSpec",
+          "id": "right",
+          "parent": "light_right",
+          "value": false
         }
-    ],
-
-    "segmentParams": [
+      ]
+    },
+    {
+      "type": "CommandSpec",
+      "id": "NirvssCaptureCommand",
+      "notes": "Control NIRVSS Capture",
+      "parent": "KnRoverCommand",
+      "color": "#9ACCD9",
+      "params": [
         {
-            "type": "ParamSpec",
-            "id": "hintedSpeed",
-            "valueType": "number",
-            "required": false,
-            "minimum": 0,
-            "notes": "Recommended rover driving speed. Actual driving speed may differ."
+          "type": "ParamSpec",
+          "id": "duration",
+          "parent": "duration",
+          "default": 240
+        },
+
+        {
+          "type": "ParamSpec",
+          "id": "resolution",
+          "parent": "resolution_nirvss"
+        },
+        {
+          "type": "ParamSpec",
+          "id": "scale",
+          "parent": "scale_nirvss"
+        },
+        {
+          "type": "ParamSpec",
+          "id": "instrument",
+          "parent": "instrument",
+          "value": "Nirvss"
         }
-    ],
-
-    "commandSpecs": [
+      ]
+    },
+    {
+      "type": "CommandSpec",
+      "id": "NirvssContinuousCommand",
+      "notes": "Control NIRVSS Continuous Capture",
+      "parent": "NirvssCaptureCommand",
+      "color": "#9ACCD9",
+      "params": [
         {
-            "type": "CommandSpec",
-            "id": "KnRoverCommand",
-            "notes": "KnRover specific command",
-            "parent": "Command",
-            "abstract": true,
-            "params": [
-                {
-                    "type": "ParamSpec",
-                    "id": "duration",
-                    "valueType": "number",
-                    "minimum": 0,
-                    "default": 0
-                },
-                {
-                    "type": "ParamSpec",
-                    "id": "presetCode",
-                    "valueType": "string",
-                    "required": true
-                },
-                {
-                    "type": "ParamSpec",
-                    "id": "presetName",
-                    "valueType": "string",
-                    "required": true
-                },
-                {
-                    "type": "ParamSpec",
-                    "id": "instrument",
-                    "parent": "instrument"
-                }
-            ]
-        },
-        {
-            "type": "CommandSpec",
-            "id": "TiltCommand",
-            "name": "Tilt",
-            "notes": "Tilt Instrument Platform",
-            "parent": "KnRoverCommand",
-            "color": "#0000ff",
-            "params": [
-                {
-                    "type": "ParamSpec",
-                    "id": "tilt",
-                    "parent": "tilt"
-                },
-                {
-                    "type": "ParamSpec",
-                    "id": "instrument",
-                    "parent": "instrument",
-                    "value": "Tilter"
-                },
-                {
-                    "type": "ParamSpec",
-                    "id": "duration",
-                    "parent": "duration",
-                    "default": 30
-                }
-            ]
-        },
-        {
-            "type": "CommandSpec",
-            "id": "IlluminationCommand",
-            "notes": "Control LED Strips",
-            "parent": "KnRoverCommand",
-            "color": "#00ff00",
-            "params": [
-                {
-                    "type": "ParamSpec",
-                    "id": "tilt",
-                    "parent": "tilt"
-                },
-                {
-                    "type": "ParamSpec",
-                    "id": "instrument",
-                    "parent": "instrument",
-                    "value": "LightModule"
-                },
-                {
-                    "type": "ParamSpec",
-                    "id": "top",
-                    "parent": "light_top",
-                    "value": false
-                },
-                {
-                    "type": "ParamSpec",
-                    "id": "bottom",
-                    "parent": "light_bottom",
-                    "value": false
-                },
-                {
-                    "type": "ParamSpec",
-                    "id": "left",
-                    "parent": "light_left",
-                    "value": false
-                },
-                {
-                    "type": "ParamSpec",
-                    "id": "right",
-                    "parent": "light_right",
-                    "value": false
-                }
-            ]
-        },
-        {
-            "type": "CommandSpec",
-            "id": "NirvssCaptureCommand",
-            "notes": "Control NIRVSS Capture",
-            "parent": "KnRoverCommand",
-            "color": "#00ff00",
-            "params": [
-                {
-                    "type": "ParamSpec",
-                    "id": "duration",
-                    "parent": "duration",
-                    "default": 240
-                },
-
-                {
-                    "type": "ParamSpec",
-                    "id": "resolution",
-                    "parent": "resolution_nirvss"
-                },
-                {
-                    "type": "ParamSpec",
-                    "id": "scale",
-                    "parent": "scale_nirvss"
-                },
-                {
-                    "type": "ParamSpec",
-                    "id": "instrument",
-                    "parent": "instrument",
-                    "value": "Nirvss"
-                }
-            ]
-        },
-        {
-            "type": "CommandSpec",
-            "id": "NirvssContinuousCommand",
-            "notes": "Control NIRVSS Continuous Capture",
-            "parent": "NirvssCaptureCommand",
-            "color": "#00ff00",
-            "params": [
-                {
-                    "type": "ParamSpec",
-                    "id": "continuous",
-                    "parent": "continuous"
-                }
-            ]
-        },
-        {
-            "type": "CommandSpec",
-            "id": "Pause",
-            "parent": "KnRoverCommand",
-            "color": "#999999"
-        },
-        {
-            "type": "CommandSpec",
-            "id": "StopCommand",
-            "parent": "Command",
-            "color": "#999999"
+          "type": "ParamSpec",
+          "id": "continuous",
+          "parent": "continuous"
         }
-    ],
+      ]
+    },
+    {
+      "type": "CommandSpec",
+      "id": "RealSenseCommand",
+      "notes": "Control RealSense Continuous Capture",
+      "parent": "KnRoverCommand",
+      "color": "#98CED9",
+      "params": [
+        {
+          "type": "ParamSpec",
+          "id": "id_rs",
+          "parent": "id_rs"
+        },
+        {
+          "type": "ParamSpec",
+          "id": "resolution",
+          "parent": "resolution_rs"
+        },
+        {
+          "type": "ParamSpec",
+          "id": "frame_rate",
+          "parent": "frame_rate_rs"
+        },
+        {
+          "type": "ParamSpec",
+          "id": "instrument",
+          "parent": "instrument",
+          "value": "RealSense"
+        },
+        {
+          "type": "ParamSpec",
+          "id": "continuous",
+          "parent": "continuous",
+          "value": false
+        }
+      ]
+    },
+    {
+      "type": "CommandSpec",
+      "id": "DslrCommand",
+      "notes": "Control DSLR Capture",
+      "parent": "KnRoverCommand",
+      "color": "#adfff4",
+      "params": [
+        {
+          "type": "ParamSpec",
+          "id": "id_dslr",
+          "parent": "id_dslr"
+        },
+        {
+          "type": "ParamSpec",
+          "id": "resolution",
+          "parent": "resolution_dslr"
+        },
+        {
+          "type": "ParamSpec",
+          "id": "instrument",
+          "parent": "instrument",
+          "value": "Dslr"
+        }
+      ]
+    },
+    {
+      "type": "CommandSpec",
+      "id": "EnvCommand",
+      "notes": "Control Environment Sensor Capture",
+      "parent": "KnRoverCommand",
+      "color": "#FFD7B1",
+      "params": [
+        {
+          "type": "ParamSpec",
+          "id": "continuous",
+          "parent": "continuous"
+        },
+        {
+          "type": "ParamSpec",
+          "id": "instrument",
+          "parent": "instrument",
+          "value": "Environment"
+        }
+      ]
+    },
+    {
+      "type": "CommandSpec",
+      "id": "NirCamCommand",
+      "notes": "NirCam Capture",
+      "parent": "KnRoverCommand",
+      "color": "#DCF8AC",
+      "params": [
+        {
+          "type": "ParamSpec",
+          "id": "instrument",
+          "parent": "instrument",
+          "value": "NirCam"
+        }
+      ]
+    },
+    {
+      "type": "CommandSpec",
+      "id": "Pause",
+      "parent": "KnRoverCommand",
+      "color": "#999999"
+    }
+  ],
 
-    "stationSequenceCommands": [
-        "TiltCommand",
-        "IlluminationCommand",
-    ],
+  "stationSequenceCommands": [
+    "TiltCommand",
+    "IlluminateCommand",
+    "NirvssCaptureCommand",
+    "NirvssContinuousCommand",
+    "RealSenseCommand",
+    "DslrCommand",
+    "EnvCommand",
+    "NirCamCommand",
+    "Pause"
+  ],
 
-    "segmentSequenceCommands": [
-    ]
+  "segmentSequenceCommands": [
+  ]
 }
