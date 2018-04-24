@@ -450,23 +450,11 @@ GEOCAM_UTIL_LIVE_MODE = False
 GEOCAM_UTIL_DATATABLES_EDITOR = False
 GEOCAM_TRACK_URL_PORT = 8181
 
-XGDS_CORE_TEMPLATE_DIRS = getOrCreateDict('XGDS_CORE_TEMPLATE_DIRS')
-# XGDS_CORE_TEMPLATE_DIRS[XGDS_SAMPLE_SAMPLE_MODEL] = [os.path.join('xgds_sample', 'templates', 'handlebars')]
-# XGDS_CORE_TEMPLATE_DIRS[XGDS_IMAGE_IMAGE_SET_MODEL] = [os.path.join('xgds_image', 'templates', 'handlebars')]
-
-# XGDS_CORE_CONDITION_MODEL = "xgds_baseline_app.MyCondition"
-# XGDS_CORE_CONDITION_HISTORY_MODEL = "xgds_baseline_app.MyConditionHistory"
-
-XGDS_CORE_REBROADCAST_MAP = getOrCreateDict('XGDS_CORE_REBROADCAST_MAP')
-#XGDS_CORE_REBROADCAST_MAP.update({'xgds_baseline_app_pastposition':{'modelName':'xgds_baseline_app.PastPosition', 'pkColNum':1, 'pkType': 'int'}})
 
 XGDS_CORE_TEMPLATE_DEBUG = True
 
 COUCHDB_FILESTORE_NAME = "braille-file-store"
 
-JWPLAYER_KEY = '***REMOVED***'
-
-# IMAGE_CAPTURE_DIR = os.path.join(DATA_ROOT, 'xgds_video_stills')
 
 ALLOWED_HOSTS = ['*']
 
@@ -485,18 +473,6 @@ REST_FRAMEWORK = {
          'rest_framework.permissions.IsAuthenticated',
     ]
 }
-
-# GEOCAM_TRACK_PRELOAD_TRACK_IMAGES = ["/static/xgds_baseline_app/icons/ev1_pointer.png", 
-#                                      "/static/xgds_baseline_app/icons/ev2_pointer.png",
-#                                      "/static/xgds_baseline_app/icons/ev1_circle.png", 
-#                                      "/static/xgds_baseline_app/icons/ev2_circle.png",
-#                                      "/static/xgds_baseline_app/icons/ev1_stop.png", 
-#                                      "/static/xgds_baseline_app/icons/ev2_stop.png"]
-
-# XGDS_SSE_TRACK_CHANNELS = ['EV1','EV2']
-# XGDS_SSE_CONDITION_CHANNELS = XGDS_SSE_TRACK_CHANNELS
-# XGDS_SSE_NOTE_CHANNELS = ['EV1', 'EV2', 'SA']
-# XGDS_NOTES_CURRENT_MAPPED_FUNCTION = 'xgds_baseline_app.views.currentMapNotes'F
 
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 SESSION_COOKIE_AGE = 43200 # 12 hours
