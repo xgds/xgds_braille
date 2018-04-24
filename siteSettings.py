@@ -134,11 +134,6 @@ MANAGERS = ADMINS
 #     }
 # }
 
-#
-# If you want to use Bing Maps for a baselayer instead of open street map,
-# get an API key from https://www.bingmapsportal.com, and override the
-# declaration below in settings.py
-XGDS_MAP_SERVER_MAP_API_KEY = ""
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
@@ -370,22 +365,10 @@ XGDS_PLANNER_SCHEMAS = {
 
 XGDS_PLANNER_DEFAULT_SITE = ('LAB', 'Lava Beds')
 
-# GEOCAM_TRACK_RESOURCE_MODEL = 'xgds_baseline_app.MyResource'
 GEOCAM_TRACK_POSITION_MODEL = 'geocamTrack.ResourcePoseDepth'
 GEOCAM_TRACK_PAST_POSITION_MODEL = 'geocamTrack.PastResourcePoseDepth'
-# GEOCAM_TRACK_INTERPOLATE_MAX_SECONDS = 120
-
 GEOCAM_TRACK_OPS_TIME_ZONE = TIME_ZONE
 
-
-
-# XGDS_NOTES_OPS_TIME_ZONE = GEOCAM_TRACK_OPS_TIME_ZONE
-# XGDS_NOTES_USER_SESSION_MODEL = 'xgds_baseline_app.MyUserSession'
-# XGDS_NOTES_NOTE_MODEL = 'xgds_baseline_app.MyNote'
-# XGDS_NOTES_TAGGED_NOTE_MODEL = 'xgds_baseline_app.MyTaggedNote'
-# XGDS_NOTES_POPULATE_NOTE_DATA = 'xgds_baseline_app.views.populateNoteData'
-# XGDS_NOTES_BUILD_NOTES_FORM = 'xgds_baseline_app.views.buildNotesForm'
-# XGDS_NOTES_TABLE_DEFAULT_COLUMNS = ['creation_time','event_time', 'event_timezone', 'flight_name', 'author_name', 'role_name', 'location_name', 'content', 'tag_names',  'link']
 
 # XGDS_INSTRUMENT_IMPORT_MODULE_PATH = 'xgds_baseline_app.instrumentDataImporters'
 
