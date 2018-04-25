@@ -15,7 +15,7 @@
       "type": "ParamSpec",
       "id": "defaultSpeed",
       "valueType": "number",
-      "unit": "m/s",
+      "unit": "meters/sec",
       "notes": "The default speed for traverses",
       "required": false,
       "name": "Default Speed",
@@ -49,7 +49,7 @@
       "minimum": -25,
       "maximum": 50,
       "default": 0,
-      "units": "degrees",
+      "unit": "degrees",
       "notes": "The tilt or pitch of the instrument pack"
     },
     {
@@ -106,7 +106,7 @@
       "minimum": 1,
       "maximum": 7,
       "default": 4,
-      "units": "degrees",
+      "unit": "degrees",
       "notes": "Scaling factor for image, larger = longer time to store"
     },
     {
@@ -238,13 +238,15 @@
           "type": "ParamSpec",
           "id": "presetCode",
           "valueType": "string",
-          "required": true
+          "required": true,
+          "visible": false
         },
         {
           "type": "ParamSpec",
           "id": "presetName",
           "valueType": "string",
-          "required": true
+          "required": true,
+          "visible": false
         },
         {
           "type": "ParamSpec",
@@ -270,7 +272,7 @@
           "type": "ParamSpec",
           "id": "instrument",
           "parent": "instrument",
-          "value": "Tilter"
+          "default": "Tilter"
         },
         {
           "type": "ParamSpec",
@@ -282,45 +284,40 @@
     },
     {
       "type": "CommandSpec",
-      "id": "IlluminationCommand",
+      "id": "IlluminateCommand",
       "notes": "Control LED Strips",
       "parent": "KnRoverCommand",
-      "color": "#f9f7b4",
+      "color": "#fff5c1",
       "params": [
-        {
-          "type": "ParamSpec",
-          "id": "tilt",
-          "parent": "tilt"
-        },
         {
           "type": "ParamSpec",
           "id": "instrument",
           "parent": "instrument",
-          "value": "LightModule"
+          "default": "LightModule"
         },
         {
           "type": "ParamSpec",
           "id": "top",
           "parent": "light_top",
-          "value": false
+          "default": false
         },
         {
           "type": "ParamSpec",
           "id": "bottom",
           "parent": "light_bottom",
-          "value": false
+          "default": false
         },
         {
           "type": "ParamSpec",
           "id": "left",
           "parent": "light_left",
-          "value": false
+          "default": false
         },
         {
           "type": "ParamSpec",
           "id": "right",
           "parent": "light_right",
-          "value": false
+          "default": false
         }
       ]
     },
@@ -352,7 +349,7 @@
           "type": "ParamSpec",
           "id": "instrument",
           "parent": "instrument",
-          "value": "Nirvss"
+          "default": "Nirvss"
         }
       ]
     },
@@ -396,13 +393,13 @@
           "type": "ParamSpec",
           "id": "instrument",
           "parent": "instrument",
-          "value": "RealSense"
+          "default": "RealSense"
         },
         {
           "type": "ParamSpec",
           "id": "continuous",
           "parent": "continuous",
-          "value": false
+          "default": false
         }
       ]
     },
@@ -427,7 +424,7 @@
           "type": "ParamSpec",
           "id": "instrument",
           "parent": "instrument",
-          "value": "Dslr"
+          "default": "Dslr"
         }
       ]
     },
@@ -447,7 +444,7 @@
           "type": "ParamSpec",
           "id": "instrument",
           "parent": "instrument",
-          "value": "Environment"
+          "default": "Environment"
         }
       ]
     },
@@ -462,7 +459,7 @@
           "type": "ParamSpec",
           "id": "instrument",
           "parent": "instrument",
-          "value": "NirCam"
+          "default": "NirCam"
         }
       ]
     },
@@ -487,5 +484,43 @@
   ],
 
   "segmentSequenceCommands": [
+  ],
+
+  "unitSpecs": [
+    {
+      "type": "UnitSpec",
+      "name": "length",
+      "units": {
+        "meters": 1.0,
+        "mm": 0.001,
+        "inches": 0.0254
+      }
+    },
+    {
+      "type": "UnitSpec",
+      "name": "duration",
+      "units": {
+        "seconds": 1.0,
+        "minutes": 60
+      }
+    },
+    {
+      "type": "UnitSpec",
+      "name": "speed",
+      "units": {
+        "m/s": 1.0,
+        "meters/sec": 1.0,
+        "mph": 2.2369363
+      }
+    },
+    {
+      "type": "UnitSpec",
+      "name": "angle",
+      "units": {
+        "degrees": 1.0,
+        "radians": 0.0174533
+      }
+    }
   ]
+
 }

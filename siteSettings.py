@@ -58,7 +58,6 @@ INSTALLED_APPS = ['django_npm_apps',
                   'xgds_notes2',
                   'xgds_planner2',
                   'xgds_map_server',
-                  'xgds_data',
                   # 'xgds_video',
                   # 'xgds_plot',
                   # 'xgds_status_board',
@@ -269,9 +268,6 @@ ROOT_URLCONF = 'urls'
 LOGIN_URL = SCRIPT_NAME + 'accounts/login/'
 LOGIN_REDIRECT_URL = '/'
 
-# This is an optional setting but if you don't have it enabled then the map server and the xgds_data won't work
-XGDS_DATA_LOG_ENABLED = True
-
 # email settings
 EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
 EMAIL_FILE_PATH = '/tmp/xgds_messages'
@@ -378,26 +374,6 @@ GEOCAM_TRACK_OPS_TIME_ZONE = TIME_ZONE
 # XGDS_DATA_IMPORTS = getOrCreateDict('XGDS_DATA_IMPORTS')
 # XGDS_DATA_IMPORTS["Foo"]= '../../xgds_baseline_app/instrumentDataImport/Foo'
 
-# XGDS_DATA_MASKED_FIELDS = getOrCreateDict('XGDS_DATA_MASKED_FIELDS')
-# XGDS_DATA_MASKED_FIELDS['basaltApp'] = {'MyImageSet': ['user_position',
-#                                                           'creation_time',
-#                                                           ],
-#                                        }
-# XGDS_DATA_EXPAND_RELATED = getOrCreateDict('XGDS_DATA_EXPAND_RELATED')
-# XGDS_DATA_EXPAND_RELATED['xgds_baseline_app'] = {'MySample': [('region', 'zone', 'Zone')]}
-
-
-# XGDS_VIDEO_GET_ACTIVE_EPISODE = 'xgds_baseline_app.views.getActiveEpisode'
-# XGDS_VIDEO_GET_EPISODE_FROM_NAME = 'xgds_baseline_app.views.getEpisodeFromName'
-# XGDS_VIDEO_GET_TIMEZONE_FROM_NAME = 'xgds_baseline_app.views.getTimezoneFromFlightName'
-# XGDS_VIDEO_INDEX_FILE_METHOD = 'xgds_baseline_app.views.getIndexFileSuffix'
-# XGDS_VIDEO_DELAY_AMOUNT_METHOD = 'xgds_baseline_app.views.getDelaySeconds'
-# XGDS_VIDEO_NOTE_EXTRAS_FUNCTION = 'xgds_baseline_app.views.getNoteExtras'
-# XGDS_VIDEO_NOTE_FILTER_FUNCTION = 'xgds_baseline_app.views.noteFilterFunction'
-
-# RECORDED_VIDEO_DIR_BASE = DATA_ROOT
-# RECORDED_VIDEO_URL_BASE = DATA_URL
-
 
 # XGDS_MAP_SERVER_JS_MAP = getOrCreateDict('XGDS_MAP_SERVER_JS_MAP')
 # try:
@@ -412,9 +388,6 @@ GEOCAM_TRACK_OPS_TIME_ZONE = TIME_ZONE
 #                                                        'searchableColumns': ['name', 'resource_name'],
 #                                                        'search_form_class': 'xgds_baseline_app.forms.SearchTrackForm'
 #                                                        }
-
-# XGDS_MAP_SERVER_DEFAULT_ZOOM = 15
-# XGDS_MAP_SERVER_SITE_MONIKER = 'Region'
 
 
 PYRAPTORD_SERVICE = True
