@@ -1,0 +1,22 @@
+{
+    "PORTS": "/home/xgds/xgds_braille/apps/xgds_braille_app/ports.json",
+    "LOG_DIR": "/home/xgds/xgds_braille/data/pyraptord",
+    "LOG_FILE":"pyraptord_${unique}.txt",
+
+    "SERVICES": {
+
+        "EV1_recorder": {
+            "command": " "
+        },
+        "EV2_recorder": {
+            "command": " "
+        },
+        "SA_recorder": {
+            "command": " "
+        }
+    },
+
+    "GROUPS": {
+        "startup": []
+    }
+}

@@ -3,9 +3,6 @@ name: KRex2.PastPosition
 class: geocamTrack.PastResourcePoseDepth
 extension: txt
 delimiter: " "
-defaults:
-  vehicle__name: KRex2
-  depth: null
 fields:
   timestamp:
     type: datetime
@@ -39,3 +36,4 @@ fields:
   depth:
     type: float
     units: meters
+    default: null
