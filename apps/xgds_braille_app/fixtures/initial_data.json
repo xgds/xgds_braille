@@ -41,10 +41,11 @@
     },
      {
         "pk": 1,
-        "model": "xgds_planner2.vehicle",
+        "model": "xgds_core.vehicle",
         "fields": {
             "name": "KRex2",
-            "type": "KRex2"
+            "type": "KRex2",
+            "primary": true
         }
     },
     {
@@ -54,7 +55,7 @@
                 "creator": "root",
                 "name": " Flights",
                 "description": "Will contain all flight data.  Do not select this node; expand and select its children.",
-                "childNodesUrl": "/xgds_planner2/completedFlightsTreeNodes",
+                "childNodesUrl": "/xgds_core/completedFlightsTreeNodes",
                 "parent": "mg1"
         }
     },
