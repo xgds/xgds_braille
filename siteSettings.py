@@ -361,6 +361,15 @@ XGDS_PLANNER_SCHEMAS = {
 
 XGDS_PLANNER_DEFAULT_SITE = ('LAB', 'Lava Beds')
 
+XGDS_PLANNER_PLAN_EXPORTERS = (
+    ('xpjson', '.json', 'xgds_planner2.planExporter.XpjsonPlanExporter'),
+    ('bearing_distance', '.bdj', 'xgds_planner2.planExporter.BearingDistanceJsonPlanExporter'),
+    ('kml', '.kml', 'xgds_planner2.kmlPlanExporter.KmlPlanExporter'),
+    ('stats', '-stats.json', 'xgds_planner2.statsPlanExporter.StatsPlanExporter'),
+    ('crsjson', '.crsjson', 'xgds_planner2.planExporter.CrsJsonPlanExporter'),
+)
+
+
 GEOCAM_TRACK_POSITION_MODEL = 'geocamTrack.ResourcePoseDepth'
 GEOCAM_TRACK_PAST_POSITION_MODEL = 'geocamTrack.PastResourcePoseDepth'
 GEOCAM_TRACK_OPS_TIME_ZONE = TIME_ZONE
