@@ -23,7 +23,7 @@
           "zoneLetter": "N",
           "frame": "RoverscapeSiteFrameZDown",
           "zDirection": "down",
-          "label": "Site Frame",
+          "label": "Ames Site Frame",
           "coordinateLabel": "X, Y",
           "coordinateNotes": "X=Northing Y=Easting",
           "coordinateMapping": "lat, lon",
@@ -48,8 +48,10 @@
           "zoneLetter": "T",
           "frame": "LavaBedsSiteFrameZDown",
           "zDirection": "down",
-          "label": "Site Frame",
-          "coordinateLabel": "X, Y"
+          "label": "LABE Site Frame",
+          "coordinateLabel": "X, Y",
+          "coordinateNotes": "X=Northing Y=Easting",
+          "timezone": "America/Los_Angeles"
         }
       },
       "bbox": [41.70680300818831, -121.4751488275,
@@ -79,12 +81,14 @@
     {
       "type": "NirvssCaptureCommand",
       "presetName": "NIRVSS One Shot",
-      "presetCode": "NOS"
+      "presetCode": "NOS",
+      "resolution": "tbdxtbdmed"
     },
     {
       "type": "NirvssContinuousCommand",
       "presetName": "NIRVSS Continuous",
-      "presetCode": "NCS"
+      "presetCode": "NCS",
+      "resolution": "tbdxtbdmed"
     },
     {
       "type": "RealSenseCommand",
@@ -103,15 +107,9 @@
     },
     {
       "type": "EnvCommand",
-      "presetName": "Environmental On",
+      "presetName": "Environmental",
       "presetCode": "ECS",
       "continuous": true
-    },
-    {
-      "type": "EnvCommand",
-      "presetName": "Environmental Off",
-      "presetCode": "ECD",
-      "continuous": false
     },
     {
       "type": "NirCamCommand",

@@ -15,7 +15,7 @@
       "type": "ParamSpec",
       "id": "defaultSpeed",
       "valueType": "number",
-      "unit": "meters/sec",
+      "unit": "speed",
       "notes": "The default speed for traverses",
       "required": false,
       "name": "Default Speed",
@@ -55,28 +55,28 @@
     {
       "type": "ParamSpec",
       "id": "light_top",
-      "name": "Light: Top",
+      "name": "Top",
       "valueType": "boolean",
       "notes": "Toggle top LED strip"
     },
     {
       "type": "ParamSpec",
       "id": "light_bottom",
-      "name": "Light: Bottom",
+      "name": "Bottom",
       "valueType": "boolean",
       "notes": "Toggle bottom LED strip"
     },
     {
       "type": "ParamSpec",
       "id": "light_left",
-      "name": "Light: Left",
+      "name": "Left",
       "valueType": "boolean",
       "notes": "Toggle left LED strip"
     },
     {
       "type": "ParamSpec",
       "id": "light_right",
-      "name": "Light: Right",
+      "name": "Right",
       "valueType": "boolean",
       "notes": "Toggle right LED strip"
     },
@@ -106,7 +106,6 @@
       "minimum": 1,
       "maximum": 7,
       "default": 4,
-      "unit": "degrees",
       "notes": "Scaling factor for image, larger = longer time to store"
     },
     {
