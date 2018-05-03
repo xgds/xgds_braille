@@ -72,13 +72,13 @@
     },
 
     {
-        "pk": 1,
+        "pk": 2,
         "model": "geocamTrack.linestyle",
         "fields": {
             "color": "ffffff00",
             "width": 2,
             "extras": "{}",
-            "name": "krex2_linestyle",
+            "name": "KRex2",
             "uuid": "KREX2"
         }
     },
