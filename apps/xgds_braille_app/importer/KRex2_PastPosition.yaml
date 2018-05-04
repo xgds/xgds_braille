@@ -6,11 +6,11 @@ delimiter: " "
 fields:
   timestamp:
     type: datetime
-  longitude:
+  easting:
     type: float
     min: -180.0
     max: 180.0
-  latitude:
+  northing:
     type: float
     min: -90.0
     max: 90.0
