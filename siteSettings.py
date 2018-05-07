@@ -61,10 +61,10 @@ INSTALLED_APPS = ['django_npm_apps',
                   # 'xgds_video',
                   # 'xgds_plot',
                   # 'xgds_status_board',
-                  'xgds_core',
 
                   'deepzoom',
                   'geocamTrack',
+                  'xgds_core',
                   'geocamPycroraptor2',
                   'geocamUtil',
                   'pipeline',
@@ -121,19 +121,6 @@ ADMINS = (
 )
 MANAGERS = ADMINS
 
-# Databases
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.contrib.gis.db.backends.mysql', # django.db.backends.mysql',
-#         'NAME': 'xgds_baseline_app',
-#         'USER': 'root',
-#         'PASSWORD': 'xgds',
-#         'HOST': '127.0.0.1',
-#         'PORT': '3306',
-#     }
-# }
-
-
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
 # although not all choices may be available on all operating systems.
@@ -181,22 +168,6 @@ MEDIA_ROOT = DATA_ROOT
 # trailing slash if there is a path component (optional in other cases).
 # Examples: "http://media.lawrence.com", "http://example.com/media/"
 MEDIA_URL = DATA_URL
-
-#  This is the directory appended to MEDIA_ROOT for storing generated deep zooms.
-#  If defined, but not physically created, the directory will be created for you.
-#  If not defined, the following default directory name will be used:
-DEEPZOOM_ROOT = 'xgds_image/deepzoom_images/'
-
-#  These are the keyword arguments used to initialize the deep zoom creator:
-#  'tile_size', 'tile_overlap', 'tile_format', 'image_quality', 'resize_filter'.
-#  They strike a good (maybe best?) balance between image fidelity and file size.
-#  If not defined the following default values will be used:
-DEEPZOOM_PARAMS = {'tile_size': 256,
-                    'tile_overlap': 1,
-                    'tile_format': "jpg",
-                    'image_quality': 1.0,
-                    'resize_filter': "antialias"}
-
 
 # URL prefix for admin media -- CSS, JavaScript and images. Make sure to use a
 # trailing slash.
@@ -287,25 +258,8 @@ STATICFILES_FINDERS = (
     'django_npm_apps.finders.NpmAppFinder',
 )
 
-
-# PIPELINE = {'PIPELINE_ENABLED': True,
-#             'JAVASCRIPT':
-#                 {'custom_map': {'source_filenames': ('xgds_planner2/js/uploadJson.js',
-#                                                    'xgds_map_server/js/map_viewer/olShowMapCoords.js',
-#                                                    'xgds_map_server/js/map_viewer/olInitialLayers.js',
-#                                                    ),
-#                               'output_filename': 'js/custom_map.js',
-#                               },
-#                  },
-#             'JS_COMPRESSOR':'pipeline.compressors.yuglify.YuglifyCompressor',
-#             'CSS_COMPRESSOR':'pipeline.compressors.yuglify.YuglifyCompressor',
-#             'YUGLIFY_JS_ARGUMENTS': 'mangle:false --terminal',
-#             'DISABLE_WRAPPER' :True,
-#             }
-
 # SET UP PIPELINE
 PIPELINE = getOrCreateDict('PIPELINE')
-
 PIPELINE['PIPELINE_ENABLED'] = True
 PIPELINE['JS_COMPRESSOR'] = 'pipeline.compressors.yuglify.YuglifyCompressor'
 PIPELINE['CSS_COMPRESSOR'] = 'pipeline.compressors.yuglify.YuglifyCompressor'
@@ -378,25 +332,6 @@ GEOCAM_TRACK_OPS_TIME_ZONE = TIME_ZONE
 # XGDS_INSTRUMENT_IMPORT_MODULE_PATH = 'xgds_baseline_app.instrumentDataImporters'
 
 # GEOCAM_TRACK_RECENT_TIME_FUNCTION = 'xgds_baseline_app.views.getCurrentTimeWithDelayCorrection'
-
-# Include a dictionary of name to url for imports if you wish to include import functionality
-# XGDS_DATA_IMPORTS = getOrCreateDict('XGDS_DATA_IMPORTS')
-# XGDS_DATA_IMPORTS["Foo"]= '../../xgds_baseline_app/instrumentDataImport/Foo'
-
-
-# XGDS_MAP_SERVER_JS_MAP = getOrCreateDict('XGDS_MAP_SERVER_JS_MAP')
-# try:
-#     del XGDS_MAP_SERVER_JS_MAP['Track']
-# except:
-#     pass
-# XGDS_MAP_SERVER_JS_MAP['Actual_Traverse'] = {'ol': 'geocamTrack/js/olActual_TraverseMap.js',
-#                                                        'model': GEOCAM_TRACK_TRACK_MODEL,
-#                                                        'columns': ['name', 'resource_name', 'type', 'color', 'alpha',  'pk', 'app_label', 'model_type', 'times', 'coords', 'lat', 'DT_RowId'],
-#                                                        'hiddenColumns': ['type', 'color', 'alpha', 'pk', 'app_label', 'model_type', 'times', 'coords', 'lat', 'DT_RowId'],
-#                                                        'columnTitles': ['Name', 'Resource',''],
-#                                                        'searchableColumns': ['name', 'resource_name'],
-#                                                        'search_form_class': 'xgds_baseline_app.forms.SearchTrackForm'
-#                                                        }
 
 
 PYRAPTORD_SERVICE = True
