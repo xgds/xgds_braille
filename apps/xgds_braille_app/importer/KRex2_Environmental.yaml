@@ -1,18 +1,20 @@
-# This file describes temperature values as provided by the temperature probe from KRex2
----
-name: KRex2.Temp
-class: xgds_braille_app.Temp
+# This file describes temperature pressure and humidity values as provided by
+# the temperature probe from KRex2
+name: KRex2.TPH
+class: xgds_braille_app.Environmental
 extension: tsv
 delimiter: "\t"
+flight_required: true
 fields:
-  - name: vehicle__name
-    default: KRex2
-    type: string
-  - name: timestamp
+  timestamp:
     type: datetime
-  - name : temperature
+  temperature:
     type : float
-  - name: units
-    type: string
-    default: C
-    skip: true
+    min : 0
+    max : 45
+  pressure:
+    type : float
+  humidity:
+    type : float
+    min : 0
+    max : 100

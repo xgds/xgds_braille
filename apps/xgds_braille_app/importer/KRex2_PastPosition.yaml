@@ -8,13 +8,8 @@ fields:
     type: datetime
   easting:
     type: float
-    min: -180.0
-    max: 180.0
   northing:
     type: float
-    min: -90.0
-    max: 90.0
-    units: degrees
   altitude:
     type: float
     units: meters

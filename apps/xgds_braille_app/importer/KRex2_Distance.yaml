@@ -1,0 +1,12 @@
+# This file describes the distance from the cave wall
+name: KRex2.Distance
+class: xgds_braille_app.RoverDistance
+extension: txt
+delimiter: " "
+flight_required: true
+fields:
+  timestamp:
+    type: datetime
+  distance:
+    type : float
+    units : meters
