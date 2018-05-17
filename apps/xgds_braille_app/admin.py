@@ -15,3 +15,8 @@
 #__END_LICENSE__
 
 from django.contrib import admin
+
+from models import *
+
+admin.site.register(Environmental)
+admin.site.register(WallDistance)

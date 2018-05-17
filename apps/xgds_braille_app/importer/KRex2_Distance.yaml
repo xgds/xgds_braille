@@ -1,6 +1,6 @@
 # This file describes the distance from the cave wall
-name: KRex2.Distance
-class: xgds_braille_app.RoverDistance
+name: KRex2.WallDistance
+class: xgds_braille_app.WallDistance
 extension: txt
 delimiter: " "
 flight_required: true

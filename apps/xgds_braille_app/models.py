@@ -13,3 +13,39 @@
 # CONDITIONS OF ANY KIND, either express or implied. See the License for the
 # specific language governing permissions and limitations under the License.
 #__END_LICENSE__
+
+# This is an auto-generated Django model module.
+# You'll have to do the following manually to clean this up:
+#   * Rearrange models' order
+#   * Make sure each model has one field with primary_key=True
+#   * Make sure each ForeignKey has `on_delete` set to the desired behavior.
+# Feel free to rename the models, but don't rename db_table values or field names.
+from __future__ import unicode_literals
+
+from django.db import models
+
+
+class Environmental(models.Model):
+    """
+    This is an auto-generated Django model created from a
+    YAML specifications using ./apps/xgds_core/importer/yamlModelBuilder.py
+    and YAML file ./apps/xgds_braille_app/importer/KRex2_Environmental.yaml
+    """
+
+    timestamp = models.DateTimeField(db_index=True, null=False, blank=False)
+    temperature = models.FloatField(null=True, blank=True)
+    pressure = models.FloatField(null=True, blank=True)
+    humidity = models.FloatField(null=True, blank=True)
+    flight = models.ForeignKey('xgds_core.Flight', on_delete=models.SET_NULL, blank=True, null=True)
+
+
+class WallDistance(models.Model):
+    """
+    This is an auto-generated Django model created from a
+    YAML specifications using ./apps/xgds_core/importer/yamlModelBuilder.py
+    and YAML file ./apps/xgds_braille_app/importer/KRex2_Distance.yaml
+    """
+
+    timestamp = models.DateTimeField(db_index=True, null=False, blank=False)
+    distance = models.FloatField(null=True, blank=True)
+    flight = models.ForeignKey('xgds_core.Flight', on_delete=models.SET_NULL, blank=True, null=True)
