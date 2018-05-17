@@ -59,7 +59,7 @@ INSTALLED_APPS = ['django_npm_apps',
                   'xgds_planner2',
                   'xgds_map_server',
                   # 'xgds_video',
-                  # 'xgds_plot',
+                  'xgds_plot',
                   # 'xgds_status_board',
 
                   'deepzoom',
@@ -305,13 +305,11 @@ if DEBUG_TOOLBAR:
 
 VAR_ROOT = PROJ_ROOT + 'var/'
 
-XGDS_PLANNER_SCHEMAS = {
-   "KRex2": {
-       "schemaSource": "apps/xgds_braille_app/planner/kRex2PlanSchema.json",
-       "librarySource": "apps/xgds_braille_app/planner/kRex2PlanLibrary.json",
-       "simulatorUrl": "xgds_planner2/js/planner/genericVehicleSimulator.js",
-       "simulator": "genericVehicle.Simulator",  # the namespace within the simulator js
-   }
+XGDS_PLANNER_SCHEMAS["KRex2"] = {
+    "schemaSource": "apps/xgds_braille_app/planner/kRex2PlanSchema.json",
+    "librarySource": "apps/xgds_braille_app/planner/kRex2PlanLibrary.json",
+    "simulatorUrl": "xgds_planner2/js/planner/genericVehicleSimulator.js",
+    "simulator": "genericVehicle.Simulator",  # the namespace within the simulator js
 }
 
 XGDS_PLANNER_DEFAULT_SITE = ('LAB', 'Lava Beds')
