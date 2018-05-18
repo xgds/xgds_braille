@@ -33,7 +33,6 @@ from django.conf import global_settings
 from django.core.urlresolvers import reverse
 from geocamUtil.SettingsUtil import getOrCreateDict, getOrCreateArray, HOSTNAME
 
-
 XGDS_SITE_APP = "xgds_braille_app"
 
 SITE_TITLE = 'BRAILLE'
