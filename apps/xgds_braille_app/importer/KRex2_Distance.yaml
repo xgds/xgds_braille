@@ -1,6 +1,7 @@
 # This file describes the distance from the cave wall
 name: KRex2.WallDistance
 class: xgds_braille_app.WallDistance
+superclass: xgds_timeseries.TimeSeriesModel
 extension: txt
 delimiter: " "
 flight_required: true
