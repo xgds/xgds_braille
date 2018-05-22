@@ -2,6 +2,7 @@
 # the temperature probe from KRex2
 name: KRex2.TPH
 class: xgds_braille_app.Environmental
+superclass: xgds_timeseries.TimeSeriesModel
 extension: tsv
 delimiter: "\t"
 flight_required: true
@@ -9,9 +10,11 @@ fields:
   timestamp:
     type: datetime
   temperature:
-    type : float
-    min : 0
-    max : 45
+    type: float
+    min: 0
+    max: 45
+    units: C
+    label: Temp
   pressure:
     type : float
   humidity:

@@ -63,6 +63,7 @@ INSTALLED_APPS = ['django_npm_apps',
 
                   'deepzoom',
                   'geocamTrack',
+                  'xgds_timeseries',
                   'xgds_core',
                   'geocamPycroraptor2',
                   'geocamUtil',
