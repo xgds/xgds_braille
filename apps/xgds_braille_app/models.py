@@ -60,7 +60,7 @@ class Environmental(xgds_timeseries.TimeSeriesModel):
     flight = models.ForeignKey('xgds_core.Flight', on_delete=models.SET_NULL, blank=True, null=True)
 
     channel_descriptions = {
-                            'temperature': xgds_timeseries.ChannelDescription('Temperature', global_min=0.000000, global_max=45.000000),
+                            'temperature': xgds_timeseries.ChannelDescription('Temp', units='C', global_min=0.000000, global_max=45.000000),
                             'pressure': xgds_timeseries.ChannelDescription('Pressure'),
                             'humidity': xgds_timeseries.ChannelDescription('Humidity', global_min=0.000000, global_max=100.000000),
                             }
