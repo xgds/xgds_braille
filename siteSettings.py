@@ -58,7 +58,7 @@ INSTALLED_APPS = ['django_npm_apps',
                   'xgds_planner2',
                   'xgds_map_server',
                   # 'xgds_video',
-                  'xgds_plot',
+                  # 'xgds_plot',
                   # 'xgds_status_board',
 
                   'deepzoom',
@@ -314,12 +314,15 @@ XGDS_PLANNER_SCHEMAS["KRex2"] = {
 
 XGDS_PLANNER_DEFAULT_SITE = ('LAB', 'Lava Beds')
 
+XGDS_PLANNER_CRS_UNITS_DEFAULT = True
+
 XGDS_PLANNER_PLAN_EXPORTERS = (
-    ('xpjson', '.json', 'xgds_planner2.planExporter.XpjsonPlanExporter'),
-    ('bearing_distance', '.bdj', 'xgds_planner2.planExporter.BearingDistanceJsonPlanExporter'),
+    # ('xpjson', '.json', 'xgds_planner2.planExporter.XpjsonPlanExporter'),
+    # ('bearing_distance', '.bdj', 'xgds_planner2.planExporter.BearingDistanceJsonPlanExporter'),
+    ('bearing_distance', '.cbdj', 'xgds_planner2.planExporter.BearingDistanceCRSJsonPlanExporter', 'bdJson'),
     ('kml', '.kml', 'xgds_planner2.kmlPlanExporter.KmlPlanExporter'),
-    ('stats', '-stats.json', 'xgds_planner2.statsPlanExporter.StatsPlanExporter'),
-    ('crsjson', '.crsjson', 'xgds_planner2.planExporter.CrsJsonPlanExporter'),
+    # ('stats', '-stats.json', 'xgds_planner2.statsPlanExporter.StatsPlanExporter'),
+    ('crsjson', '.crsjson', 'xgds_planner2.planExporter.CrsJsonPlanExporter', 'Json'),
 )
 
 
@@ -337,6 +340,7 @@ PYRAPTORD_SERVICE = True
 
 XGDS_CURRENT_SITEFRAME_ID = 2
 XGDS_CORE_LIVE_INDEX_URL = '/' + XGDS_SITE_APP + '/live'
+XGDS_CORE_FLIGHT_MONIKER = "Traverse"
 
 
 TEST_RUNNER = 'django.test.runner.DiscoverRunner'
