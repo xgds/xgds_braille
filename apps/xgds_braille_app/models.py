@@ -100,7 +100,9 @@ class WallDistance(xgds_timeseries.TimeSeriesModel):
     distance = models.FloatField(null=True, blank=True)
     flight = models.ForeignKey('xgds_core.Flight', on_delete=models.SET_NULL, blank=True, null=True)
 
-    channel_descriptions = {'distance': xgds_timeseries.ChannelDescription('Wall Distance', 'meter', 0, 5),
+    title = 'Wall Distance'
+
+    channel_descriptions = {'distance': xgds_timeseries.ChannelDescription('Wall Distance', 'meter', 0, 5, interval=1),
                             }
 
     @classmethod
@@ -121,10 +123,12 @@ class Environmental(xgds_timeseries.TimeSeriesModel):
     humidity = models.FloatField(null=True, blank=True)
     flight = models.ForeignKey('xgds_core.Flight', on_delete=models.SET_NULL, blank=True, null=True)
 
+    title = 'Environmental'
+
     channel_descriptions = {
-                            'temperature': xgds_timeseries.ChannelDescription('Temp', units='C', global_min=0.000000, global_max=45.000000),
-                            'pressure': xgds_timeseries.ChannelDescription('Pressure'),
-                            'humidity': xgds_timeseries.ChannelDescription('Humidity', global_min=0.000000, global_max=100.000000),
+                            'temperature': xgds_timeseries.ChannelDescription('Temp', units='C', global_min=0.000000, global_max=45.000000, interval=1),
+                            'pressure': xgds_timeseries.ChannelDescription('Pressure', interval=1),
+                            'humidity': xgds_timeseries.ChannelDescription('Humidity', global_min=0.000000, global_max=100.000000, interval=1),
                             }
 
     @classmethod
