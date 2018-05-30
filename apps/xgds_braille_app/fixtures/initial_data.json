@@ -117,5 +117,47 @@
            	"projCode": "EPSG:32612",
            	"projString": "+proj=utm +zone=10 +ellps=WGS84 +datum=WGS84 +units=m +no_defs"
         }
+    },
+    {
+	"model": "xgds_instrument.scienceinstrument",
+	"pk": 1,
+	"fields": {
+            "shortName": "NIRVSS SW",
+            "displayName": "NIRVSS Short Wave",
+            "active": true,
+            "dataImportFunctionName": "none",
+            "brand": "ARC",
+            "model": "NIRVSS",
+            "serialNum": "0000000",
+            "xLabel": "Wavelength",
+            "yLabel": "Radiance",
+            "xUnits": "nm",
+            "yUnits": "radiance",
+            "reverseX": false,
+            "reverseY": false,
+            "startUseDate": null,
+            "endUseDate": null
+	}
+    },
+    {
+	"model": "xgds_instrument.scienceinstrument",
+	"pk": 2,
+	"fields": {
+            "shortName": "NIRVSS LW",
+            "displayName": "NIRVSS Long Wave",
+            "active": true,
+            "dataImportFunctionName": "none",
+            "brand": "ARC",
+            "model": "NIRVSS",
+            "serialNum": "0000001",
+            "xLabel": "Wavelength",
+            "yLabel": "Radiance",
+            "xUnits": "nm",
+            "yUnits": "radiance",
+            "reverseX": false,
+            "reverseY": false,
+            "startUseDate": null,
+            "endUseDate": null
+	}
     }
 ]

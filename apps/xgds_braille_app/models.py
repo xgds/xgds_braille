@@ -25,6 +25,68 @@ from __future__ import unicode_literals
 from django.db import models
 
 import xgds_timeseries.models as xgds_timeseries
+from xgds_instrument.models import ScienceInstrument, AbstractInstrumentDataProduct
+
+
+class NirvssSpectrometerDataProduct(AbstractInstrumentDataProduct): #, NoteLinksMixin, NoteMixin, HasFlight):
+        #flight = DEFAULT_FLIGHT_FIELD()
+        #notes = BASALT_NOTES_GENERIC_RELATION()
+
+        @classmethod
+        def getSearchableFields(self):
+            result = super(AbstractInstrumentDataProduct, self).getSearchableFields()
+            result.append('flight__name')
+            return result
+
+        @property
+        def samples(self):
+            samples = [(s.wavelength,s.reflectance) for s in self.nirvssspectrometersample_set.all()]
+            return samples
+
+        @classmethod
+        def getDataForm(cls, instrument_name):
+            return None
+
+        @classmethod
+        def getSearchFormFields(cls):
+            return ['flight__vehicle',
+                    'flight',
+                    'name',
+                    'description',
+                    'minerals',
+                    'collector',
+                    'creator',
+                    ]
+
+        @classmethod
+        def getSearchFieldOrder(cls):
+            return ['flight__vehicle',
+                    'flight',
+                    'name',
+                    'description',
+                    'minerals',
+                    'collector',
+                    'creator',
+                    'acquisition_timezone',
+                    'min_acquisition_time',
+                    'max_acquisition_time']
+
+        def __unicode__(self):
+            return "%s @ %s" % (self.instrument.shortName,
+                                self.acquisition_time)
+
+
+class NirvssSpectrometerSample(models.Model):
+    dataProduct = models.ForeignKey(NirvssSpectrometerDataProduct)
+    wavelength = models.IntegerField(db_index=True)
+    reflectance = models.FloatField(db_index=True)
+
+    class Meta:
+        ordering = ['dataProduct', 'wavelength']
+
+    def __unicode__(self):
+        return "%s: (%d, %f)" % (self.dataProduct.name,
+                                 self.wavelength, self.reflectance)
 
 
 class WallDistance(xgds_timeseries.TimeSeriesModel):
