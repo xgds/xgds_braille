@@ -10,4 +10,4 @@ fields:
     type: datetime
   distance:
     type : float
-    units : meters
+    units : m

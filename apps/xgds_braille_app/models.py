@@ -102,7 +102,7 @@ class WallDistance(xgds_timeseries.TimeSeriesModel):
 
     title = 'Wall Distance'
 
-    channel_descriptions = {'distance': xgds_timeseries.ChannelDescription('Wall Distance', 'meter', 0, 5, interval=1),
+    channel_descriptions = {'distance': xgds_timeseries.ChannelDescription('Wall Distance', 'm', 0, 5, interval=1),
                             }
 
     @classmethod
