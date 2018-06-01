@@ -75,8 +75,21 @@
     },
     {
       "type": "IlluminateCommand",
-      "presetName": "Illuminate",
-      "presetCode": "ILS"
+      "presetName": "Lights On",
+      "presetCode": "ILO",
+      "top": true,
+      "bottom": true,
+      "left": true,
+      "right": true
+    },
+    {
+      "type": "IlluminateCommand",
+      "presetName": "Lights Off",
+      "presetCode": "ILF",
+      "top": false,
+      "bottom": false,
+      "left": false,
+      "right": false
     },
     {
       "type": "NirvssCaptureCommand",
@@ -100,27 +113,43 @@
     },
     {
       "type": "DslrCommand",
-      "presetName": "DSLR",
-      "presetCode": "DOS",
+      "presetName": "DSLR Left",
+      "presetCode": "DOL",
       "id_dslr": "LEFT",
       "resolution": "tbdxtbdmed"
     },
     {
-      "type": "EnvCommand",
-      "presetName": "Environmental",
-      "presetCode": "ECS",
-      "continuous": true
+      "type": "DslrCommand",
+      "presetName": "DSLR Right",
+      "presetCode": "DOR",
+      "id_dslr": "RIGHT",
+      "resolution": "tbdxtbdmed"
     },
     {
-      "type": "NirCamCommand",
-      "presetName": "NirCam",
-      "presetCode": "COS"
+      "type": "DslrCommand",
+      "presetName": "DSLR Both",
+      "presetCode": "DOB",
+      "id_dslr": "BOTH",
+      "resolution": "tbdxtbdmed"
     },
     {
       "type": "Pause",
-      "presetName": "Pause_Standard",
+      "presetName": "Pause",
       "duration": 10,
       "presetCode": "WAI"
+    },
+    {
+      "type": "ScienceMarkerDrop",
+      "presetName": "Marker Drop",
+      "duration": 15,
+      "presetCode": "SMD"
+    },
+    {
+      "type": "ScienceBioChemSample",
+      "presetName": "BioChem Sample",
+      "duration": 30,
+      "presetCode": "BCS"
     }
+
   ]
 }
