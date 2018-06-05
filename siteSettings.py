@@ -71,6 +71,7 @@ INSTALLED_APPS = ['django_npm_apps',
                   'taggit',
                   'resumable',
                   'django_markwhat',
+                  'jsonify',
 
                   'dal',
                   'dal_select2',
