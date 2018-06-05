@@ -38,14 +38,13 @@
       "id": "instrument",
       "valueType": "string",
       "notes": "Instrument",
-      "editable": false,
       "required": false
     },
     {
       "type": "ParamSpec",
       "id": "tilt",
       "name": "Tilt",
-      "valueType": "integer",
+      "valueType": "number",
       "minimum": -25,
       "maximum": 50,
       "default": 0,
@@ -110,17 +109,6 @@
     },
     {
       "type": "ParamSpec",
-      "id": "id_rs",
-      "name": "Which",
-      "default": "FRONT",
-      "choices": [["FRONT", "Front"],
-        ["LEFT","Left"],
-        ["RIGHT", "Right"]],
-      "valueType": "string",
-      "notes": "Which RealSense is controlled"
-    },
-    {
-      "type": "ParamSpec",
       "id": "resolution_rs",
       "name": "Resolution",
       "default": "Medium",
@@ -145,8 +133,9 @@
       "id": "id_dslr",
       "name": "Which",
       "default": "LEFT",
-      "choices": [["LEFT", "Left"],
-        ["RIGHT", "Right"]],
+      "choices": [["BOTH", "Both"],
+                  ["LEFT", "Left"],
+                  ["RIGHT", "Right"]],
       "valueType": "string",
       "notes": "Which DSLR is controlled"
     },
@@ -221,17 +210,15 @@
   "commandSpecs": [
     {
       "type": "CommandSpec",
-      "id": "KnRoverCommand",
-      "notes": "KnRover specific command",
+      "id": "DurationCommand",
+      "notes": "Command with duration",
       "parent": "Command",
       "abstract": true,
       "params": [
         {
           "type": "ParamSpec",
           "id": "duration",
-          "valueType": "number",
-          "minimum": 0,
-          "default": 0
+          "parent": "duration"
         },
         {
           "type": "ParamSpec",
@@ -246,11 +233,21 @@
           "valueType": "string",
           "required": true,
           "visible": false
-        },
+        }
+        ]
+    },
+    {
+      "type": "CommandSpec",
+      "id": "KnRoverCommand",
+      "notes": "KnRover specific command",
+      "parent": "DurationCommand",
+      "abstract": true,
+      "params": [
         {
           "type": "ParamSpec",
           "id": "instrument",
-          "parent": "instrument"
+          "parent": "instrument",
+          "visible": false
         }
       ]
     },
@@ -325,7 +322,7 @@
       "id": "NirvssCaptureCommand",
       "notes": "Control NIRVSS Capture",
       "parent": "KnRoverCommand",
-      "color": "#9ACCD9",
+      "color": "#c3f89c",
       "params": [
         {
           "type": "ParamSpec",
@@ -357,7 +354,7 @@
       "id": "NirvssContinuousCommand",
       "notes": "Control NIRVSS Continuous Capture",
       "parent": "NirvssCaptureCommand",
-      "color": "#9ACCD9",
+      "color": "#c3f89c",
       "params": [
         {
           "type": "ParamSpec",
@@ -373,11 +370,6 @@
       "parent": "KnRoverCommand",
       "color": "#98CED9",
       "params": [
-        {
-          "type": "ParamSpec",
-          "id": "id_rs",
-          "parent": "id_rs"
-        },
         {
           "type": "ParamSpec",
           "id": "resolution",
@@ -465,8 +457,20 @@
     {
       "type": "CommandSpec",
       "id": "Pause",
-      "parent": "KnRoverCommand",
-      "color": "#999999"
+      "parent": "DurationCommand",
+      "color": "#dcdcdc"
+    },
+    {
+      "type": "CommandSpec",
+      "id": "ScienceMarkerDrop",
+      "parent": "DurationCommand",
+      "color": "#ffc4c8"
+    },
+    {
+      "type": "CommandSpec",
+      "id": "ScienceBioChemSample",
+      "parent": "DurationCommand",
+      "color": "#ffc4c8"
     }
   ],
 
@@ -477,9 +481,9 @@
     "NirvssContinuousCommand",
     "RealSenseCommand",
     "DslrCommand",
-    "EnvCommand",
-    "NirCamCommand",
-    "Pause"
+    "Pause",
+    "ScienceMarkerDrop",
+    "ScienceBioChemSample"
   ],
 
   "segmentSequenceCommands": [
@@ -517,7 +521,7 @@
       "name": "angle",
       "units": {
         "degrees": 1.0,
-        "radians": 0.0174533
+        "radians": 57.295754957515198
       }
     }
   ]
