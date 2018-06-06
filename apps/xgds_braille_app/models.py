@@ -26,11 +26,13 @@ from django.db import models
 
 import xgds_timeseries.models as xgds_timeseries
 from xgds_instrument.models import ScienceInstrument, AbstractInstrumentDataProduct
+from xgds_notes2.models import NoteLinksMixin, NoteMixin, DEFAULT_NOTES_GENERIC_RELATION
+from xgds_core.models import HasFlight, DEFAULT_FLIGHT_FIELD
 
 
-class NirvssSpectrometerDataProduct(AbstractInstrumentDataProduct): #, NoteLinksMixin, NoteMixin, HasFlight):
-        #flight = DEFAULT_FLIGHT_FIELD()
-        #notes = BASALT_NOTES_GENERIC_RELATION()
+class NirvssSpectrometerDataProduct(AbstractInstrumentDataProduct, NoteLinksMixin, NoteMixin, HasFlight):
+        flight = DEFAULT_FLIGHT_FIELD()
+        notes = DEFAULT_NOTES_GENERIC_RELATION()
 
         @classmethod
         def getSearchableFields(self):
@@ -53,7 +55,6 @@ class NirvssSpectrometerDataProduct(AbstractInstrumentDataProduct): #, NoteLinks
                     'flight',
                     'name',
                     'description',
-                    'minerals',
                     'collector',
                     'creator',
                     ]
@@ -64,7 +65,6 @@ class NirvssSpectrometerDataProduct(AbstractInstrumentDataProduct): #, NoteLinks
                     'flight',
                     'name',
                     'description',
-                    'minerals',
                     'collector',
                     'creator',
                     'acquisition_timezone',
