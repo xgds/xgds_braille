@@ -1,0 +1,18 @@
+[
+    {
+        "pk": 1,
+        "model": "auth.user",
+        "fields": {
+	    "password": "*",
+	    "last_login": null,
+	    "is_superuser": false,
+            "username": "root",
+	    "first_name": "Ro",
+	    "last_name": "Ot",
+	    "email": "root@example.com",
+	    "is_staff": false,
+	    "is_active": true,
+	    "date_joined": "2018-05-24 12:34:56"
+        }
+    }
+]

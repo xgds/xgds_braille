@@ -17,9 +17,12 @@
 from django.contrib import admin
 
 from models import *
+from xgds_image.models import ImageSet, SingleImage
 
 admin.site.register(WallDistance)
 admin.site.register(Environmental)
 admin.site.register(ScienceInstrument)
 admin.site.register(NirvssSpectrometerDataProduct)
 admin.site.register(NirvssSpectrometerSample)
+admin.site.register(ImageSet)
+admin.site.register(SingleImage)
