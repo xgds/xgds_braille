@@ -4,6 +4,7 @@ import django
 django.setup()
 from django.conf import settings
 from xgds_braille_app.models import NirvssSpectrometerDataProduct, NirvssSpectrometerSample, ScienceInstrument
+from xgds_core.flightUtils import get_or_create_flight
 from csv import DictReader
 import sys
 import re
@@ -36,9 +37,13 @@ def importNirvssSpectra(filename):
     # Use this to store objects and bulk create in groups
     queue = []
 
+    flight =  None
+
     reader = DictReader(open(filename,'r'))
     for row in reader:
         acqTime = fixTimezone(dateparser(row['Acquisition Time']))
+        if not flight:
+            flight = get_or_create_flight(acqTime)
         epochTime = fixTimezone(datetime.datetime.fromtimestamp(float(row['Epoch Time'])))
 
         # Check for existing database entries with this same instrument and acquisition time
@@ -68,6 +73,7 @@ def importNirvssSpectra(filename):
         nsdp.creator = None
         nsdp.instrument = instrument
         nsdp.name = nsdp.__unicode__()
+        nsdp.flight = flight
         nsdp.save()
         num_imported += 1
 
@@ -90,7 +96,7 @@ def importNirvssSpectra(filename):
                 # also bogs down when the queue gets too long.  A length
                 # of 1e5 seems to work well
                 if len(queue)>=1e5:
-                    datapoint.objects.bulk_create(queue)
+                    NirvssSpectrometerSample.objects.bulk_create(queue)
                     queue = []
 
     # If there are any samples that haven't yet been created do it now
