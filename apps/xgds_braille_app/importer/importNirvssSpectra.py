@@ -91,11 +91,12 @@ def importNirvssSpectra(filename):
                 datapoint.wavelength = int(match.group(1))
                 datapoint.reflectance = float(value)
                 queue.append(datapoint)
+
                 # Empirically, this import runs way too slowly if each
                 # sample is written to the DB one at a time, and yet it
                 # also bogs down when the queue gets too long.  A length
                 # of 1e5 seems to work well
-                if len(queue)>=1e5:
+                if len(queue) >= 1e5:
                     NirvssSpectrometerSample.objects.bulk_create(queue)
                     queue = []
 
@@ -107,4 +108,9 @@ def importNirvssSpectra(filename):
 
 if __name__=='__main__':
     nirvssFilename = sys.argv[1]
+    start_time = datetime.datetime.now()
     importNirvssSpectra(nirvssFilename)
+    end_time = datetime.datetime.now()
+    print 'Import took %s' % (end_time-start_time)
+    print 'Created %d data products' % len(NirvssSpectrometerDataProduct.objects.all())
+    print 'Created %d samples' % len(NirvssSpectrometerSample.objects.all())
