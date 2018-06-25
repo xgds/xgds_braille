@@ -397,3 +397,8 @@ REST_FRAMEWORK = {
 
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 SESSION_COOKIE_AGE = 43200 # 12 hours
+
+XGDS_CORE_FLIGHT_MODEL = "xgds_braille_app.BrailleFlight"
+XGDS_CORE_GROUP_FLIGHT_MODEL = "xgds_braille_app.GroupFlight"
+XGDS_PLANNER_PLAN_EXECUTION_MODEL = "xgds_braille_app.PlanExecution"
+XGDS_CORE_ACTIVE_FLIGHT_MODEL = "xgds_braille_app.ActiveFlight"
