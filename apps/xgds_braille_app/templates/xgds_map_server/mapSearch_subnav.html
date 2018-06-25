@@ -1,5 +1,6 @@
 {% block sitemenu-content-secondary %}
 {% load nav %}
 		<li class="nav-item {% if modelName == 'Photo' %}active{% endif %}"><a class="nav-link {% if modelName == 'Photo' %}active{% endif %}" href="{% url 'search_map_object' 'Photo'%}">{{settings.XGDS_IMAGE_IMAGE_SET_MONIKER}}</a></li>
+		<li class="nav-item {% if modelName == 'Spectrometer' %}active{% endif %}"><a class="nav-link {% if modelName == 'Spectrometer' %}active{% endif %}" href="{% url 'search_map_object' 'Spectrometer'%}">NIRVSS Spectra</a></li>
 		<li class="nav-item {% if modelName == 'Note' %}active{% endif %}"><a class="nav-link {% if modelName == 'Note' %}active{% endif %}" href="{% url 'search_xgds_notes_map' %}">Notes</a></li>
 {% endblock %}

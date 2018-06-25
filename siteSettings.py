@@ -398,7 +398,28 @@ REST_FRAMEWORK = {
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 SESSION_COOKIE_AGE = 43200 # 12 hours
 
+
 XGDS_CORE_FLIGHT_MODEL = "xgds_braille_app.BrailleFlight"
 XGDS_CORE_GROUP_FLIGHT_MODEL = "xgds_braille_app.GroupFlight"
 XGDS_PLANNER_PLAN_EXECUTION_MODEL = "xgds_braille_app.PlanExecution"
 XGDS_CORE_ACTIVE_FLIGHT_MODEL = "xgds_braille_app.ActiveFlight"
+XGDS_MAP_SERVER_JS_MAP = getOrCreateDict('XGDS_MAP_SERVER_JS_MAP')
+
+XGDS_MAP_SERVER_JS_MAP['Spectrometer'] = {'ol': 'xgds_instrument/js/olSpectrometerDataProduct.js',
+                                          'model': 'xgds_braille_app.NirvssSpectrometerDataProduct',
+                                          'columns': ['checkbox', 'acquisition_time', 'acquisition_timezone', 'collector_name', 'name', 'description', 'pk', 'view_url', 'app_label', 'model_type', 'type', 'lat', 'lon', 'alt', 'flight_name', 'instrument_name','manufacturer_data_file_url','portable_data_file_url','jsonDataUrl','csvDataUrl', 'DT_RowId'],
+                                          'hiddenColumns': ['pk', 'view_url', 'app_label', 'model_type','type', 'lat','lon','alt','flight_name','instrument_name','manufacturer_data_file_url','portable_data_file_url','jsonDataUrl','csvDataUrl', 'DT_RowId'],
+                                          'columnTitles': ['Time', 'TZ', 'Collector', 'Name', 'Description'],
+                                          'viewHandlebars': 'xgds_instrument/templates/xgds_instrument/handlebars/instrument-view.handlebars',
+                                          'viewJS': [EXTERNAL_URL + 'flot/jquery.flot.js',
+                                                     EXTERNAL_URL + 'flot-axislabels/jquery.flot.axislabels.js',
+                                                     STATIC_URL + 'xgds_instrument/js/instrumentView.js' ],
+                                          'viewInitMethods': ['xgds_instrument.getData'],
+                                          'event_time_field': 'acquisition_time',
+                                          'event_timezone_field': 'acquisition_timezone',
+                                          'plotLabels': ['Wavelength(nm)','Reflectance'],
+                                          'search_form_class': 'xgds_braille_app.forms.SearchNirvssSpectrometerDataForm'
+                                          }
+
+XGDS_MAP_SERVER_JS_MAP['NIRVSS Short Wave'] = XGDS_MAP_SERVER_JS_MAP['Spectrometer']
+XGDS_MAP_SERVER_JS_MAP['NIRVSS Long Wave'] = XGDS_MAP_SERVER_JS_MAP['Spectrometer']

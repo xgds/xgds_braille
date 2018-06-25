@@ -17,16 +17,21 @@
 import datetime
 import json
 import pytz
+
 from django.conf import settings
-from django.test import TestCase
-import os
+from django.test import TestCase, TransactionTestCase
+from django.core.urlresolvers import reverse
+import couchdb
+import time
+import sys
 
 from xgds_braille_app.models import NirvssSpectrometerDataProduct, NirvssSpectrometerSample
 from xgds_braille_app.importer.importNirvssSpectra import importNirvssSpectra
 
-class testNirvssImport(TestCase):
+
+class testNirvssSpectraImport(TestCase):
     """
-    Tests the NIRVSS CSV file importer
+    Tests the NIRVSS spectrometer CSV file importer
     """
     fixtures=['initial_data.json']
 
@@ -57,3 +62,41 @@ class testNirvssImport(TestCase):
         assert(len(nsdp.getSearchFormFields())>0)
         assert(len(nsdp.getSearchFieldOrder())>0)
         assert(nsdp.getDataForm('NIRVSS SW') is None)
+
+class testDocImport(TransactionTestCase):
+    fixtures=['initial_data.json','test_data.json']
+
+    # This setup method is called before all tests in the class, and here we will use it to set up a separate
+    # couchdb database, similar to the django test database, that we can modify during tests and delete later
+    def setUp(self):
+        self.test_db_name = 'test_xgds_braille_couchdb'
+        settings.COUCHDB_FILESTORE_NAME = self.test_db_name
+        self.couchdb_server = couchdb.Server()
+        # if tests didn't end cleanly the old one could still be around; trying to create one will cause an error
+        if self.test_db_name in self.couchdb_server:
+            del self.couchdb_server[self.test_db_name]
+        self.couchdb = self.couchdb_server.create(self.test_db_name)
+
+    # This tear down method is called after all tests in the class, and here we will use it to delete the couchdb
+    # test database, but we have to wait until the deepzoom image tiling thread is done, which we do by watching
+    # a semaphore in the couchdb database
+    def tearDown(self):
+        print '\nWaiting for deepzoom thread to finish before tear down ',
+        while self.couchdb['create_deepzoom_thread']['active'] == True:
+            sys.stdout.write('|')
+            sys.stdout.flush()
+            time.sleep(1)
+        print ' Done. Deleting couchdb test instance'
+        del self.couchdb_server[self.test_db_name]
+
+    def test_importDocImage(self):
+        fp = open('apps/xgds_braille_app/test/my_interesting_doc_image_scale2.png')
+        url = reverse('xgds_save_image')
+        data ={
+            'timezone':'utc',
+            'vehicle':'',
+            'username':'root',
+            'file':fp
+        }
+        r = self.client.post(url, data=data)
+        assert(r.status_code==200)

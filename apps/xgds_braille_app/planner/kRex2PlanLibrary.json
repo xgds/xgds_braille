@@ -127,6 +127,41 @@
       "resolution": "tbdxtbdmed"
     },
     {
+      "type": "NirvssDOCConfigureCommand",
+      "presetName": "NIRVSS DOC Configure",
+      "presetCode": "DOC"
+    },
+    {
+      "type": "NirvssDOCLED410Command",
+      "presetName": "NIRVSS DOC 410nm",
+      "presetCode": "410"
+    },
+    {
+      "type": "NirvssDOCLED540Command",
+      "presetName": "NIRVSS DOC 540nm",
+      "presetCode": "540"
+    },
+    {
+      "type": "NirvssDOCLED640Command",
+      "presetName": "NIRVSS DOC 640nm",
+      "presetCode": "640"
+    },
+    {
+      "type": "NirvssDOCLED740Command",
+      "presetName": "NIRVSS DOC 740nm",
+      "presetCode": "740"
+    },
+    {
+      "type": "NirvssDOCLED905Command",
+      "presetName": "NIRVSS DOC 905nm",
+      "presetCode": "905"
+    },
+    {
+      "type": "NirvssDOCLED940Command",
+      "presetName": "NIRVSS DOC 940nm",
+      "presetCode": "940"
+    },
+    {
       "type": "RealSenseCommand",
       "presetName": "RealSense",
       "presetCode": "RCS",

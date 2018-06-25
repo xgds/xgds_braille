@@ -31,6 +31,8 @@ from xgds_core.models import AbstractActiveFlight
 from xgds_planner2.models import AbstractPlanExecution
 from xgds_core.models import AbstractFlight, DEFAULT_VEHICLE_FIELD, AbstractGroupFlight
 from xgds_instrument.models import ScienceInstrument, AbstractInstrumentDataProduct
+from xgds_notes2.models import NoteLinksMixin, NoteMixin, DEFAULT_NOTES_GENERIC_RELATION
+from xgds_core.models import HasFlight, DEFAULT_FLIGHT_FIELD
 
 class ActiveFlight(AbstractActiveFlight):
     flight = models.ForeignKey('xgds_braille_app.BrailleFlight', null=True, blank=True)
@@ -101,9 +103,9 @@ class BrailleFlight(AbstractFlight):
             })
         return children
 
-class NirvssSpectrometerDataProduct(AbstractInstrumentDataProduct): #, NoteLinksMixin, NoteMixin, HasFlight):
-        #flight = DEFAULT_FLIGHT_FIELD()
-        #notes = BASALT_NOTES_GENERIC_RELATION()
+class NirvssSpectrometerDataProduct(AbstractInstrumentDataProduct, NoteLinksMixin, NoteMixin, HasFlight):
+        flight = DEFAULT_FLIGHT_FIELD()
+        notes = DEFAULT_NOTES_GENERIC_RELATION()
 
         @classmethod
         def getSearchableFields(self):
@@ -126,7 +128,6 @@ class NirvssSpectrometerDataProduct(AbstractInstrumentDataProduct): #, NoteLinks
                     'flight',
                     'name',
                     'description',
-                    'minerals',
                     'collector',
                     'creator',
                     ]
@@ -137,7 +138,6 @@ class NirvssSpectrometerDataProduct(AbstractInstrumentDataProduct): #, NoteLinks
                     'flight',
                     'name',
                     'description',
-                    'minerals',
                     'collector',
                     'creator',
                     'acquisition_timezone',

@@ -1,4 +1,4 @@
-#__BEGIN_LICENSE__
+# __BEGIN_LICENSE__
 # Copyright (c) 2015, United States Government, as represented by the
 # Administrator of the National Aeronautics and Space Administration.
 # All rights reserved.
@@ -12,20 +12,16 @@
 # under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
 # CONDITIONS OF ANY KIND, either express or implied. See the License for the
 # specific language governing permissions and limitations under the License.
-#__END_LICENSE__
+# __END_LICENSE__
 
-from django.contrib import admin
 
-from models import *
-from xgds_image.models import ImageSet, SingleImage
+from xgds_instrument.forms import SearchInstrumentDataForm
+from xgds_braille_app.models import NirvssSpectrometerDataProduct
 
-admin.site.register(WallDistance)
-admin.site.register(Environmental)
-admin.site.register(ScienceInstrument)
-admin.site.register(NirvssSpectrometerDataProduct)
-admin.site.register(NirvssSpectrometerSample)
-admin.site.register(BrailleFlight)
-admin.site.register(GroupFlight)
-admin.site.register(PlanExecution)
-admin.site.register(ImageSet)
-admin.site.register(SingleImage)
+
+class SearchNirvssSpectrometerDataForm(SearchInstrumentDataForm):
+    field_order = NirvssSpectrometerDataProduct.getSearchFieldOrder()
+
+    class Meta:
+        model = NirvssSpectrometerDataProduct
+        fields = NirvssSpectrometerDataProduct.getSearchFormFields()
