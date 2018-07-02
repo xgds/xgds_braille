@@ -31,6 +31,9 @@ import sys
 
 from django.conf import global_settings
 from django.core.urlresolvers import reverse
+
+from django.db import models
+
 from geocamUtil.SettingsUtil import getOrCreateDict, getOrCreateArray, HOSTNAME
 
 XGDS_SITE_APP = "xgds_braille_app"
@@ -423,3 +426,6 @@ XGDS_MAP_SERVER_JS_MAP['Spectrometer'] = {'ol': 'xgds_instrument/js/olSpectromet
 
 XGDS_MAP_SERVER_JS_MAP['NIRVSS Short Wave'] = XGDS_MAP_SERVER_JS_MAP['Spectrometer']
 XGDS_MAP_SERVER_JS_MAP['NIRVSS Long Wave'] = XGDS_MAP_SERVER_JS_MAP['Spectrometer']
+
+GEOCAM_TRACK_PAST_POSITION_MODEL = 'geocamTrack.PastResourcePosition'
+
