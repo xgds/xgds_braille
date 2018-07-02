@@ -56,6 +56,29 @@
       },
       "bbox": [41.70680300818831, -121.4751488275,
         41.7108635098101, -121.4814393412821]
+    },
+    {
+      "type": "Site",
+      "id": "HAWAII",
+      "name": "Hawaii",
+      "notes": "Hawaii",
+      "alternateCrs": {
+        "type": "roversw",
+        "properties": {
+          "originNorthing": 4618612.41,
+          "originEasting": 626640.78,
+          "projection": "utm",
+          "zone": 10,
+          "zoneLetter": "T",
+          "frame": "LavaBedsSiteFrameZDown",
+          "zDirection": "down",
+          "label": "LABE Site Frame",
+          "coordinateLabel": "X, Y",
+          "coordinateNotes": "X=Northing Y=Easting",
+          "timezone": "Pacific/Honolulu"
+        }
+      },
+      "bbox": [-156.269531,18.859509,-154.684753,20.305993]
     }
   ],
 

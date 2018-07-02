@@ -23,12 +23,85 @@
 from __future__ import unicode_literals
 
 from django.db import models
+from django.urls import reverse
 
 import xgds_timeseries.models as xgds_timeseries
+from xgds_map_server.models import GeoJSON
+from xgds_core.models import AbstractActiveFlight
+from xgds_planner2.models import AbstractPlanExecution
+from xgds_core.models import AbstractFlight, DEFAULT_VEHICLE_FIELD, AbstractGroupFlight
 from xgds_instrument.models import ScienceInstrument, AbstractInstrumentDataProduct
 from xgds_notes2.models import NoteLinksMixin, NoteMixin, DEFAULT_NOTES_GENERIC_RELATION
 from xgds_core.models import HasFlight, DEFAULT_FLIGHT_FIELD
 
+class ActiveFlight(AbstractActiveFlight):
+    flight = models.ForeignKey('xgds_braille_app.BrailleFlight', null=True, blank=True)
+
+class PlanExecution(AbstractPlanExecution):
+    plan = models.ForeignKey('xgds_planner2.Plan', null=True, related_name='xgds_braille_plan_execution')
+    flight = models.ForeignKey('xgds_braille_app.BrailleFlight', null=True, blank=True)
+
+class GroupFlight(AbstractGroupFlight):
+    @property
+    def flights (self):
+        return self.brailleflight_set.all()
+
+class BrailleFlight(AbstractFlight):
+    group   = models.ForeignKey('xgds_braille_app.GroupFlight', null=True, blank=True)
+    vehicle = DEFAULT_VEHICLE_FIELD()
+    summary = models.CharField(max_length=1024, blank=True, null=True)
+    # nirvss_data = models.ForeignKey()
+
+    def has_nirvss_data(self):
+        return True
+
+    def getTreeJsonChildren(self):
+        children = []
+
+        if hasattr(self, 'track'):
+            children.append({
+                 "title"   : "Track",
+                 "selected": False,
+                 "tooltip" : "Tracks for " + self.name,
+                 "key"     : self.uuid + "_tracks",
+                 "data"    : {
+                     "json"   : reverse('geocamTrack_mapJsonTrack', kwargs={'uuid': str(self.track.uuid)}),
+                     "kmlFile": reverse('geocamTrack_trackKml', kwargs={'trackName': self.track.name}),
+                     "sseUrl" : "",
+                     "type"   : 'MapLink',
+                 }
+            })
+
+        if self.plans:
+            my_plan = self.plans[0].plan
+            children.append({
+                 "title"   : "Plan",
+                 "selected": False,
+                 "tooltip" : "Plan for " + self.name,
+                 "key"     : self.uuid + "_plan",
+                 "data"    : {
+                     "json"   : reverse('planner2_mapJsonPlan', kwargs={'uuid': str(my_plan.uuid)}),
+                     "kmlFile": reverse('planner2_planExport', kwargs={'uuid': str(my_plan.uuid), 'name': my_plan.name + '.kml'}),
+                        "sseUrl" : "",
+                        "type"   : 'MapLink',
+                 }
+            })
+
+        if self.has_nirvss_data():
+            # this will be changed in the future
+            geo_json_object = GeoJSON.objects.get(name="Band Depths")
+
+            children.append({
+                 "title"   : "NIRVSS heatmap",
+                 "selected": False,
+                 "tooltip" : "Plan for " + self.name,
+                 "key"     : self.uuid + "_plan",
+                 "data"    : {
+                    "type"   : "GeoJSON",
+                    "geoJSON": geo_json_object.geoJSON,
+                 }
+            })
+        return children
 
 class NirvssSpectrometerDataProduct(AbstractInstrumentDataProduct, NoteLinksMixin, NoteMixin, HasFlight):
         flight = DEFAULT_FLIGHT_FIELD()
