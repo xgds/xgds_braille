@@ -427,5 +427,6 @@ XGDS_MAP_SERVER_JS_MAP['Spectrometer'] = {'ol': 'xgds_instrument/js/olSpectromet
 XGDS_MAP_SERVER_JS_MAP['NIRVSS Short Wave'] = XGDS_MAP_SERVER_JS_MAP['Spectrometer']
 XGDS_MAP_SERVER_JS_MAP['NIRVSS Long Wave'] = XGDS_MAP_SERVER_JS_MAP['Spectrometer']
 
-GEOCAM_TRACK_PAST_POSITION_MODEL = 'geocamTrack.PastResourcePosition'
+GEOCAM_TRACK_PAST_POSITION_MODEL = 'xgds_braille_app.PastResourcePosition'
+GEOCAM_TRACK_TRACK_MODEL = 'xgds_braille_app.BrailleTrack'
 

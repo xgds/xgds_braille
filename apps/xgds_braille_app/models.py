@@ -26,8 +26,7 @@ from django.db import models
 from django.urls import reverse
 from django.conf import settings
 
-from geocamTrack.models import AbstractTrack, DEFAULT_ICON_STYLE_FIELD, DEFAULT_LINE_STYLE_FIELD, \
-    AltitudeResourcePosition, TrackMixin
+from geocamTrack.models import *
 from xgds_timeseries.models import TimeSeriesModel, ChannelDescription
 from xgds_map_server.models import GeoJSON
 from xgds_core.models import AbstractActiveFlight, HasVehicle
@@ -83,7 +82,9 @@ class BrailleTrack(AbstractTrack, HasVehicle):
     def __unicode__(self):
         return '%s %s' % (self.__class__.__name__, self.name)
 
-class PastResourcePosition(AltitudeResourcePosition, BrailleTrackMixin):
+class PastResourcePosition(AbstractResourcePosition, AltitudeMixin, YPRMixin, TrackMixin, DepthMixin):
+    track = models.ForeignKey('xgds_braille_app.BrailleTrack')
+
     @classmethod
     def getSearchFormFields(cls):
         return ['track', 'track__vehicle', 'timestamp', 'latitude', 'longitude', 'altitude']
@@ -105,6 +106,8 @@ class BandDepthTimeSeries(TimeSeriesModel):
     band_depth = models.FloatField(null=True, blank=True)
     band_depth_definition = models.ForeignKey('xgds_braille_app.BandDepthDefinition', blank=True, null=True)
     flight = models.ForeignKey('xgds_braille_app.BrailleFlight', on_delete=models.SET_NULL, blank=True, null=True)
+
+    title = "Band Depth Time Series"
 
     channel_descriptions = {
         'band_depth': ChannelDescription('Band Depth', units='C', global_min=-5.0, global_max=5.0)
@@ -134,6 +137,7 @@ class BrailleFlight(AbstractFlight):
     vehicle = DEFAULT_VEHICLE_FIELD()
     summary = models.CharField(max_length=1024, blank=True, null=True)
     geojson = models.ForeignKey('xgds_map_server.GeoJSON', null=True, blank=True)
+    track   = models.ForeignKey('xgds_braille_app.BrailleTrack', null=True, blank=True)
 
     def has_nirvss_data(self):
         return (self.geojson is not None) and self.geojson.is_nirvss_data()
