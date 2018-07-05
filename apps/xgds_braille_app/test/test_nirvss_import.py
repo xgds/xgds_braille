@@ -27,6 +27,7 @@ import sys
 
 from xgds_braille_app.models import NirvssSpectrometerDataProduct, NirvssSpectrometerSample
 from xgds_braille_app.importer.importNirvssSpectra import importNirvssSpectra
+from xgds_braille_app.importer.importDocImage import get_doc_metadata
 
 
 class testNirvssSpectraImport(TestCase):
@@ -90,13 +91,16 @@ class testDocImport(TransactionTestCase):
         del self.couchdb_server[self.test_db_name]
 
     def test_importDocImage(self):
-        fp = open('apps/xgds_braille_app/test/my_interesting_doc_image_scale2.png')
+        filename = 'apps/xgds_braille_app/test/my_interesting_doc_image_scale2.png'
+        fp = open(filename)
+        extras = get_doc_metadata(filename)
         url = reverse('xgds_save_image')
         data ={
             'timezone':'utc',
             'vehicle':'',
             'username':'root',
-            'file':fp
+            'file':fp,
+            'exif':extras
         }
         r = self.client.post(url, data=data)
         assert(r.status_code==200)

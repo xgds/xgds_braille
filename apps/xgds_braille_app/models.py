@@ -26,16 +26,24 @@ from django.db import models
 from django.urls import reverse
 from django.conf import settings
 
+from taggit.managers import TaggableManager
+
 from geocamTrack.models import AbstractTrack, DEFAULT_ICON_STYLE_FIELD, DEFAULT_LINE_STYLE_FIELD, \
     AltitudeResourcePosition, TrackMixin
 from xgds_timeseries.models import TimeSeriesModel, ChannelDescription
 from xgds_map_server.models import GeoJSON
-from xgds_core.models import AbstractActiveFlight, HasVehicle
+from xgds_core.models import AbstractActiveFlight, HasVehicle, BroadcastMixin
 from xgds_planner2.models import AbstractPlanExecution
 from xgds_core.models import AbstractFlight, DEFAULT_VEHICLE_FIELD, AbstractGroupFlight
 from xgds_instrument.models import ScienceInstrument, AbstractInstrumentDataProduct
 from xgds_notes2.models import NoteLinksMixin, NoteMixin, DEFAULT_NOTES_GENERIC_RELATION
 from xgds_core.models import HasFlight
+from xgds_image.models import AbstractSingleImage, AbstractImageSet, DEFAULT_CAMERA_FIELD
+from xgds_image import models as xgds_image_models
+from xgds_notes2.models import AbstractTaggedNote, AbstractLocatedNote
+
+from django.contrib.contenttypes.fields import GenericRelation
+BRAILLE_NOTES_GENERIC_RELATION = lambda: GenericRelation('BrailleNote', related_name='%(app_label)s_%(class)s_related')
 
 
 class BrailleTrackMixin(models.Model):
@@ -87,6 +95,36 @@ class PastResourcePosition(AltitudeResourcePosition, BrailleTrackMixin):
     @classmethod
     def getSearchFormFields(cls):
         return ['track', 'track__vehicle', 'timestamp', 'latitude', 'longitude', 'altitude']
+
+
+class AbstractBraillePosition(AltitudeResourcePosition, BroadcastMixin):
+    # set foreign key fields required by parent model to correct types for this site
+    track = models.ForeignKey(BrailleTrack, db_index=True, null=True, blank=True)
+    serverTimestamp = models.DateTimeField(db_index=True)
+
+    def getBroadcastChannel(self):
+        result = self.displayName
+        if not result:
+            return 'sse'
+        return result
+
+    @property
+    def displayName(self):
+        if self.track:
+            return self.track.vehicle_name
+        return None
+
+    class Meta:
+        abstract = True
+
+
+class CurrentPosition(AbstractBraillePosition):
+    pass
+
+
+class PastPosition(AbstractBraillePosition):
+    pass
+
 
 class BandDepthGeoJSON(GeoJSON):
     flight = models.ForeignKey('xgds_braille_app.BrailleFlight', null=True, blank=True)
@@ -184,6 +222,10 @@ class BrailleFlight(AbstractFlight):
                  }
             })
         return children
+
+DEFAULT_FLIGHT_FIELD = lambda: models.ForeignKey(BrailleFlight, related_name='%(app_label)s_%(class)s_related',
+                                                 verbose_name=settings.XGDS_CORE_FLIGHT_MONIKER, blank=True, null=True)
+
 
 class NirvssSpectrometerDataProduct(AbstractInstrumentDataProduct, NoteLinksMixin, NoteMixin, HasFlight):
         flight = models.ForeignKey(settings.XGDS_CORE_FLIGHT_MODEL, null=True, blank=True)
@@ -286,4 +328,148 @@ class Environmental(TimeSeriesModel):
     @classmethod
     def get_channel_names(cls):
         return ['temperature', 'pressure', 'humidity', ]
+
+
+class InstrumentPlatformTilt(TimeSeriesModel):
+    """
+    This is an auto-generated Django model created from a
+    YAML specifications using ./submodules/xgds_core/xgds_core/importer/yamlModelBuilder.py
+    and YAML file apps/xgds_braille_app/importer/KRex2_Tilt.yaml
+    """
+
+    timestamp = models.DateTimeField(db_index=True, null=False, blank=False)
+    tilt = models.FloatField(null=True, blank=True)
+    flight = models.ForeignKey('xgds_braille_app.BrailleFlight', on_delete=models.SET_NULL, blank=True, null=True)
+
+    title = 'Instrument Platform Tilt'
+    channel_descriptions = {
+                            'tilt': ChannelDescription('Tilt', units='degrees'),
+                            }
+
+    @classmethod
+    def get_channel_names(cls):
+        return ['tilt', ]
+
+
+class BrailleTaggedNote(AbstractTaggedNote):
+    # set foreign key fields required by parent model to correct types for this site
+    content_object = models.ForeignKey('BrailleNote')
+
+
+class BrailleNote(AbstractLocatedNote):
+    # Override this to specify a list of related fields
+    # to be join-query loaded when notes are listed, as an optimization
+    # prefetch for reverse or for many to many.
+    prefetch_related_fields = ['tags']
+
+    # select related for forward releationships.
+    select_related_fields = ['author', 'role', 'location', 'flight', 'position']
+
+    # set foreign key fields and manager required by parent model to correct types for this site
+    position = models.ForeignKey(PastPosition, null=True, blank=True)
+    tags = TaggableManager(through=BrailleTaggedNote, blank=True)
+
+    flight = DEFAULT_FLIGHT_FIELD()
+    notes = BRAILLE_NOTES_GENERIC_RELATION()
+
+    def getBroadcastChannel(self):
+        if self.flight:
+            return self.flight.vehicle.name
+        return 'sse'
+
+    @classmethod
+    def buildTagsQuery(cls, search_value):
+        splits = search_value.split(' ')
+        found_tags = HierarchichalTag.objects.filter(name__in=splits)
+        if found_tags:
+            return {'tags__in': found_tags}
+        return None
+
+    def calculateDelayedEventTime(self, event_time):
+        try:
+            if self.flight.active:
+                delayConstant = Constant.objects.get(name="delay")
+                return event_time - datetime.timedelta(seconds=int(delayConstant.value))
+        except:
+            pass
+        return self.event_time
+
+    def getPosition(self):
+        # IMPORTANT this should not be used across multitudes of notes, it is designed to be used during construction.
+        if not self.position and self.location_found == None:
+            vehicle = None
+            if self.flight:
+                if self.flight.vehicle:
+                    vehicle = self.flight.vehicle
+            self.position = getClosestPosition(timestamp=self.event_time, vehicle=vehicle)
+            if self.position:
+                self.location_found = True
+            else:
+                self.location_found = False
+            self.save()
+        return self.position
+
+    @classmethod
+    def getSearchFormFields(cls):
+        return ['content',
+                'tags',
+                'event_timezone',
+                'author',
+                'role',
+                'location',
+                'flight__vehicle'
+                ]
+
+    @classmethod
+    def getSearchFieldOrder(cls):
+        return ['tags',
+                'hierarchy',
+                'content',
+                'author',
+                'flight__group',
+                'flight__vehicle',
+                'role',
+                'location',
+                'event_timezone',
+                'min_event_time',
+                'max_event_time']
+
+
+class BrailleImageSet(AbstractImageSet):
+    camera = DEFAULT_CAMERA_FIELD()
+    track_position = models.ForeignKey(PastResourcePosition, null=True, blank=True )
+    exif_position = models.ForeignKey(PastResourcePosition, null=True, blank=True, related_name="%(app_label)s_%(class)s_image_exif_set" )
+    user_position = models.ForeignKey(PastResourcePosition, null=True, blank=True, related_name="%(app_label)s_%(class)s_image_user_set" )
+    flight = DEFAULT_FLIGHT_FIELD()
+    notes = BRAILLE_NOTES_GENERIC_RELATION()
+
+
+class BrailleSingleImage(AbstractSingleImage):
+    """ This can be used for screenshots or non geolocated images
+    """
+    # set foreign key fields from parent model to point to correct types
+    imageSet = models.ForeignKey(BrailleImageSet, null=True, related_name="images")
+
+class ImageAnnotation(xgds_image_models.AbstractAnnotation):
+    image = models.ForeignKey(BrailleImageSet, related_name='%(app_label)s_%(class)s_image')
+
+    class Meta:
+        abstract = True
+
+
+class TextAnnotation(ImageAnnotation, xgds_image_models.AbstractTextAnnotation):
+    pass
+
+
+class EllipseAnnotation(ImageAnnotation, xgds_image_models.AbstractEllipseAnnotation):
+    pass
+
+
+class RectangleAnnotation(ImageAnnotation, xgds_image_models.AbstractRectangleAnnotation):
+    pass
+
+
+class ArrowAnnotation(ImageAnnotation, xgds_image_models.AbstractArrowAnnotation):
+    pass
+
 

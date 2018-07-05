@@ -17,7 +17,7 @@
 from django.contrib import admin
 
 from models import *
-from xgds_image.models import ImageSet, SingleImage
+from xgds_core.models import ImportedTelemetryFile
 
 admin.site.register(WallDistance)
 admin.site.register(Environmental)
@@ -27,9 +27,13 @@ admin.site.register(NirvssSpectrometerSample)
 admin.site.register(BrailleFlight)
 admin.site.register(GroupFlight)
 admin.site.register(PlanExecution)
-admin.site.register(ImageSet)
-admin.site.register(SingleImage)
+#admin.site.register(ImageSet)
+#admin.site.register(SingleImage)
 admin.site.register(BandDepthDefinition)
 admin.site.register(BandDepthTimeSeries)
 admin.site.register(BandDepthGeoJSON)
 admin.site.register(BrailleTrack)
+admin.site.register(BrailleSingleImage)
+admin.site.register(BrailleImageSet)
+admin.site.register(InstrumentPlatformTilt)
+admin.site.register(ImportedTelemetryFile)
