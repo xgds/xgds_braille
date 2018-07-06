@@ -40,16 +40,17 @@ class BandDepthGeoJSON(GeoJSON, IsFlightChild):
     @classmethod
     def get_tree_json(cls, parent_class, parent_pk):
         try:
-            # TODO is it possible to have more than one band depth per flight?
-            found = cls.objects.get(flight__id=parent_pk)
-            result = {"title": "NIRVSS heatmap",
-                      "selected": False,
-                      "tooltip": "Band Depth for " + found.flight.name,
-                      "key": found.pk + "_nirvss",
-                      "data": {"type": "GeoJSON",
-                               "geoJSON": found.geojson.geoJSON,
-                               }
-                      }
+            found = cls.objects.filter(flight__id=parent_pk)
+            result = []
+            for f in found:
+                result.append({"title": "NIRVSS heatmap",
+                               "selected": False,
+                               "tooltip": "Band Depth for " + f.flight.name,
+                               "key": f.pk + "_nirvss",
+                               "data": {"type": "GeoJSON",
+                                        "geoJSON": f.geojson.geoJSON,
+                                       }
+                              })
             return result
         except ObjectDoesNotExist:
             return None
