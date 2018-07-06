@@ -36,6 +36,8 @@ from xgds_core.models import HasFlight, DEFAULT_FLIGHT_FIELD, IsFlightChild
 
 class BandDepthGeoJSON(GeoJSON, IsFlightChild):
     flight = models.ForeignKey(settings.XGDS_CORE_FLIGHT_MODEL, null=True, blank=True)
+    band_depth_definition = models.ForeignKey('xgds_braille_app.BandDepthDefinition', null=True, blank=True)
+    band_depth_time_series = models.ForeignKey('xgds_braille_app.BandDepthTimeSeries', null=True, blank=True)
 
     @classmethod
     def get_tree_json(cls, parent_class, parent_pk):
@@ -43,14 +45,17 @@ class BandDepthGeoJSON(GeoJSON, IsFlightChild):
             found = cls.objects.filter(flight__id=parent_pk)
             result = []
             for f in found:
-                result.append({"title": "NIRVSS heatmap",
-                               "selected": False,
-                               "tooltip": "Band Depth for " + f.flight.name,
-                               "key": f.pk + "_nirvss",
-                               "data": {"type": "GeoJSON",
-                                        "geoJSON": f.geojson.geoJSON,
-                                       }
-                              })
+                result.append({
+                    "title": "NIRVSS heatmap for %s" % f.band_depth_definition.name,
+                    "selected": False,
+                    "tooltip": "NIRVSS heatmap for %s taken on flight %s" % (
+                    f.band_depth_definition.name, f.flight.name),
+                    "key": f.pk + "_nirvss",
+                    "data": {
+                        "type": "GeoJSON",
+                        "geoJSON": f.geojson.geoJSON,
+                    }
+                })
             return result
         except ObjectDoesNotExist:
             return None
