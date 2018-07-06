@@ -25,72 +25,34 @@ from __future__ import unicode_literals
 from django.db import models
 from django.urls import reverse
 from django.conf import settings
+from django.core.exceptions import ObjectDoesNotExist
 
-from geocamTrack.models import *
 from xgds_timeseries.models import TimeSeriesModel, ChannelDescription
 from xgds_map_server.models import GeoJSON
-from xgds_core.models import AbstractActiveFlight, HasVehicle
-from xgds_planner2.models import AbstractPlanExecution
-from xgds_core.models import AbstractFlight, DEFAULT_VEHICLE_FIELD, AbstractGroupFlight
 from xgds_instrument.models import ScienceInstrument, AbstractInstrumentDataProduct
 from xgds_notes2.models import NoteLinksMixin, NoteMixin, DEFAULT_NOTES_GENERIC_RELATION
-from xgds_core.models import HasFlight
+from xgds_core.models import HasFlight, DEFAULT_FLIGHT_FIELD, IsFlightChild
 
 
-class BrailleTrackMixin(models.Model):
-    track = models.ForeignKey('xgds_braille_app.BrailleTrack')
-
-    @property
-    def has_track(self):
-        return hasattr(self, 'track')
-
-    @property
-    def track_name(self):
-        if self.has_track:
-            return self.track.name
-        return None
-
-    @property
-    def track_pk(self):
-        if self.has_track:
-            return self.track.pk
-        return None
-
-    @property
-    def track_color(self):
-        if self.has_track:
-            return self.track.getLineStyleColor()
-        return None
-
-    @property
-    def track_hexcolor(self):
-        if self.has_track:
-            kc = self.track.getLineStyleColor()
-            nc = '%s%s%s' % (kc[6:], kc[4:6], kc[2:4])
-            return nc
-        return None
-
-    class Meta:
-        abstract = True
-
-class BrailleTrack(AbstractTrack, HasVehicle):
-    iconStyle = DEFAULT_ICON_STYLE_FIELD()
-    lineStyle = DEFAULT_LINE_STYLE_FIELD()
-    flight = models.ForeignKey('xgds_braille_app.BrailleFlight', null=True, blank=True)
-    vehicle = DEFAULT_VEHICLE_FIELD()
-
-    def __unicode__(self):
-        return '%s %s' % (self.__class__.__name__, self.name)
-
-class PastResourcePosition(AbstractResourcePosition, AltitudeMixin, YPRMixin, TrackMixin, DepthMixin):
-    track = models.ForeignKey('xgds_braille_app.BrailleTrack')
+class BandDepthGeoJSON(GeoJSON, IsFlightChild):
+    flight = models.ForeignKey(settings.XGDS_CORE_FLIGHT_MODEL, null=True, blank=True)
 
     @classmethod
-    def getSearchFormFields(cls):
-        return ['track', 'track__vehicle', 'timestamp', 'latitude', 'longitude', 'altitude']
+    def get_tree_json(cls, parent_class, parent_pk):
+        try:
+            found = cls.objects.get(flight__id=parent_pk)
+            result = {"title": "NIRVSS heatmap",
+                      "selected": False,
+                      "tooltip": "Band Depth for " + found.flight.name,
+                      "key": found.pk + "_nirvss",
+                      "data": {"type": "GeoJSON",
+                               "geoJSON": found.geojson.geoJSON,
+                               }
+                      }
+            return result
+        except ObjectDoesNotExist:
+            return None
 
-class BandDepthGeoJSON(GeoJSON):
-    flight = models.ForeignKey('xgds_braille_app.BrailleFlight', null=True, blank=True)
 
 class BandDepthDefinition(models.Model):
     name = models.CharField(max_length=256, null=True, blank=True)
@@ -101,15 +63,12 @@ class BandDepthDefinition(models.Model):
     def __unicode__ (self):
         return "%s between %s nm and %s nm, center %s nm" % (self.name, self.left_wavelength, self.right_wavelength, self.center_wavelength)
 
+
 class BandDepthTimeSeries(TimeSeriesModel):
     time_stamp = models.DateTimeField(db_index=True, null=False, blank=False)
     band_depth = models.FloatField(null=True, blank=True)
     band_depth_definition = models.ForeignKey('xgds_braille_app.BandDepthDefinition', blank=True, null=True)
-    flight = models.ForeignKey('xgds_braille_app.BrailleFlight', on_delete=models.SET_NULL, blank=True, null=True)
-
-    title = "Band Depth Time Series"
-
-    title = "Band Depth Time Series"
+    flight = models.ForeignKey(settings.XGDS_CORE_FLIGHT_MODEL, on_delete=models.SET_NULL, null=True, blank=True)
 
     channel_descriptions = {
         'band_depth': ChannelDescription('Band Depth', units='C', global_min=-5.0, global_max=5.0)
@@ -122,74 +81,6 @@ class BandDepthTimeSeries(TimeSeriesModel):
     def __unicode__ (self):
         return "ts: %s, band depth %s, bd name: %s" % (self.time_stamp, self.band_depth, self.band_depth_definition.name)
 
-class ActiveFlight(AbstractActiveFlight):
-    flight = models.ForeignKey('xgds_braille_app.BrailleFlight', null=True, blank=True)
-
-class PlanExecution(AbstractPlanExecution):
-    plan = models.ForeignKey('xgds_planner2.Plan', null=True, related_name='xgds_braille_plan_execution')
-    flight = models.ForeignKey('xgds_braille_app.BrailleFlight', null=True, blank=True)
-
-class GroupFlight(AbstractGroupFlight):
-    @property
-    def flights (self):
-        return self.brailleflight_set.all()
-
-class BrailleFlight(AbstractFlight):
-    group   = models.ForeignKey('xgds_braille_app.GroupFlight', null=True, blank=True)
-    vehicle = DEFAULT_VEHICLE_FIELD()
-    summary = models.CharField(max_length=1024, blank=True, null=True)
-    geojson = models.ForeignKey('xgds_map_server.GeoJSON', null=True, blank=True)
-    track   = models.ForeignKey('xgds_braille_app.BrailleTrack', null=True, blank=True)
-
-    def has_nirvss_data(self):
-        return (self.geojson is not None) and self.geojson.is_nirvss_data()
-
-    def getTreeJsonChildren(self):
-        children = []
-
-        if hasattr(self, 'track'):
-            children.append({
-                 "title"   : "Track",
-                 "selected": False,
-                 "tooltip" : "Tracks for " + self.name,
-                 "key"     : self.uuid + "_tracks",
-                 "data"    : {
-                     "json"   : reverse('geocamTrack_mapJsonTrack', kwargs={'uuid': str(self.track.uuid)}),
-                     "kmlFile": reverse('geocamTrack_trackKml', kwargs={'trackName': self.track.name}),
-                     "sseUrl" : "",
-                     "type"   : 'MapLink',
-                 }
-            })
-
-        if self.plans:
-            my_plan = self.plans[0].plan
-            children.append({
-                 "title"   : "Plan",
-                 "selected": False,
-                 "tooltip" : "Plan for " + self.name,
-                 "key"     : self.uuid + "_plan",
-                 "data"    : {
-                     "json"   : reverse('planner2_mapJsonPlan', kwargs={'uuid': str(my_plan.uuid)}),
-                     "kmlFile": reverse('planner2_planExport', kwargs={'uuid': str(my_plan.uuid), 'name': my_plan.name + '.kml'}),
-                        "sseUrl" : "",
-                        "type"   : 'MapLink',
-                 }
-            })
-
-        if self.has_nirvss_data():
-            # this will be changed in the future
-
-            children.append({
-                 "title"   : "NIRVSS heatmap",
-                 "selected": False,
-                 "tooltip" : "GeoJSON object for " + self.name,
-                 "key"     : self.uuid + "_plan",
-                 "data"    : {
-                    "type"   : "GeoJSON",
-                    "geoJSON": self.geojson.geoJSON,
-                 }
-            })
-        return children
 
 class NirvssSpectrometerDataProduct(AbstractInstrumentDataProduct, NoteLinksMixin, NoteMixin, HasFlight):
         flight = models.ForeignKey(settings.XGDS_CORE_FLIGHT_MODEL, null=True, blank=True)
@@ -236,6 +127,7 @@ class NirvssSpectrometerDataProduct(AbstractInstrumentDataProduct, NoteLinksMixi
             return "%s @ %s" % (self.instrument.shortName,
                                 self.acquisition_time)
 
+
 class NirvssSpectrometerSample(models.Model):
     dataProduct = models.ForeignKey(NirvssSpectrometerDataProduct)
     wavelength = models.IntegerField(db_index=True)
@@ -248,6 +140,7 @@ class NirvssSpectrometerSample(models.Model):
         return "%s: (%d, %f)" % (self.dataProduct.name,
                                  self.wavelength, self.reflectance)
 
+
 class WallDistance(TimeSeriesModel):
     """
     This is an auto-generated Django model created from a
@@ -257,8 +150,7 @@ class WallDistance(TimeSeriesModel):
 
     timestamp = models.DateTimeField(db_index=True, null=False, blank=False)
     distance = models.FloatField(null=True, blank=True)
-    flight = models.ForeignKey('xgds_core.Flight', on_delete=models.SET_NULL, blank=True, null=True)
-
+    flight = models.ForeignKey(settings.XGDS_CORE_FLIGHT_MODEL, on_delete=models.SET_NULL, null=True, blank=True)
     title = 'Wall Distance'
 
     channel_descriptions = {'distance': ChannelDescription('Wall Distance', 'm', 0, 5, interval=1),
@@ -267,6 +159,7 @@ class WallDistance(TimeSeriesModel):
     @classmethod
     def get_channel_names(cls):
         return ['distance']
+
 
 class Environmental(TimeSeriesModel):
     """
@@ -279,7 +172,7 @@ class Environmental(TimeSeriesModel):
     temperature = models.FloatField(null=True, blank=True)
     pressure = models.FloatField(null=True, blank=True)
     humidity = models.FloatField(null=True, blank=True)
-    flight = models.ForeignKey('xgds_core.Flight', on_delete=models.SET_NULL, blank=True, null=True)
+    flight = models.ForeignKey(settings.XGDS_CORE_FLIGHT_MODEL, on_delete=models.SET_NULL, null=True, blank=True)
 
     title = 'Environmental'
 
@@ -292,4 +185,27 @@ class Environmental(TimeSeriesModel):
     @classmethod
     def get_channel_names(cls):
         return ['temperature', 'pressure', 'humidity', ]
+
+
+class InstrumentPlatformTilt(TimeSeriesModel):
+    """
+    This is an auto-generated Django model created from a
+    YAML specifications using ./submodules/xgds_core/xgds_core/importer/yamlModelBuilder.py
+    and YAML file apps/xgds_braille_app/importer/KRex2_Tilt.yaml
+    """
+
+    timestamp = models.DateTimeField(db_index=True, null=False, blank=False)
+    tilt = models.FloatField(null=True, blank=True)
+    flight = models.ForeignKey(settings.XGDS_CORE_FLIGHT_MODEL, on_delete=models.SET_NULL, null=True, blank=True)
+
+    title = 'Instrument Platform Tilt'
+    channel_descriptions = {
+                            'tilt': ChannelDescription('Tilt', units='degrees'),
+                            }
+
+    @classmethod
+    def get_channel_names(cls):
+        return ['tilt', ]
+
+
 
