@@ -109,6 +109,8 @@ class BandDepthTimeSeries(TimeSeriesModel):
 
     title = "Band Depth Time Series"
 
+    title = "Band Depth Time Series"
+
     channel_descriptions = {
         'band_depth': ChannelDescription('Band Depth', units='C', global_min=-5.0, global_max=5.0)
     }
