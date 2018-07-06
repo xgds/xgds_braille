@@ -401,24 +401,7 @@ REST_FRAMEWORK = {
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 SESSION_COOKIE_AGE = 43200 # 12 hours
 
-
-XGDS_CORE_FLIGHT_MODEL = "xgds_braille_app.BrailleFlight"
-XGDS_CORE_GROUP_FLIGHT_MODEL = "xgds_braille_app.GroupFlight"
-XGDS_PLANNER_PLAN_EXECUTION_MODEL = "xgds_braille_app.PlanExecution"
-XGDS_CORE_ACTIVE_FLIGHT_MODEL = "xgds_braille_app.ActiveFlight"
 XGDS_MAP_SERVER_JS_MAP = getOrCreateDict('XGDS_MAP_SERVER_JS_MAP')
-
-XGDS_IMAGE_IMAGE_SET_MODEL = 'xgds_braille_app.BrailleImageSet'
-XGDS_IMAGE_SINGLE_IMAGE_MODEL = 'xgds_braille_app.BrailleSingleImage'
-XGDS_IMAGE_DEFAULT_CREATE_DEEPZOOM = True
-XGDS_IMAGE_ARROW_ANNOTATION_MODEL = 'xgds_braille_app.ArrowAnnotation'
-XGDS_IMAGE_ELLIPSE_ANNOTATION_MODEL = 'xgds_braille_app.EllipseAnnotation'
-XGDS_IMAGE_RECTANGLE_ANNOTATION_MODEL = 'xgds_braille_app.RectangleAnnotation'
-XGDS_IMAGE_TEXT_ANNOTATION_MODEL = 'xgds_braille_app.TextAnnotation'
-
-XGDS_CORE_TEMPLATE_DIRS = getOrCreateDict('XGDS_CORE_TEMPLATE_DIRS')
-XGDS_CORE_TEMPLATE_DIRS[XGDS_SAMPLE_SAMPLE_MODEL] = [os.path.join('xgds_sample', 'templates', 'handlebars')]
-XGDS_CORE_TEMPLATE_DIRS[XGDS_IMAGE_IMAGE_SET_MODEL] = [os.path.join('xgds_image', 'templates', 'handlebars')]
 
 XGDS_MAP_SERVER_JS_MAP['Spectrometer'] = {'ol': 'xgds_instrument/js/olSpectrometerDataProduct.js',
                                           'model': 'xgds_braille_app.NirvssSpectrometerDataProduct',
@@ -439,5 +422,5 @@ XGDS_MAP_SERVER_JS_MAP['Spectrometer'] = {'ol': 'xgds_instrument/js/olSpectromet
 XGDS_MAP_SERVER_JS_MAP['NIRVSS Short Wave'] = XGDS_MAP_SERVER_JS_MAP['Spectrometer']
 XGDS_MAP_SERVER_JS_MAP['NIRVSS Long Wave'] = XGDS_MAP_SERVER_JS_MAP['Spectrometer']
 
-GEOCAM_TRACK_PAST_POSITION_MODEL = 'geocamTrack.PastResourcePosition'
+GEOCAM_TRACK_PAST_POSITION_MODEL = 'geocamTrack.PastResourcePoseDepth'
 

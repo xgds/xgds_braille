@@ -3,7 +3,9 @@
 import django
 django.setup()
 from pandas import DataFrame, merge, to_datetime
-from xgds_braille_app.models import NirvssSpectrometerDataProduct, BandDepthTimeSeries, BrailleFlight, BandDepthDefinition
+from xgds_core.models import Flight
+from xgds_braille_app.models import NirvssSpectrometerDataProduct, BandDepthTimeSeries, BandDepthDefinition
+
 
 def calculate_band_depth(data_frame, wavelengths, sampling_rate="1T"):
     reflectances = [
@@ -29,6 +31,7 @@ def calculate_band_depth(data_frame, wavelengths, sampling_rate="1T"):
 
     return reflectances[['band_depth']].resample(sampling_rate).mean().dropna()
 
+
 def convert_nirvss_spectra(start_time, end_time):
     data_products = NirvssSpectrometerDataProduct.objects.filter(instrument_id=1).filter(acquisition_time__gte=start_time, acquisition_time__lte=end_time)
     samples = []
@@ -45,15 +48,19 @@ def convert_nirvss_spectra(start_time, end_time):
 
     return DataFrame(data=samples)
 
+
 def add_band_depth_time_series(data_frame, band_depth_definition, flight):
     for time, band_depth in data_frame.itertuples(name=None):
         BandDepthTimeSeries.objects.create(time_stamp=time, band_depth=band_depth, band_depth_definition=band_depth_definition, flight=flight)
 
+
 def get_flight(flight_name):
-    return BrailleFlight.objects.get(name=flight_name)
+    return Flight.objects.get(name=flight_name)
+
 
 def get_band_depth_definitions():
     return BandDepthDefinition.objects.all()
+
 
 if __name__=='__main__':
     import sys
