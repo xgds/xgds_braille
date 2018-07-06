@@ -36,23 +36,28 @@ from xgds_core.models import HasFlight, DEFAULT_FLIGHT_FIELD, IsFlightChild
 
 class BandDepthGeoJSON(GeoJSON, IsFlightChild):
     flight = models.ForeignKey(settings.XGDS_CORE_FLIGHT_MODEL, null=True, blank=True)
+    band_depth_definition = models.ForeignKey('xgds_braille_app.BandDepthDefinition', null=True, blank=True)
+    band_depth_time_series = models.ForeignKey('xgds_braille_app.BandDepthTimeSeries', null=True, blank=True)
 
     @classmethod
     def get_tree_json(cls, parent_class, parent_pk):
         try:
-            # TODO is it possible to have more than one band depth per flight?
-            found = cls.objects.get(flight__id=parent_pk)
-            result = {"title": "NIRVSS heatmap",
-                      "selected": False,
-                      "tooltip": "Band Depth for " + found.flight.name,
-                      "key": found.pk + "_nirvss",
-                      "data": {"type": "GeoJSON",
-                               "geoJSON": found.geojson.geoJSON,
-                               }
-                      }
-            return result
+            band_depth_geojson = cls.objects.get(flight__id=parent_pk)
         except ObjectDoesNotExist:
             return None
+
+        result = {
+            "title": "NIRVSS heatmap for %s" % band_depth_geojson.band_depth_definition.name,
+            "selected": False,
+            "tooltip": "NIRVSS heatmap for %s taken on flight %s" % (band_depth_geojson.band_depth_definition.name, band_depth_geojson.flight.name),
+            "key": band_depth_geojson.pk + "_nirvss",
+            "data": {
+                "type": "GeoJSON",
+                "geoJSON": band_depth_geojson.geojson.geoJSON,
+            }
+        }
+
+        return result
 
 
 class BandDepthDefinition(models.Model):
