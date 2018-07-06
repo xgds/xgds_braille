@@ -69,6 +69,7 @@ class BandDepthTimeSeries(TimeSeriesModel):
     band_depth = models.FloatField(null=True, blank=True)
     band_depth_definition = models.ForeignKey('xgds_braille_app.BandDepthDefinition', blank=True, null=True)
     flight = models.ForeignKey(settings.XGDS_CORE_FLIGHT_MODEL, on_delete=models.SET_NULL, null=True, blank=True)
+    title = "Band Depth Time Series"
 
     channel_descriptions = {
         'band_depth': ChannelDescription('Band Depth', units='C', global_min=-5.0, global_max=5.0)
