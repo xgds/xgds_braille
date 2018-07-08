@@ -99,11 +99,13 @@ class NirvssSpectrometerDataProduct(AbstractInstrumentDataProduct, NoteLinksMixi
         found = NirvssSpectrometerDataProduct.objects.filter(flight__id=flight_pk)
         result = None
         if found.exists():
+            flight = LazyGetModelByName(settings.XGDS_CORE_FLIGHT_MODEL).get().objects.get(id=flight_pk)
             result = {'name': 'NIRVSS Spectra',
                       'count': found.count(),
                       'url': reverse('search_map_object_filter',
                                      kwargs={'modelName': 'Spectrometer',
-                                             'filter': 'flight__pk:' + str(flight_pk)})
+                                             'filter': 'flight__group:%d,flight__vehicle:%d' % (
+                                             flight.group.pk, flight.vehicle.pk)})
                       }
         return result
 
