@@ -37,7 +37,6 @@ from xgds_core.models import HasFlight, DEFAULT_FLIGHT_FIELD, IsFlightChild
 class BandDepthGeoJSON(GeoJSON, IsFlightChild):
     flight = models.ForeignKey(settings.XGDS_CORE_FLIGHT_MODEL, null=True, blank=True)
     band_depth_definition = models.ForeignKey('xgds_braille_app.BandDepthDefinition', null=True, blank=True)
-    band_depth_time_series = models.ForeignKey('xgds_braille_app.BandDepthTimeSeries', null=True, blank=True)
 
     @classmethod
     def get_tree_json(cls, parent_class, parent_pk):
