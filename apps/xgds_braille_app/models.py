@@ -31,7 +31,7 @@ from xgds_timeseries.models import TimeSeriesModel, ChannelDescription
 from xgds_map_server.models import GeoJSON
 from xgds_instrument.models import ScienceInstrument, AbstractInstrumentDataProduct
 from xgds_notes2.models import NoteLinksMixin, NoteMixin, DEFAULT_NOTES_GENERIC_RELATION
-from xgds_core.models import HasFlight, DEFAULT_FLIGHT_FIELD, IsFlightChild
+from xgds_core.models import HasFlight, DEFAULT_FLIGHT_FIELD, IsFlightChild, IsFlightData
 
 
 class BandDepthGeoJSON(GeoJSON, IsFlightChild):
@@ -89,50 +89,63 @@ class BandDepthTimeSeries(TimeSeriesModel):
         return "ts: %s, band depth %s, bd name: %s" % (self.time_stamp, self.band_depth, self.band_depth_definition.name)
 
 
-class NirvssSpectrometerDataProduct(AbstractInstrumentDataProduct, NoteLinksMixin, NoteMixin, HasFlight):
-        flight = models.ForeignKey(settings.XGDS_CORE_FLIGHT_MODEL, null=True, blank=True)
-        notes = DEFAULT_NOTES_GENERIC_RELATION()
+class NirvssSpectrometerDataProduct(AbstractInstrumentDataProduct, NoteLinksMixin, NoteMixin, HasFlight, IsFlightData):
+    flight = models.ForeignKey(settings.XGDS_CORE_FLIGHT_MODEL, null=True, blank=True)
+    notes = DEFAULT_NOTES_GENERIC_RELATION()
 
-        @classmethod
-        def getSearchableFields(self):
-            result = super(AbstractInstrumentDataProduct, self).getSearchableFields()
-            result.append('flight__name')
-            return result
+    @classmethod
+    def get_info_json(cls, flight_pk):
+        found = NirvssSpectrometerDataProduct.objects.filter(flight__id=flight_pk)
+        result = None
+        if found.exists():
+            result = {'name': 'NIRVSS Spectra',
+                      'count': found.count(),
+                      'url': reverse('search_map_object_filter',
+                                     kwargs={'modelName': 'Spectrometer',
+                                             'filter': 'flight__pk:' + str(flight_pk)})
+                      }
+        return result
 
-        @property
-        def samples(self):
-            samples = [(s.wavelength,s.reflectance) for s in self.nirvssspectrometersample_set.all()]
-            return samples
+    @classmethod
+    def getSearchableFields(self):
+        result = super(AbstractInstrumentDataProduct, self).getSearchableFields()
+        result.append('flight__name')
+        return result
 
-        @classmethod
-        def getDataForm(cls, instrument_name):
-            return None
+    @property
+    def samples(self):
+        samples = [(s.wavelength,s.reflectance) for s in self.nirvssspectrometersample_set.all()]
+        return samples
 
-        @classmethod
-        def getSearchFormFields(cls):
-            return ['flight__vehicle',
-                    'flight',
-                    'name',
-                    'description',
-                    'collector',
-                    'creator',
-                    ]
+    @classmethod
+    def getDataForm(cls, instrument_name):
+        return None
 
-        @classmethod
-        def getSearchFieldOrder(cls):
-            return ['flight__vehicle',
-                    'flight',
-                    'name',
-                    'description',
-                    'collector',
-                    'creator',
-                    'acquisition_timezone',
-                    'min_acquisition_time',
-                    'max_acquisition_time']
+    @classmethod
+    def getSearchFormFields(cls):
+        return ['flight__vehicle',
+                'flight',
+                'name',
+                'description',
+                'collector',
+                'creator',
+                ]
 
-        def __unicode__(self):
-            return "%s @ %s" % (self.instrument.shortName,
-                                self.acquisition_time)
+    @classmethod
+    def getSearchFieldOrder(cls):
+        return ['flight__vehicle',
+                'flight',
+                'name',
+                'description',
+                'collector',
+                'creator',
+                'acquisition_timezone',
+                'min_acquisition_time',
+                'max_acquisition_time']
+
+    def __unicode__(self):
+        return "%s @ %s" % (self.instrument.shortName,
+                            self.acquisition_time)
 
 
 class NirvssSpectrometerSample(models.Model):

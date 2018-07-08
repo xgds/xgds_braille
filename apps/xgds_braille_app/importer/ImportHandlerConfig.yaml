@@ -8,91 +8,92 @@ import_path: '/home/xgds/xgds_braille/data/incoming'
 registry:
   - name: 'KRex Track'
     filepath_pattern: '[\d\.]+_RODO.csv'
-    importer: '/home/xgds/xgds_braille/apps/xgds_core/importer/csvImportRunner.py'
-    arguments: '-i %(filename)s -c /home/xgds/xgds_braille/apps/xgds_braille_app/importer/KRex2_PastPosition.yaml -v KRex2'
+    importer: '/home/xgds/xgds_braille/apps/geocamTrack/importer/trackImportRunner.py'
+    arguments: '-o 10T -i %(filename)s -c /home/xgds/xgds_braille/apps/xgds_braille_app/importer/KRex2_PastPosition.yaml -v KRex2'
     timeout: 300
     order: 1
-  - name: 'Mapping Pose Estimates'
-    filepath_pattern: 'MAPS/localizations_xgds.txt'
-    importer: '/home/xgds/xgds_braille/apps/xgds_core/importer/csvImportRunner.py'
-    arguments: '-i %(filename)s -c /home/xgds/xgds_braille/apps/xgds_braille_app/importer/KRex2_PastPosition.yaml -v KRex2'
-    timeout: 300
-    order: 1
+#  - name: 'Mapping Pose Estimates'
+#    filepath_pattern: 'MAPS/localizations_xgds.txt'
+#    importer: '/home/xgds/xgds_braille/apps/xgds_core/importer/csvImportRunner.py'
+#    arguments: '-i %(filename)s -c /home/xgds/xgds_braille/apps/xgds_braille_app/importer/KRex2_PastPosition.yaml -v KRex2'
+#    timeout: 300
+#    order: 1
   - name: 'KRex Wall Distance'
     filepath_pattern: 'MAPS/distances\.txt'
     importer: '/home/xgds/xgds_braille/apps/xgds_core/importer/csvImportRunner.py'
     arguments: '-i %(filename)s -c /home/xgds/xgds_braille/apps/xgds_braille_app/importer/KRex2_Distance.yaml -v KRex2'
     timeout: 300
-    order: 1
+    order: 2
   - name: 'Instrument Platform Tilt'
     filepath_pattern: 'TILT/[\d\-\.]+_TILT\.csv'
     importer: '/home/xgds/xgds_braille/apps/xgds_core/importer/csvImportRunner.py'
     arguments: '-i %(filename)s -c /home/xgds/xgds_braille/apps/xgds_braille_app/importer/KRex2_Tilt.yaml -v KRex2'
     timeout: 300
-    order: 1
+    order: 2
   - name: 'Lights'
     filepath_pattern: 'LGHT/[\d\-\.]+_LGHT\.csv'
     importer: '/home/xgds/xgds_braille/apps/xgds_core/importer/csvImportRunner.py'
     arguments: '-i %(filename)s -c /home/xgds/xgds_braille/apps/xgds_braille_app/importer/KRex2_Light.yaml -v KRex2'
     timeout: 300
-    order: 1
+    order: 2
   - name: 'Cave wall mosaic'
     filepath_pattern: 'MAPS/ply_list_drg_side.tif'
     importer: '/home/xgds/xgds_braille/apps/xgds_braille_app/importer/import_image.py'
     arguments: '--camera WallCam %(filename)s'
     timeout: 300
-    order: 2
-  - name: 'GeoTiff Map Layer'
-    filepath_pattern: 'MAPS/ply_list_drg_top\.tif'
-    importer: '/home/xgds/xgds_braille/apps/xgds_braille_app/importer/import_map.py'
-    arguments: '%(filename)s'
-    timeout: 300
-    order: 2
+    order: 3
+#  - name: 'GeoTiff Map Layer'
+#    filepath_pattern: 'MAPS/ply_list_drg_top\.tif'
+#    importer: '/home/xgds/xgds_braille/apps/xgds_braille_app/importer/import_map.py'
+#    arguments: '%(filename)s'
+#    timeout: 300
+#    order: 2
   - name: '3D Mapping image files'
     filepath_pattern: 'MAPS/[\d\-\.]+_pc\.jpg'
     importer: '/home/xgds/xgds_braille/apps/xgds_braille_app/importer/import_image.py'
     arguments: '--camera WallCam %(filename)s'
     timeout: 300
-    order: 2
+    order: 3
   - name: 'NIRVSS Spectrometer'
     filepath_pattern: 'NIRVSS_[LS]W.*\.csv'
     importer: '/home/xgds/xgds_braille/apps/xgds_braille_app/importer/importNirvssSpectra.py'
     timeout: 300
-    order: 2
+    order: 4
   - name: 'NIRVSS DOC'
     filepath_pattern: '\d+nm_\d+ms_scale\d_\d+-bitcomp.png'
     importer: '/home/xgds/xgds_braille/apps/xgds_braille_app/importer/importDocImage.py'
     timeout: 300
-    order: 3
+    order: 4
   - name: 'SLR Stereo - Left'
     filepath_pattern: 'SLRL/[\d\-\.]+_left_.+\.(?i)(JPE?G)'
     importer: '/home/xgds/xgds_braille/apps/xgds_braille_app/importer/import_image.py'
     arguments: '--camera SLRL %(filename)s'
     timeout: 300
-    order: 4
+    order: 5
   - name: 'SLR Stereo - Right'
     filepath_pattern: 'SLRR/[\d\-\.]+_right_.+\.(?i)(JPE?G)'
     importer: '/home/xgds/xgds_braille/apps/xgds_braille_app/importer/import_image.py'
     arguments: '--camera SLRR %(filename)s'
     timeout: 300
-    order: 4
+    order: 5
   - name: '3D Mapping mesh'
     filepath_pattern: 'MAPS/[\d\-\.]+_pc_mesh\.ply'
     importer: '/home/xgds/xgds_braille/apps/xgds_braille_app/importer/import_file.py'
     arguments: '--instrument WallCam %(filename)s'
     timeout: 300
-    order: 5
+    order: 6
   - name: '3D Mapping point cloud'
     filepath_pattern: 'MAPS/[\d\-\.]+_pc\.txt'
     importer: '/home/xgds/xgds_braille/apps/xgds_braille_app/importer/import_file.py'
     arguments: '--instrument WallCam %(filename)s'
     timeout: 300
-    order: 6
+    order: 7
   - name: 'NavCam'
     filepath_pattern: 'NAV[LR]/HazCam[\d\-\.]+\.TIFF'
     importer: '/home/xgds/xgds_braille/apps/xgds_braille_app/importer/import_image.py'
     arguments: '--navcam %(filename)s'
     timeout: 300
+    order: 3
   - name: 'RGBD Camera'
     filepath_pattern: 'r-[\d\.]+\.ppm'
     importer: '/home/xgds/xgds_braille/apps/xgds_braille_app/importer/import_image.py'
