@@ -17,7 +17,10 @@ import json
 from PNGinfo import PNGinfo
 
 HTTP_PREFIX = 'https'
-URL_PREFIX = 'localhost'
+from django.contrib.sites.models import Site
+URL_PREFIX = Site.objects.get_current().domain
+
+#URL_PREFIX = 'localhost'
 
 
 def fixTimezone(the_time):

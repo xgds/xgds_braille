@@ -15,7 +15,9 @@ import pytz
 import json
 
 HTTP_PREFIX = 'https'
-URL_PREFIX = 'localhost'
+
+from django.contrib.sites.models import Site
+URL_PREFIX = Site.objects.get_current().domain
 
 
 def fixTimezone(the_time):
@@ -36,7 +38,7 @@ def import_image(filename,camera):
     files = {'file': fp}
 
     # TODO: reverse is only getting the last part, missing '<http(s)>://<hostname>/'
-    url = reverse('xgds_save_image')
+    # url = reverse('xgds_save_image')
     # ... so roll it like this:
     url = "%s://%s%s" % (HTTP_PREFIX, URL_PREFIX, '/xgds_image/rest/saveImage/')
 
