@@ -1,7 +1,9 @@
 #!/usr/bin/env python
 
 import django
+from geocamUtil.loader import LazyGetModelByName
 django.setup()
+from django.conf import settings
 from pandas import DataFrame, merge, to_datetime
 from xgds_core.models import Flight
 from xgds_braille_app.models import NirvssSpectrometerDataProduct, BandDepthTimeSeries, BandDepthDefinition
@@ -63,19 +65,17 @@ def get_band_depth_definitions():
 
 
 if __name__=='__main__':
-    import sys
-    flight_name = sys.argv[1]
+    all_flights = LazyGetModelByName(settings.XGDS_CORE_FLIGHT_MODEL).get().objects.all()
+    for flight in all_flights:
+        start, end = flight.start_time, flight.end_time
+        data_frame = convert_nirvss_spectra(start, end)
 
-    flight = get_flight(flight_name)
-    start, end = flight.start_time, flight.end_time
-    data_frame = convert_nirvss_spectra(start, end)
+        for bdd in get_band_depth_definitions():
+            reflectances = calculate_band_depth(data_frame, [
+                bdd.left_wavelength, bdd.center_wavelength, bdd.right_wavelength,
+            ])
 
-    for bdd in get_band_depth_definitions():
-        reflectances = calculate_band_depth(data_frame, [
-            bdd.left_wavelength, bdd.center_wavelength, bdd.right_wavelength,
-        ])
-
-        add_band_depth_time_series(reflectances, bdd, flight)
+            add_band_depth_time_series(reflectances, bdd, flight)
 
 
 
