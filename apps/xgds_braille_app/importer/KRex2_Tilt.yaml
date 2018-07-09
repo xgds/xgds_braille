@@ -7,7 +7,7 @@ delimiter: ","
 flight_required: true
 fields:
   timestamp:
-    type: datetime
+    type: unixtime_int_microsecond
   tilt:
     type : float
     units : degrees

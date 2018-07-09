@@ -7,7 +7,7 @@ delimiter: " "
 flight_required: true
 fields:
   timestamp:
-    type: datetime
+    type: iso8601
   distance:
     type : float
     units : m
