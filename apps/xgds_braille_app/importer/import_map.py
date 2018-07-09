@@ -28,9 +28,9 @@ def fixTimezone(the_time):
     return the_time
 
 
-def import_map(filename):
+def import_map(filename, username, password):
     data ={
-        'username':'root',
+        'username': username,
     }
     fp = open(filename)
     files = {'file': fp}
@@ -40,7 +40,7 @@ def import_map(filename):
     # ... so roll it like this:
     url = "%s://%s%s" % (HTTP_PREFIX, URL_PREFIX, URL_TAIL)
 
-    r = requests.post(url, data=data, files=files, verify=False, auth=('root','xgds'))
+    r = requests.post(url, data=data, files=files, verify=False, auth=(username, password))
     if r.status_code == 200:
         print 'HTTP status code:', r.status_code
         print r.text
@@ -58,8 +58,11 @@ if __name__=='__main__':
     parser = optparse.OptionParser('usage: %prog')
     #parser.add_option('-i', '--geotiff',
     #                  help='Use this option if the map is in GeoTIFF format')
+    parser.add_option('-u', '--username', default='irg', help='username for xgds auth')
+    parser.add_option('-p', '--password', help='authtoken for xgds authentication.  Can get it from https://xgds_server_name/accounts/rest/genToken/<username>')
+
     opts, args = parser.parse_args()
     #print opts.geotiff
-    filename = arg[0]
-    retval = import_map(filename)
+    filename = args[0]
+    retval = import_map(filename, opts.username, opts.password)
     sys.exit(retval)

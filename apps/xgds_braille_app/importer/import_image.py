@@ -27,11 +27,11 @@ def fixTimezone(the_time):
     return the_time
 
 
-def import_image(filename,camera):
+def import_image(filename,camera, username, password):
     data ={
         'timezone':'utc',
         'vehicle':'',
-        'username':'root',
+        'username': username,
         'camera': camera
     }
     fp = open(filename)
@@ -42,7 +42,7 @@ def import_image(filename,camera):
     # ... so roll it like this:
     url = "%s://%s%s" % (HTTP_PREFIX, URL_PREFIX, '/xgds_image/rest/saveImage/')
 
-    r = requests.post(url, data=data, files=files, verify=False, auth=('root','xgds'))
+    r = requests.post(url, data=data, files=files, verify=False, auth=(username, password))
     if r.status_code == 200:
         print 'HTTP status code:', r.status_code
         print r.text
@@ -60,9 +60,12 @@ if __name__=='__main__':
     parser = optparse.OptionParser('usage: %prog')
     parser.add_option('-c', '--camera',
                       help='Name of the camera this image came from')
+    parser.add_option('-u', '--username', default='irg', help='username for xgds auth')
+    parser.add_option('-p', '--password', help='authtoken for xgds authentication.  Can get it from https://xgds_server_name/accounts/rest/genToken/<username>')
+
     opts, args = parser.parse_args()
     print opts.camera
     camera = opts.camera
     filename = args[0]
-    retval = import_image(filename,camera=camera)
+    retval = import_image(filename, camera=camera, username=opts.username, password=opts.password)
     sys.exit(retval)

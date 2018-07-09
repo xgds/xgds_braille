@@ -2,7 +2,7 @@
 Steps for data import:
 
 0. Run the import handler:
-./apps/xgds_braille_app/scripts/importHandler.py /home/xgds/xgds_braille/apps/xgds_braille_app/importer/ImportHandlerConfig.yaml
+./apps/xgds_braille_app/scripts/importHandler.py --username xgds --password ##pwhere## /home/xgds/xgds_braille/apps/xgds_braille_app/importer/ImportHandlerConfig.yaml
 
 1. import track
 ./xgds_braille//apps/geocamTrack/importer/trackImportRunner.py -c ./xgds_braille/apps/xgds_braille_app/importer/KRex2_PastPosition.yaml -i TRACK_DATA_FILENAME -o 10T

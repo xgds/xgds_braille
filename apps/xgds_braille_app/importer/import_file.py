@@ -26,9 +26,9 @@ def fixTimezone(the_time):
     return the_time
 
 
-def import_file(filename):
+def import_file(filename, username, password):
     data ={
-        'username':'root',
+        'username': username,
     }
     fp = open(filename)
     files = {'file': fp}
@@ -38,7 +38,7 @@ def import_file(filename):
     # ... so roll it like this:
     url = "%s://%s%s" % (HTTP_PREFIX, URL_PREFIX, URL_TAIL)
 
-    r = requests.post(url, data=data, files=files, verify=False, auth=('root','xgds'))
+    r = requests.post(url, data=data, files=files, verify=False, auth=(username, password))
     if r.status_code == 200:
         print 'HTTP status code:', r.status_code
         print r.text
@@ -54,9 +54,13 @@ def import_file(filename):
 if __name__=='__main__':
     import optparse
     parser = optparse.OptionParser('usage: %prog')
+    parser.add_option('-i', '--instrument', help='instrument that was the source of this file')
+    parser.add_option('-u', '--username', default='irg', help='username for xgds auth')
+    parser.add_option('-p', '--password', help='authtoken for xgds authentication.  Can get it from https://xgds_server_name/accounts/rest/genToken/<username>')
+
     opts, args = parser.parse_args()
-    filename = arg[0]
+    filename = args[0]
     sys.stderr.write('Generic file import not yet supported\n')
     sys.exit(-1)
-    retval = import_file(filename)
+    retval = import_file(filename, username, password)
     sys.exit(retval)

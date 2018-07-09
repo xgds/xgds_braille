@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+import optparse
 import django
 django.setup()
 from django.conf import settings
@@ -68,12 +69,12 @@ def get_doc_metadata(filename):
     return metadata
 
 
-def import_doc_image(filename):
+def import_doc_image(filename, username, password):
     metadata = get_doc_metadata(filename)
     data ={
         'timezone':'utc',
         'vehicle':'',
-        'username':'root',
+        'username': username,
         'camera': 'NRVD',
         'exifdata': metadata
     }
@@ -85,7 +86,7 @@ def import_doc_image(filename):
     # ... so roll it like this:
     url = "%s://%s%s" % (HTTP_PREFIX, URL_PREFIX, '/xgds_image/rest/saveImage/')
 
-    r = requests.post(url, data=data, files=files, verify=False, auth=('root','xgds'))
+    r = requests.post(url, data=data, files=files, verify=False, auth=(username, password))
     if r.status_code == 200:
         print 'HTTP status code:', r.status_code
         print r.text
@@ -99,6 +100,10 @@ def import_doc_image(filename):
 
 
 if __name__=='__main__':
+    parser = optparse.OptionParser('usage: %prog')
+    parser.add_option('-u', '--username', default='irg', help='username for xgds auth')
+    parser.add_option('-p', '--password', help='authtoken for xgds authentication.  Can get it from https://xgds_server_name/accounts/rest/genToken/<username>')
+
     doc_image_filename = sys.argv[1]
-    retval = import_doc_image(doc_image_filename)
+    retval = import_doc_image(doc_image_filename, opts.username, opts.password)
     sys.exit(retval)

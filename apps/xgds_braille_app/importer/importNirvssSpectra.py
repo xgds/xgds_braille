@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 
+import optparse
+
 import django
 django.setup()
 from django.conf import settings
@@ -18,6 +20,7 @@ def fixTimezone(the_time):
         the_time = pytz.timezone('utc').localize(the_time)
     the_time = the_time.astimezone(pytz.utc)
     return the_time
+
 
 def importNirvssSpectra(filename):
     """
@@ -97,6 +100,9 @@ def importNirvssSpectra(filename):
 
 
 if __name__=='__main__':
+    parser = optparse.OptionParser('usage: %prog')
+    parser.add_option('-i', '--instrument', help='instrument that was the source of this file')
+
     nirvssFilename = sys.argv[1]
     start_time = datetime.datetime.now()
     num_imported = importNirvssSpectra(nirvssFilename)
