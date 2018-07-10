@@ -35,7 +35,7 @@ def calculate_band_depth(data_frame, wavelengths, sampling_rate="1T"):
 
 
 def convert_nirvss_spectra(start_time, end_time):
-    if end_time is None:
+    if end_time is not None:
         data_products = NirvssSpectrometerDataProduct.objects.filter(acquisition_time__gte=start_time, acquisition_time__lte=end_time)
     else:
         data_products = NirvssSpectrometerDataProduct.objects.filter(acquisition_time__gte=start_time)
