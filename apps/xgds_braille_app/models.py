@@ -59,6 +59,9 @@ class BandDepthGeoJSON(GeoJSON, IsFlightChild):
         except ObjectDoesNotExist:
             return None
 
+    def __unicode__(self):
+        return "band depth geojson for flight %s and bdd %s" % (self.flight.name, self.band_depth_definition.name)
+
 
 class BandDepthDefinition(models.Model):
     name = models.CharField(max_length=256, null=True, blank=True)
