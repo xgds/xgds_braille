@@ -104,6 +104,8 @@ if __name__=='__main__':
     parser.add_option('-u', '--username', default='irg', help='username for xgds auth')
     parser.add_option('-p', '--password', help='authtoken for xgds authentication.  Can get it from https://xgds_server_name/accounts/rest/genToken/<username>')
 
+    opts, args = parser.parse_args()
+
     doc_image_filename = sys.argv[1]
     retval = import_doc_image(doc_image_filename, opts.username, opts.password)
     sys.exit(retval)
