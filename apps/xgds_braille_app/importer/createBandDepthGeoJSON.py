@@ -87,6 +87,8 @@ def create_geojson_for_flight(flight, band_depth_definition):
             "value": bdts.band_depth,
         })
     band_depth = pd.DataFrame(data=band_depth)
+    if len(band_depth) == 0:
+        return None
 
     flight_track_positions = flight.track.getPositions()
     gps = []
@@ -97,6 +99,8 @@ def create_geojson_for_flight(flight, band_depth_definition):
             "longitude": ftp.longitude,
         })
     gps = pd.DataFrame(data=gps)
+    if len(gps) == 0:
+        return None
 
     band_depth.index = pd.to_datetime(
         band_depth['timestamp'],
@@ -171,6 +175,8 @@ def create_geojson_for_all_bdd(flight):
             flight=flight,
             band_depth_definition=bdd,
         )
+        if geojson_string is None:
+            continue
         BandDepthGeoJSON.objects.create(
             flight=flight,
             band_depth_definition=bdd,
