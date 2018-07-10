@@ -52,7 +52,7 @@ class BandDepthGeoJSON(GeoJSON, IsFlightChild):
                     "key": f.pk + "_nirvss",
                     "data": {
                         "type": "GeoJSON",
-                        "geoJSON": f.geojson.geoJSON,
+                        "geoJSON": f.geoJSON,
                     }
                 })
             return result
