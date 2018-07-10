@@ -106,6 +106,6 @@ if __name__=='__main__':
 
     opts, args = parser.parse_args()
 
-    doc_image_filename = sys.argv[1]
+    doc_image_filename = args[0]
     retval = import_doc_image(doc_image_filename, opts.username, opts.password)
     sys.exit(retval)
