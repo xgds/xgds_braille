@@ -52,8 +52,10 @@ def convert_nirvss_spectra(start_time, end_time):
 
 
 def add_band_depth_time_series(data_frame, band_depth_definition, flight):
+    bdts_objects = []
     for time, band_depth in data_frame.itertuples(name=None):
-        BandDepthTimeSeries.objects.create(time_stamp=time, band_depth=band_depth, band_depth_definition=band_depth_definition, flight=flight)
+        bdts_objects.append(BandDepthTimeSeries.objects.create(time_stamp=time, band_depth=band_depth, band_depth_definition=band_depth_definition, flight=flight))
+    return bdts_objects
 
 
 def get_flight(flight_name):
@@ -63,19 +65,18 @@ def get_flight(flight_name):
 def get_band_depth_definitions():
     return BandDepthDefinition.objects.all()
 
+# main function to be called from outside this script
+def create_band_depth_time_series(flight):
+    start, end = flight.start_time, flight.end_time
+    data_frame = convert_nirvss_spectra(start, end)
 
-if __name__=='__main__':
-    all_flights = LazyGetModelByName(settings.XGDS_CORE_FLIGHT_MODEL).get().objects.all()
-    for flight in all_flights:
-        start, end = flight.start_time, flight.end_time
-        data_frame = convert_nirvss_spectra(start, end)
+    for bdd in get_band_depth_definitions():
+        reflectances = calculate_band_depth(data_frame, [
+            bdd.left_wavelength, bdd.center_wavelength, bdd.right_wavelength,
+        ])
 
-        for bdd in get_band_depth_definitions():
-            reflectances = calculate_band_depth(data_frame, [
-                bdd.left_wavelength, bdd.center_wavelength, bdd.right_wavelength,
-            ])
+        add_band_depth_time_series(reflectances, bdd, flight)
 
-            add_band_depth_time_series(reflectances, bdd, flight)
 
 
 
