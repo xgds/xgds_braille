@@ -18,13 +18,6 @@ from convertNirvssSpectra import create_band_depth_time_series
 from createBandDepthGeoJSON import create_geojson_for_all_bdd
 
 
-def fixTimezone(the_time):
-    if not the_time.tzinfo or the_time.tzinfo.utcoffset(the_time) is None:
-        the_time = pytz.timezone('utc').localize(the_time)
-    the_time = the_time.astimezone(pytz.utc)
-    return the_time
-
-
 def importNirvssSpectra(filename):
     """
     Import NIRVSS spectra from a CSV file and write them to the database
@@ -47,10 +40,9 @@ def importNirvssSpectra(filename):
 
     reader = DictReader(open(filename,'r'))
     for row in reader:
-        acqTime = fixTimezone(dateparser(row['Acquisition Time']))
+        epochTime = datetime.datetime.utcfromtimestamp(float(row['Epoch Time'])).replace(tzinfo=pytz.UTC)
         if not flight:
-            flight = get_or_create_flight(acqTime)
-        epochTime = fixTimezone(datetime.datetime.fromtimestamp(float(row['Epoch Time'])))
+            flight = get_or_create_flight(epochTime)
 
         # Check for existing database entries with this same instrument and acquisition time
         existingRecords = NirvssSpectrometerDataProduct.objects.filter(
@@ -72,7 +64,7 @@ def importNirvssSpectra(filename):
         nsdp.portable_file_format_name = 'ASCII'
         nsdp.acquisition_time = epochTime
         nsdp.acquisition_timezone = 'UTC'
-        nsdp.creation_time = fixTimezone(datetime.datetime.utcnow())
+        nsdp.creation_time = datetime.datetime.utcnow().replace(tzinfo=pytz.utc)
         nsdp.track_position = None
         nsdp.user_position = None
         nsdp.collector = None
