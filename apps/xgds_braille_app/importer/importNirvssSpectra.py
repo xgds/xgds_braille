@@ -102,6 +102,7 @@ def importNirvssSpectra(filename):
 
 
 if __name__=='__main__':
+    # TODO: reconcile whether we get the instrument from a command line arg or infer from the filename
     parser = optparse.OptionParser('usage: %prog')
     parser.add_option('-i', '--instrument', help='instrument that was the source of this file')
 
