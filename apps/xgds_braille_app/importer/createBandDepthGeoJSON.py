@@ -165,14 +165,14 @@ def create_geojson_for_flight(flight, band_depth_definition):
 
     return dumps(create_feature_collection(geojson_collection))
 
-if __name__ == "__main__":
-    all_flights = LazyGetModelByName(settings.XGDS_CORE_FLIGHT_MODEL).get().objects.all()
-    all_band_depth_definitions = BandDepthDefinition.objects.all()
-
-    for flight in all_flights:
-        for bdd in all_band_depth_definitions:
-            geojson_string = create_geojson_for_flight(flight, bdd)
-            BandDepthGeoJSON.objects.create(
-                flight=flight,
-                band_depth_definition=bdd,
-            )
+def create_geojson_for_all_bdd(flight):
+    for bdd in BandDepthDefinition.objects.all():
+        geojson_string = create_geojson_for_flight(
+            flight=flight,
+            band_depth_definition=bdd,
+        )
+        BandDepthGeoJSON.objects.create(
+            flight=flight,
+            band_depth_definition=bdd,
+            geoJSON=geojson_string,
+        )

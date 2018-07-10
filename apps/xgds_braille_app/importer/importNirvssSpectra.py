@@ -14,6 +14,9 @@ import datetime
 from dateutil.parser import parse as dateparser
 import pytz
 
+from convertNirvssSpectra import create_band_depth_time_series
+from createBandDepthGeoJSON import create_geojson_for_all_bdd
+
 
 def fixTimezone(the_time):
     if not the_time.tzinfo or the_time.tzinfo.utcoffset(the_time) is None:
@@ -96,6 +99,13 @@ def importNirvssSpectra(filename):
                 queue.append(datapoint)
         NirvssSpectrometerSample.objects.bulk_create(queue)
         queue = []
+
+    # for this flight, create one band depth time series for all existing band depth definitions
+    create_band_depth_time_series(flight=flight)
+
+    # from each generated band depth time series, create a band depth geojson
+    create_geojson_for_all_bdd(flight=flight)
+
     return num_imported
 
 
