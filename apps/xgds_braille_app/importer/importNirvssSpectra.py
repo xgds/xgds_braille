@@ -92,11 +92,12 @@ def importNirvssSpectra(filename):
         NirvssSpectrometerSample.objects.bulk_create(queue)
         queue = []
 
-    # for this flight, create one band depth time series for all existing band depth definitions
-    create_band_depth_time_series(flight=flight)
+    if flight is not None:
+        # for this flight, create one band depth time series for all existing band depth definitions
+        create_band_depth_time_series(flight=flight)
 
-    # from each generated band depth time series, create a band depth geojson
-    create_geojson_for_all_bdd(flight=flight)
+        # from each generated band depth time series, create a band depth geojson
+        create_geojson_for_all_bdd(flight=flight)
 
     return num_imported
 
