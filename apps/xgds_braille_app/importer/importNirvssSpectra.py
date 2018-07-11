@@ -42,6 +42,7 @@ def importNirvssSpectra(filename):
 
         flight = getFlight(epochTime, None)
         if flight is None:
+            print 'No flight for', row
             continue
 
         # Check for existing database entries with this same instrument and acquisition time
