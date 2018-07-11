@@ -65,13 +65,13 @@ registry:
   - name: 'NIRVSS Spectrometer'
     filepath_pattern: 'NRVS/[\d]*_NRVS_[LS]W.*\.csv'
     importer: '/home/xgds/xgds_braille/apps/xgds_braille_app/importer/importNirvssSpectra.py'
-    timeout: 300
+    timeout: 600
     order: 4
     auth: false
   - name: 'NIRVSS Spectrometer'
     filepath_pattern: 'NRVS/NIRVSS_[LS]W[\d\w_]*\.csv'
     importer: '/home/xgds/xgds_braille/apps/xgds_braille_app/importer/importNirvssSpectra.py'
-    timeout: 300
+    timeout: 600
     order: 4
     auth: false
   - name: 'NIRVSS DOC'
