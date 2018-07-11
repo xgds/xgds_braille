@@ -7,6 +7,8 @@ django.setup()
 from django.conf import settings
 from xgds_braille_app.models import NirvssSpectrometerDataProduct, NirvssSpectrometerSample, ScienceInstrument
 from xgds_core.flightUtils import getFlight
+from geocamTrack.utils import getClosestPosition
+
 from csv import DictReader
 import sys
 import re
@@ -45,6 +47,7 @@ def importNirvssSpectra(filename):
             print 'No flight for', row
             continue
 
+
         # Check for existing database entries with this same instrument and acquisition time
         existingRecords = NirvssSpectrometerDataProduct.objects.filter(
                 acquisition_time=epochTime,instrument=instrument
@@ -54,6 +57,10 @@ def importNirvssSpectra(filename):
             for record in existingRecords:
                 print '    %s' % record
             continue
+
+        track_position = None
+        if flight:
+            track_position = getClosestPosition(epochTime)
 
         # No existing records, so add this one
         nsdp = NirvssSpectrometerDataProduct()
@@ -66,7 +73,7 @@ def importNirvssSpectra(filename):
         nsdp.acquisition_time = epochTime
         nsdp.acquisition_timezone = 'UTC'
         nsdp.creation_time = datetime.datetime.utcnow().replace(tzinfo=pytz.utc)
-        nsdp.track_position = None
+        nsdp.track_position = track_position
         nsdp.user_position = None
         nsdp.collector = None
         nsdp.creator = None
