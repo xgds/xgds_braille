@@ -77,7 +77,7 @@ def import_doc_image(filename, username, password):
         'vehicle':'',
         'username': username,
         'camera': 'NRVD',
-        'exifdata': metadata
+        'exifData': json.dumps(metadata)
     }
     fp = open(filename)
     files = {'file': fp}
