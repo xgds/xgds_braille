@@ -27,6 +27,17 @@ def fixTimezone(the_time):
     return the_time
 
 
+def parse_timestamp(string):
+    float_seconds_pattern = '(?<!\d)(\d{10}\.\d*)(?!\d)' # ten digits, a '.', and more digits
+    int_microseconds_pattern = '(?<!\d)(\d{16})(?!\d)' # sixteen digits
+    match = re.search(float_seconds_pattern,string)
+    if match:
+        return datetime.datetime.utcfromtimestamp(float(match.group(0))).replace(tzinfo=pytz.utc)
+    match = re.search(int_microseconds_pattern,string)
+    if match:
+        return datetime.datetime.utcfromtimestamp(1.e-6*int(match.group(0))).replace(tzinfo=pytz.utc)
+    return None
+
 def import_image(filename,camera, username, password):
     data ={
         'timezone':'utc',
@@ -34,6 +45,12 @@ def import_image(filename,camera, username, password):
         'username': username,
         'camera': camera
     }
+    # If we get a timestamp from filename then add it to exifData:
+    timestamp = parse_timestamp(filename)
+    if timestamp is not None:
+        exifData = {'DateTimeOriginal':timestamp.isoformat()}
+        data['exifData'] = json.dumps(exifData)
+
     fp = open(filename)
     files = {'file': fp}
 
