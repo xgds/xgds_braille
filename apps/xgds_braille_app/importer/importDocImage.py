@@ -64,6 +64,7 @@ def get_doc_metadata(filename):
                 timestr = timestamp.isoformat()
                 if 'create' in txt:
                     metadata['Creation Time'] = timestr
+                    metadata['DateTimeOriginal'] = timestr
                 elif 'modify' in txt:
                     metadata['Modify Time'] = timestr
     return metadata
