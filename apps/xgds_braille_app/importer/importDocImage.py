@@ -92,7 +92,7 @@ def import_doc_image(filename, username, password):
         print r.text
         return 0
     else:
-        sys.stderr.write('HTTP status code:', r.status_code, '\n')
+        sys.stderr.write('HTTP status code: ' + str(r.status_code) + '\n')
         sys.stderr.write(r.text)
         sys.stderr.write('\n')
         sys.stderr.flush()
