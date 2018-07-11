@@ -36,6 +36,7 @@ registry:
     auth: false
   - name: 'Lights'
     filepath_pattern: 'LGHT/[\d\-\.]+_LGHT\.csv'
+    ignore: true
     importer: '/home/irg/xgds_braille/apps/xgds_core/importer/csvImportRunner.py'
     arguments: '-i %(filename)s -c /home/irg/xgds_braille/apps/xgds_braille_app/importer/KRex2_Light.yaml -v KRex2'
     timeout: 300
@@ -91,12 +92,14 @@ registry:
   - name: '3D Mapping mesh'
     filepath_pattern: 'MAPS/[\d\-\.]+_pc_mesh\.ply'
     importer: '/home/irg/xgds_braille/apps/xgds_braille_app/importer/import_file.py'
+    ignore: true
     arguments: '--instrument WallCam %(filename)s'
     timeout: 300
     order: 6
     auth: true
   - name: '3D Mapping point cloud'
     filepath_pattern: 'MAPS/[\d\-\.]+_pc\.txt'
+    ignore: true
     importer: '/home/irg/xgds_braille/apps/xgds_braille_app/importer/import_file.py'
     arguments: '--instrument WallCam %(filename)s'
     timeout: 300
@@ -118,6 +121,7 @@ registry:
     auth: true
   - name: 'RGBD PointCloud'
     filepath_pattern: 'd-[\d\.]+\.pcd'
+    ignore: true
     importer: '/home/irg/xgds_braille/apps/xgds_braille_app/importer/dummy_importer.py'
     arguments: '--rgbdpc %(filename)s'
     timeout: 300
