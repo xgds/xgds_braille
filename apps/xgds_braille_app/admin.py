@@ -20,7 +20,6 @@ from models import *
 from xgds_core.models import ImportedTelemetryFile
 
 admin.site.register(WallDistance)
-admin.site.register(Environmental)
 admin.site.register(ScienceInstrument)
 admin.site.register(NirvssSpectrometerDataProduct)
 admin.site.register(NirvssSpectrometerSample)

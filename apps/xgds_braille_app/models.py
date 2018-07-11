@@ -186,32 +186,6 @@ class WallDistance(TimeSeriesModel):
         return ['distance']
 
 
-class Environmental(TimeSeriesModel):
-    """
-    This is an auto-generated Django model created from a
-    YAML specifications using ./apps/xgds_core/importer/yamlModelBuilder.py
-    and YAML file ./apps/xgds_braille_app/importer/KRex2_Environmental.yaml
-    """
-
-    timestamp = models.DateTimeField(db_index=True, null=False, blank=False)
-    temperature = models.FloatField(null=True, blank=True)
-    pressure = models.FloatField(null=True, blank=True)
-    humidity = models.FloatField(null=True, blank=True)
-    flight = models.ForeignKey(settings.XGDS_CORE_FLIGHT_MODEL, on_delete=models.SET_NULL, null=True, blank=True)
-
-    title = 'Environmental'
-
-    channel_descriptions = {
-                            'temperature': ChannelDescription('Temp', units='C', global_min=0.000000, global_max=45.000000, interval=1),
-                            'pressure': ChannelDescription('Pressure', interval=1),
-                            'humidity': ChannelDescription('Humidity', global_min=0.000000, global_max=100.000000, interval=1),
-                            }
-
-    @classmethod
-    def get_channel_names(cls):
-        return ['temperature', 'pressure', 'humidity', ]
-
-
 class InstrumentPlatformTilt(TimeSeriesModel):
     """
     This is an auto-generated Django model created from a
