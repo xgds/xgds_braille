@@ -207,4 +207,29 @@ class InstrumentPlatformTilt(TimeSeriesModel):
         return ['tilt', ]
 
 
+class InstrumentPlatformLight(TimeSeriesModel):
+    """
+    This is an auto-generated Django model created from a
+    YAML specifications using ./apps/xgds_core/importer/yamlModelBuilder.py
+    and YAML file ./apps/xgds_braille_app/importer/KRex2_Light.yaml
+    """
+
+    timestamp = models.DateTimeField(db_index=True, null=False, blank=False)
+    light0 = models.IntegerField(null=True, blank=True)
+    light1 = models.IntegerField(null=True, blank=True)
+    light2 = models.IntegerField(null=True, blank=True)
+    light3 = models.IntegerField(null=True, blank=True)
+    flight = models.ForeignKey('xgds_core.Flight', on_delete=models.SET_NULL, blank=True, null=True)
+
+    title = 'Instrument Platform Light'
+    channel_descriptions = {
+                            'light0': ChannelDescription('Light0'),
+                            'light1': ChannelDescription('Light1'),
+                            'light2': ChannelDescription('Light2'),
+                            'light3': ChannelDescription('Light3'),
+                            }
+
+    @classmethod
+    def get_channel_names(cls):
+        return ['light0', 'light1', 'light2', 'light3', ]
 
