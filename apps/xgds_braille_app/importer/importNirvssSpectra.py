@@ -27,6 +27,8 @@ def importNirvssSpectra(filename):
     :return: the number of spectra imported
     """
     num_imported = 0
+    num_rejected_noflight = 0
+    num_rejected_exists = 0
 
     # The only current way to know which instrument this is from is the filename
     if 'LW' in filename:
@@ -44,18 +46,21 @@ def importNirvssSpectra(filename):
 
         flight = getFlight(epochTime, None)
         if flight is None:
-            print 'No flight for', row
+            num_rejected_noflight += 1
+            if num_rejected_noflight < 10:
+                print 'No flight for', row
             continue
-
 
         # Check for existing database entries with this same instrument and acquisition time
         existingRecords = NirvssSpectrometerDataProduct.objects.filter(
                 acquisition_time=epochTime,instrument=instrument
             )
         if len(existingRecords)>0:
-            print 'This spectrum is already imported as:'
-            for record in existingRecords:
-                print '    %s' % record
+            num_rejected_exists += 1
+            if num_rejected_exists < 10:
+                print 'This spectrum is already imported as:'
+                for record in existingRecords:
+                    print '    %s' % record
             continue
 
         track_position = None
@@ -107,8 +112,10 @@ def importNirvssSpectra(filename):
         # from each generated band depth time series, create a band depth geojson
         create_geojson_for_all_bdd(flight=flight)
 
-    return num_imported
-
+    stats = {'num_imported': num_imported,
+             'num_rejected_noflight': num_rejected_noflight,
+             'num_rejected_exists': num_rejected_exists}
+    return stats
 
 if __name__=='__main__':
     # TODO: reconcile whether we get the instrument from a command line arg or infer from the filename
@@ -117,7 +124,9 @@ if __name__=='__main__':
 
     nirvssFilename = sys.argv[1]
     start_time = datetime.datetime.now()
-    num_imported = importNirvssSpectra(nirvssFilename)
+    import_stats = importNirvssSpectra(nirvssFilename)
     end_time = datetime.datetime.now()
     print 'Import took %s' % (end_time-start_time)
-    print 'Imported %d ' % num_imported
+    print 'Imported %d ' % import_stats['num_imported']
+    print 'Rejected %d because no flight matches' % import_stats['num_rejected_noflight']
+    print 'Rejected %d that were already imported' % import_stats['num_rejected_exists']
