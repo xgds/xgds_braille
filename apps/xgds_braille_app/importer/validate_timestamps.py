@@ -30,6 +30,7 @@ from subprocess import Popen, PIPE
 from threading import Timer
 import shlex
 import traceback
+from dateutil.parser import parse as dateparser
 
 
 class TimestampValidator:
@@ -48,6 +49,8 @@ class TimestampValidator:
         self.unmatched_files = [] # matched no config rule
         self.timestamps_that_failed = [] # tried to import and failed
         self.timestamps_that_succeeded = [] # tried and succeeded
+        # The actual timestamps
+        self.timestamps = []
 
     def find_files(self,root_dir):
         for dirName, subdirList, fileList in os.walk(root_dir):
@@ -102,29 +105,39 @@ class TimestampValidator:
             if 'timestamp_extractor' in registry:
                 cmd = ' '.join([registry['timestamp_extractor'], arguments])
                 try:
-                    print cmd
                     proc = Popen(shlex.split(cmd), stdout=PIPE, stderr=PIPE)
                 except Exception as e:
+                    print cmd
                     print str(e)
                     print traceback.format_exc()
                     continue
                 timeout = 100
                 timer = Timer(timeout, proc.kill)
-                start_import_time = pytz.timezone('utc').localize(datetime.datetime.utcnow())
                 try:
                     timer.start()
                     (stdout, stderr) = proc.communicate()
                 finally:
                     timer.cancel()
-                end_import_time = pytz.timezone('utc').localize(datetime.datetime.utcnow())
 
-                # If it succeeded, keep track that we did this one
+                # Keep track of successes and failures
                 if proc.returncode == 0:
                     self.timestamps_that_succeeded.append(filename)
                 else:
                     self.timestamps_that_failed.append(filename)
-                #print stdout,
+
+                # Aggregate outputs
+                for line in stdout.splitlines():
+                    print line
+                    try:
+                        timestamp = dateparser(line)
+                        if timestamp is not None:
+                            self.timestamps.append(timestamp)
+                    except ValueError:
+                        # If the line does not parse as a timestamp it's probably some other stdout we can ignore
+                        print 'Cannot parse time from "%s"' % line
+
                 if stderr:
+                    print cmd
                     print "stderr:"
                     print stderr,
 
@@ -166,22 +179,11 @@ if __name__ == '__main__':
 
     # Get timestamp from root directory
     flight_dir = args[0]
-    timestamp = get_timestamp_from_dirname(flight_dir)
-    if timestamp is None:
+    flight_dir_timestamp = get_timestamp_from_dirname(flight_dir)
+    if flight_dir_timestamp is None:
         raise ValueError('Cannot get a valid timestamp from source root %s' % flight_dir)
 
-    print 'Timestamp is %s' % timestamp
-
-    if opts.make_flight:
-        try:
-            # get or create a flight for that source root directory
-            import django
-            django.setup()
-            from django.conf import settings
-            from xgds_core.flightUtils import get_or_create_flight_with_source_root
-            get_or_create_flight_with_source_root(flight_dir,timestamp)
-        except ImportError:
-            print 'No django, cannot create a flight'
+    print 'Flight dir timestamp is %s' % flight_dir_timestamp
 
     # If we were given a timestamp validation config, go validate timestamps
     if opts.configfile is not None:
@@ -190,3 +192,22 @@ if __name__ == '__main__':
         if not opts.test:
             validator.process_files()
         validator.print_stats()
+        start_time = flight_dir_timestamp
+        earliest_time = min(validator.timestamps)
+        end_time = max(validator.timestamps)
+        print 'start time:   ', start_time
+        print 'earliest time:', earliest_time
+        print 'end time:     ', end_time
+
+        # If we were asked to create a flight, create it
+        if opts.make_flight:
+            try:
+                # get or create a flight for that source root directory
+                import django
+                django.setup()
+                from django.conf import settings
+                from xgds_core.flightUtils import get_or_create_flight_with_source_root
+                flight = get_or_create_flight_with_source_root(flight_dir,start_time,end_time)
+                print 'Created or got flight %s' % flight
+            except ImportError:
+                print 'No django, cannot create a flight'

@@ -25,7 +25,7 @@ def parseTimestampsFromFilename(filename, options):
         if match:
             timestampString = match.groups()[-1]
             epochTime = datetime.datetime.utcfromtimestamp(1e-6*int(timestampString)).replace(tzinfo=pytz.UTC)
-    print epochTime
+    print epochTime.isoformat()
     num_imported += 1
 
     stats = {'num_imported': num_imported}
