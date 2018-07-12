@@ -18,6 +18,8 @@ def parseTimestampsFromFilename(filename, options):
         if match:
             timestampString = match.groups()[-1]
             epochTime = datetime.datetime.utcfromtimestamp(float(timestampString)).replace(tzinfo=pytz.UTC)
+        else:
+            raise ValueError('Could not find expected time string in %s' % filename)
 
     elif options.type == 'microseconds':
         timestamp_pattern = '(\d{16})'
@@ -25,6 +27,9 @@ def parseTimestampsFromFilename(filename, options):
         if match:
             timestampString = match.groups()[-1]
             epochTime = datetime.datetime.utcfromtimestamp(1e-6*int(timestampString)).replace(tzinfo=pytz.UTC)
+        else:
+            raise ValueError('Could not find expected time string in %s' % filename)
+
     print epochTime.isoformat()
     num_imported += 1
 
