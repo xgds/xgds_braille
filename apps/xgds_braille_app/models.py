@@ -27,6 +27,8 @@ from django.urls import reverse
 from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
 
+from geocamUtil.loader import LazyGetModelByName
+
 from xgds_timeseries.models import TimeSeriesModel, ChannelDescription
 from xgds_map_server.models import GeoJSON
 from xgds_instrument.models import ScienceInstrument, AbstractInstrumentDataProduct
