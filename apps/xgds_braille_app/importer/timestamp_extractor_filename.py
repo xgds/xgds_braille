@@ -11,16 +11,22 @@ import pytz
 
 def parseTimestampsFromFilename(filename, options):
     num_imported = 0
-    timestamp_pattern = '([\d\-\.])'
-    match = re.search(timestamp_pattern,filename)
-    if match:
-        timestampString = match.group(1)
-        if options.type == 'seconds':
+
+    if options.type == 'seconds':
+        timestamp_pattern = '(\d{10}\.\d{4,10})'
+        match = re.search(timestamp_pattern,filename)
+        if match:
+            timestampString = match.groups()[-1]
             epochTime = datetime.datetime.utcfromtimestamp(float(timestampString)).replace(tzinfo=pytz.UTC)
-        elif options.type == 'microseconds':
+
+    elif options.type == 'microseconds':
+        timestamp_pattern = '(\d{16})'
+        match = re.search(timestamp_pattern, filename)
+        if match:
+            timestampString = match.groups()[-1]
             epochTime = datetime.datetime.utcfromtimestamp(1e-6*int(timestampString)).replace(tzinfo=pytz.UTC)
-        print epochTime
-        num_imported += 1
+    print epochTime
+    num_imported += 1
 
     stats = {'num_imported': num_imported}
     return stats
@@ -37,4 +43,4 @@ if __name__=='__main__':
 
     filename = arguments[0]
     import_stats = parseTimestampsFromFilename(filename, options)
-    print 'Imported %d ' % import_stats['num_imported']
+    print 'Found %d timestamps' % import_stats['num_imported']
