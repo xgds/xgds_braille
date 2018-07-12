@@ -31,7 +31,7 @@ def parseTimestampsFromCSV(filename, options):
                 epochTime = dateparser(timestampString)
                 #print 'timezone:', epochTime.tzname()
 
-            print epochTime
+            print epochTime.isoformat()
             num_imported += 1
 
     stats = {'num_imported': num_imported}
