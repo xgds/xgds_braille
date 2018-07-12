@@ -123,11 +123,15 @@ def create_geojson_for_flight(flight, band_depth_definition):
         right_index=True,
         direction="nearest",
         suffixes=["_band_depth", "_gps"],
+        tolerance=pd.Timedelta('10 seconds'),
     )[[
         "latitude",
         "longitude",
         "value",
     ]]
+
+    if len(merged_df) == 0:
+        return None
 
     post_df = merged_df.apply(lat_lon_to_utm, axis=1)
 
