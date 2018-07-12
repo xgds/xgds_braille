@@ -29,11 +29,10 @@ import pytz
 from subprocess import Popen, PIPE
 from threading import Timer
 import shlex
-import time
 import traceback
 
 
-class TimestampFinder:
+class TimestampValidator:
     def __init__(self, config_yaml_path):
         # config comes from a YAML file
         self.config = yaml.load(open(config_yaml_path))
@@ -50,10 +49,9 @@ class TimestampFinder:
         self.timestamps_that_failed = [] # tried to import and failed
         self.timestamps_that_succeeded = [] # tried and succeeded
 
-    def get_new_files(self):
-        print self.config['import_path']
-        for dirName, subdirList, fileList in os.walk(self.config['import_path']):
-            print('Found directory: %s' % dirName)
+    def find_files(self,root_dir):
+        for dirName, subdirList, fileList in os.walk(root_dir):
+            #print('Found directory: %s' % dirName)
             for basename in fileList:
                 filename = os.path.join(dirName, basename)
 
@@ -125,10 +123,12 @@ class TimestampFinder:
                     self.timestamps_that_succeeded.append(filename)
                 else:
                     self.timestamps_that_failed.append(filename)
-                print "stdout:", stdout
-                print "stderr:", stderr
+                #print stdout,
+                if stderr:
+                    print "stderr:"
+                    print stderr,
 
-    def print_import_stats(self):
+    def print_stats(self):
         print 'Found %d files configured to ignore' % len(self.ignored_files)
         print 'Found %d ambiguous files, matched more than one config rule' % len(self.ambiguous_files)
         print 'Found %d unmatched files, matched no config rule' % len(self.unmatched_files)
@@ -137,17 +137,56 @@ class TimestampFinder:
         print 'Tried %d timestamps that failed' % len(self.timestamps_that_failed)
         print 'Tried %d timestamps that succeeded' % len(self.timestamps_that_succeeded)
 
+
+def get_timestamp_from_dirname(dirname):
+    pattern = '(\d{16})_(SCIENCE|SCOUTING)_(\d{2})'
+    match = re.search(pattern,dirname)
+    if match:
+        timestamp = datetime.datetime.utcfromtimestamp(1e-6*int(match.group(1))).replace(tzinfo=pytz.utc)
+        return timestamp
+    return None
+
+
 if __name__ == '__main__':
     import optparse
     parser = optparse.OptionParser('usage: %prog')
+    parser.add_option('-c', '--configfile',
+                      help='yaml config file for getting timestamps from files')
     parser.add_option('-t', '--test',
                       action='store_true', default=False,
-                      help='Run in test mode: find files and report them but do not process them')
- 
+                      help='Run in test mode')
+    parser.add_option('-f', '--force',
+                      action='store_true', default=False,
+                      help='Force creation of a flight even if invalid timestamps are found')
+    parser.add_option('-m', '--make_flight',
+                      action='store_true', default=False,
+                      help='Create a flight for the given directory')
+
     opts, args = parser.parse_args()
 
-    finder = TimestampFinder(args[0])
-    finder.get_new_files()
-    if not opts.test:
-        finder.process_files()
-    finder.print_import_stats()
+    # Get timestamp from root directory
+    flight_dir = args[0]
+    timestamp = get_timestamp_from_dirname(flight_dir)
+    if timestamp is None:
+        raise ValueError('Cannot get a valid timestamp from source root %s' % flight_dir)
+
+    print 'Timestamp is %s' % timestamp
+
+    if opts.make_flight:
+        try:
+            # get or create a flight for that source root directory
+            import django
+            django.setup()
+            from django.conf import settings
+            from xgds_core.flightUtils import get_or_create_flight_with_source_root
+            get_or_create_flight_with_source_root(flight_dir,timestamp)
+        except ImportError:
+            print 'No django, cannot create a flight'
+
+    # If we were given a timestamp validation config, go validate timestamps
+    if opts.configfile is not None:
+        validator = TimestampValidator(opts.configfile)
+        validator.find_files(flight_dir)
+        if not opts.test:
+            validator.process_files()
+        validator.print_stats()
