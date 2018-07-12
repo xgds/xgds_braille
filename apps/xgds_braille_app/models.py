@@ -80,13 +80,28 @@ class BandDepthTimeSeries(TimeSeriesModel):
     flight = models.ForeignKey(settings.XGDS_CORE_FLIGHT_MODEL, on_delete=models.SET_NULL, null=True, blank=True)
     title = "Band Depth Time Series"
 
-    channel_descriptions = {
-        'band_depth': ChannelDescription('Band Depth', units='C', global_min=-5.0, global_max=5.0)
-    }
+    dynamic = True
+    dynamic_value = "band_depth"
+    dynamic_separator = "band_depth_definition_name"
+
+    @staticmethod
+    def get_all_band_depth_defs():
+        return list(BandDepthDefinition.objects.all())
+
+    @property
+    def channel_description(self):
+        descriptions = {}
+        for bdd in self.get_all_band_depth_defs():
+            descriptions[bdd.name] = ChannelDescription(bdd.name, global_min=-15.0, global_max=15.0)
+        return descriptions
 
     @classmethod
     def get_channel_names(cls):
-        return ['band_depth']
+        return [bdd.name for bdd in cls.get_all_band_depth_defs()]
+
+    @property
+    def band_depth_definition_name(self):
+        return self.band_depth_definition.name
 
     def __unicode__ (self):
         return "ts: %s, band depth %s, bd name: %s" % (self.time_stamp, self.band_depth, self.band_depth_definition.name)
