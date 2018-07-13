@@ -257,15 +257,23 @@ if __name__ == '__main__':
 
     opts, args = parser.parse_args()
 
-    # Get timestamp from root directory
+    # the top level directory should contain all the data for a flight
     flight_dir = args[0]
+
+    # just the final directory name, not the full path to it
+    # have to accommodate the path ending in '/' or not
+    flight_dir_parts = flight_dir.split('/')
+    basename = flight_dir_parts[-1]
+    if not basename:
+        basename = flight_dir_parts[-2]
+
+    # Get start time from root directory
     start_time = get_timestamp_from_dirname(flight_dir)
     if start_time is None:
         raise ValueError('Cannot get a valid timestamp from source root %s' % flight_dir)
-
     print 'Flight dir timestamp is %s' % start_time
 
-    # If we were given a timestamp validation config, go validate timestamps
+    # If we were given a timestamp validation config, go validate timestamps for all data
     if opts.configfile is not None:
         validator = TimestampValidator(opts.configfile)
         validator.find_files(flight_dir)
@@ -273,11 +281,12 @@ if __name__ == '__main__':
             validator.process_files()
         validator.print_stats()
         timestamps = [t[1] for t in validator.timestamps]
-        earliest_time = min(timestamps)
-        end_time = max(timestamps)
-        print 'start time:   ', start_time
-        print 'earliest time:', earliest_time
-        print 'end time:     ', end_time
+        first_data_time = min(timestamps)
+        last_data_time = max(timestamps)
+        print 'Timestamps for', basename
+        print 'start time:     ', start_time
+        print 'first data time:', first_data_time
+        print 'last data time: ', last_data_time
 
         # If we were asked to create a flight, create it
         # Note that we cannot make a flight with an end time if we didn't get a config
@@ -296,11 +305,6 @@ if __name__ == '__main__':
 
         # If we were asked to make a plot, make it
         if opts.plot:
-            flight_dir_parts = flight_dir.split('/')
-            basename = flight_dir_parts[-1]
-            print basename
-            if not basename:
-                basename = flight_dir_parts[-2]
             pdffile = 'timestamps_%s.pdf' % basename
             print 'plotting to', pdffile
             validator.plot_times(pdffile)
