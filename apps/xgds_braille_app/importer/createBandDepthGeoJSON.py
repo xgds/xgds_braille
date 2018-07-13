@@ -56,8 +56,11 @@ def create_geojson(easting, northing, zone_number, zone_letter, band_depth, conf
             "stroke-width": 0,
             "fill": str(get_color(band_depth)),
             "fill-opacity": 1,
-            "band-depth": "%f +- %f" % (round(float(band_depth), 4), round(float(stddev), 4)),
-            "confidence": int(confidence),
+            "popup-content":
+            {
+                "Band Depth": "%f +- %f" % (round(float(band_depth), 4), round(float(stddev), 4)),
+                "Confidence": int(confidence),
+            }
         },
         "geometry":
         {
