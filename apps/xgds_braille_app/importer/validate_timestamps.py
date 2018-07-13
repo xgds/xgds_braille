@@ -190,8 +190,6 @@ class TimestampValidator:
         print 'Found %d unmatched files, matched no config rule' % len(self.unmatched_files)
         if len(self.files_to_process)>0:
             print 'Found %d files to process' % len(self.files_to_process)
-        print 'Tried %d timestamps that failed' % len(self.timestamps_that_failed)
-        print 'Tried %d timestamps that succeeded' % len(self.timestamps_that_succeeded)
 
     def plot_times(self,pdffile):
         # Convert list of tuples of source name, timestamp to a dictionary of source name key, timestamp list value
@@ -200,6 +198,18 @@ class TimestampValidator:
             if name not in plot_data.keys():
                 plot_data[name] = []
             plot_data[name].append(timestamp)
+
+        # decimate big datasets because otherwise the plot is kinda unmanageable
+        for k in plot_data.keys():
+            if len(plot_data[k])>1000:
+                print 'there were', len(plot_data[k]), k
+                plot_data[k].sort()
+                n = len(plot_data[k])/1000
+                newlist = plot_data[k][0::n]
+                # just in case we need to see the last one...
+                newlist.append(plot_data[k][-1])
+                plot_data[k] = newlist
+                print 'now there are', len(plot_data[k]), k
 
         import matplotlib as mpl
         mpl.use('pdf')
@@ -297,7 +307,7 @@ if __name__ == '__main__':
                 django.setup()
                 from django.conf import settings
                 from xgds_core.flightUtils import get_or_create_flight_with_source_root
-                flight = get_or_create_flight_with_source_root(flight_dir,start_time,end_time)
+                flight = get_or_create_flight_with_source_root(flight_dir,start_time,last_data_time)
                 print 'Created or got flight %s' % flight
             except ImportError as e:
                 print 'Error: Cannot create a flight'

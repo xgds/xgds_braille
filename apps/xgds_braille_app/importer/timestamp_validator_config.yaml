@@ -8,11 +8,11 @@
 # Registry of regex patterns to look for and what to do when files match them
 registry:
   - name: 'RODO'
-    filepath_pattern: '[\d\.]+_RODO.csv'
+    filepath_pattern: 'RODO/.*\.csv'
     from: 'csv'
-    column_name: 'Epoch Time'
-    delimiter: 'tab'
+    column_name: '#time'
     format: 'seconds'
+    ignore: true
   - name: 'MAPS pose'
     filepath_pattern: 'MAPS/localizations_xgds.txt'
     from: 'csv'
@@ -37,6 +37,7 @@ registry:
     format: 'microseconds'
   - name: 'MAPS mosaic'
     filepath_pattern: 'MAPS/ply_list_drg_(side|top).tif'
+    ignore: true
   - name: 'MAPS jpg'
     filepath_pattern: 'MAPS/[\d\-\.]+_pc\.jpg'
     from: 'filename'
@@ -56,11 +57,11 @@ registry:
     from: 'doc'
   - name: 'SLRL'
     filepath_pattern: 'SLRL/[\d\-\.]+_SLRL_.+\.(?i)(JPE?G)'
-    from: 'exif'
+    from: 'filename'
     format: 'microseconds'
   - name: 'SLRR'
     filepath_pattern: 'SLRR/[\d\-\.]+_SLRR_.+\.(?i)(JPE?G)'
-    from: 'exif'
+    from: 'filename'
     format: 'microseconds'
   - name: 'MAPS mesh'
     filepath_pattern: 'MAPS/[\d\-\.]+_pc_mesh\.ply'
