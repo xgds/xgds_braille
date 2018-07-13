@@ -4,9 +4,9 @@ read -p "About to DELETE the braille-file-store DB and create an empty one. Are 
 if [[ $REPLY =~ ^[Yy][Ee][Ss]$ ]]
 then
     # delete current database
-    curl -X DELETE http://127.0.0.1:5984/braille-data-store
+    curl -X DELETE http://127.0.0.1:5984/braille-file-store
     # create new empty one
-    curl -X PUT http://127.0.0.1:5984/braille-data-store
+    curl -X PUT http://127.0.0.1:5984/braille-file-store
     # install design (query) documents
     curl -X PUT http://127.0.0.1:5984/braille-file-store/"id" -d @./couchViews.js
 fi
