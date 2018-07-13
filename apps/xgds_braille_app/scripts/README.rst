@@ -3,7 +3,7 @@ Steps for data import:
 
 1. Run the data validator:
 cd apps/xgds_braille_app/importer
-./validate_timestamps.py -m -c timestamp_extractor_config.yaml  <path to data you want to analyze>
+./validate_timestamps.py -m -c timestamp_validator_config.yaml  <path to data you want to analyze>
 
 2. Run the import handler:
 ./apps/xgds_braille_app/scripts/importHandler.py --username xgds --password ##pwhere## /home/xgds/xgds_braille/apps/xgds_braille_app/importer/ImportHandlerConfig.yaml

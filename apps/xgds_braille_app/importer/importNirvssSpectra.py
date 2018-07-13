@@ -68,7 +68,7 @@ def importNirvssSpectra(filename):
 
         # Check for existing database entries with this same instrument and acquisition time
         existingRecords = NirvssSpectrometerDataProduct.objects.filter(
-                acquisition_time=epochTime,instrument=instrument
+                acquisition_time=epochTime, instrument=instrument
             )
         if len(existingRecords)>0:
             num_rejected_exists += 1
@@ -80,7 +80,7 @@ def importNirvssSpectra(filename):
 
         track_position = None
         if flight:
-            track_position = getClosestPosition(epochTime)
+            track_position = getClosestPosition(timestamp=epochTime)
 
         # No existing records, so add this one
         nsdp = NirvssSpectrometerDataProduct()

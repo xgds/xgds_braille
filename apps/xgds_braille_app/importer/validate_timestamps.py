@@ -26,10 +26,12 @@ import os
 import re
 import datetime
 import pytz
-from subprocess import Popen, PIPE
-from threading import Timer
-import shlex
+from PNGinfo import PNGinfo
+import PIL.Image
+import PIL.ExifTags
+
 import traceback
+from csv import DictReader
 from dateutil.parser import parse as dateparser
 
 
@@ -92,54 +94,95 @@ class TimestampValidator:
     def process_files(self, username=None, password=None):
         for pair in self.files_to_process:
             filename, registry = pair
-            arguments = ''
-            if 'arguments' in registry:
-                if '%(filename)s' in registry['arguments']:
-                    arguments = registry['arguments']
-                    arguments = arguments % {'filename': filename}
+            if 'from' in registry:
+                if registry['from'] == 'filename':
+                    self.get_timestamp_from_filename(filename, registry)
+                elif registry['from'] == 'csv':
+                    self.get_timestamps_from_csv(filename, registry)
+                elif registry['from'] == 'exif':
+                    self.get_timestamp_from_exif(filename, registry)
+                elif registry['from'] == 'doc':
+                    self.get_timestamp_from_doc(filename, registry)
                 else:
-                    arguments = ' '.join([registry['arguments'], filename])
+                    raise ValueError('Invalid from argument: %s' % registry['from'])
+
+    def get_timestamp_from_filename(self, filename, registry):
+        # Some filenames contain float seconds, some int microseconds
+        if registry['format'] == 'seconds':
+            timestamp_pattern = '(\d{10}\.\d{4,10})'
+            match = re.search(timestamp_pattern, filename)
+            if match:
+                timestampString = match.groups()[-1]
+                timestamp = datetime.datetime.utcfromtimestamp(float(timestampString)).replace(tzinfo=pytz.UTC)
             else:
-                arguments = filename
+                raise ValueError('Could not find expected time string in %s' % filename)
 
-            if 'timestamp_extractor' in registry:
-                cmd = ' '.join([registry['timestamp_extractor'], arguments])
-                try:
-                    proc = Popen(shlex.split(cmd), stdout=PIPE, stderr=PIPE)
-                except Exception as e:
-                    print cmd
-                    print str(e)
-                    print traceback.format_exc()
-                    continue
-                timeout = 100
-                timer = Timer(timeout, proc.kill)
-                try:
-                    timer.start()
-                    (stdout, stderr) = proc.communicate()
-                finally:
-                    timer.cancel()
+        elif registry['format'] == 'microseconds':
+            timestamp_pattern = '(\d{16})'
+            match = re.search(timestamp_pattern, filename)
+            if match:
+                timestampString = match.groups()[-1]
+                timestamp = datetime.datetime.utcfromtimestamp(1e-6 * int(timestampString)).replace(tzinfo=pytz.UTC)
+            else:
+                raise ValueError('Could not find expected time string in %s' % filename)
+        else:
+            raise ValueError('invalid type for filename timestamp: %s' % options.type)
 
-                # Keep track of successes and failures
-                if proc.returncode == 0:
-                    self.timestamps_that_succeeded.append(filename)
+        self.timestamps.append((registry['name'],timestamp))
+
+    def get_timestamps_from_csv(self, filename, registry):
+        if 'delimiter' in registry:
+            delimiter = registry['delimiter']
+        else:
+            delimiter = ','
+
+        if 'column_number' in registry:
+            column = '%d' % registry['column_number']
+            fieldnames = ['%d' % n for n in range(int(column) + 1)]
+            reader = DictReader(open(filename, 'r'), delimiter=delimiter,
+                                fieldnames=fieldnames)
+        else:
+            column = registry['column_name']
+            reader = DictReader(open(filename, 'r'), delimiter=delimiter)
+
+        for row in reader:
+            timestampString = row[column]
+            if timestampString:
+                if registry['format'] == 'seconds':
+                    timestamp = datetime.datetime.utcfromtimestamp(float(timestampString)).replace(tzinfo=pytz.UTC)
+                elif registry['format'] == 'microseconds':
+                    timestamp = datetime.datetime.utcfromtimestamp(1e-6 * int(timestampString)).replace(tzinfo=pytz.UTC)
+                elif registry['format'] == 'iso8601':
+                    timestamp = dateparser(timestampString)
+                    # print 'timezone:', timestamp.tzname()
                 else:
-                    self.timestamps_that_failed.append(filename)
+                    raise ValueError('Invalid type for csv timestamp: %s' % registry['format'])
 
-                # Aggregate outputs
-                for line in stdout.splitlines():
-                    #print line
-                    try:
-                        timestamp = dateparser(line)
-                        if timestamp is not None:
-                            self.timestamps.append(timestamp)
-                    except ValueError:
-                        # If the line does not parse as a timestamp it's probably some other stdout we can ignore
-                        print 'Cannot parse time from "%s"' % line
+                self.timestamps.append((registry['name'],timestamp))
 
-                if stderr:
-                    print cmd
-                    print "stderr:"
-                    print stderr,
+    def get_timestamp_from_exif(self, filename, registry):
+        img = PIL.Image.open(filename)
+        exif_data = img._getexif()
+        exif = {
+            PIL.ExifTags.TAGS[k]: v
+            for k, v in img._getexif().items()
+            if k in PIL.ExifTags.TAGS
+        }
+        # Note there is no timezone info standard defined for EXIF,
+        # although there is a standard for GPS time in GPSInfo,
+        # but our robot is in a cave so none of the cameras will have GPSInfo
+        timestamp = dateparser(exif['DateTimeOriginal']).replace(tzinfo=pytz.utc)
+        self.timestamps.append((registry['name'],timestamp))
+
+    def get_timestamp_from_doc(self, filename, registry):
+        info = PNGinfo(filename)
+        for entry in info.text:
+            match = re.search('date:(\D+)([\d\-T\:]+)', entry)
+        if match:
+            timestamp = dateparser(match.group(2)).astimezone(pytz.utc)
+            self.timestamps.append((registry['name'],timestamp))
+        else:
+            raise ValueError('Cannot parse DOC timestamp')
 
     def print_stats(self):
         print 'Found %d files configured to ignore' % len(self.ignored_files)
@@ -150,14 +193,48 @@ class TimestampValidator:
         print 'Tried %d timestamps that failed' % len(self.timestamps_that_failed)
         print 'Tried %d timestamps that succeeded' % len(self.timestamps_that_succeeded)
 
+    def plot_times(self,pdffile):
+        # Convert list of tuples of source name, timestamp to a dictionary of source name key, timestamp list value
+        plot_data = {}
+        for name,timestamp in self.timestamps:
+            if name not in plot_data.keys():
+                plot_data[name] = []
+            plot_data[name].append(timestamp)
+
+        import matplotlib as mpl
+        mpl.use('pdf')
+        from matplotlib import pyplot as plt
+        import matplotlib.dates as mdates
+        from matplotlib.dates import DateFormatter
+        fig, ax = plt.subplots()
+        locs = []
+        labels = []
+        for idx,name in enumerate(plot_data.keys()):
+            locs.append(idx)
+            labels.append(name)
+            y = [idx]*len(plot_data[name])
+            x = plot_data[name]
+            plt.plot(x,y,'o')
+        plt.yticks(locs,labels)
+
+        #ax.format_xdata = mdates.DateFormatter('%Y.%m.%d %H:%M:%S')
+        myFmt = mdates.DateFormatter('%Y.%m.%d %H:%M:%S')
+        ax.xaxis.set_major_formatter(myFmt)
+        ax.margins(0.05)
+        fig.autofmt_xdate()
+        fig.tight_layout()
+        plt.savefig(pdffile)
+
 
 def get_timestamp_from_dirname(dirname):
+    # Our convention for BRAILLE is that the dirname contains time in int microseconds
     pattern = '(\d{16})_(SCIENCE|SCOUTING)_(\d{2})'
     match = re.search(pattern,dirname)
     if match:
         timestamp = datetime.datetime.utcfromtimestamp(1e-6*int(match.group(1))).replace(tzinfo=pytz.utc)
         return timestamp
     return None
+
 
 
 if __name__ == '__main__':
@@ -174,32 +251,45 @@ if __name__ == '__main__':
     parser.add_option('-m', '--make_flight',
                       action='store_true', default=False,
                       help='Create a flight for the given directory')
+    parser.add_option('-p', '--plot',
+                      action='store_true', default=False,
+                      help='Plot results to pdf filename')
 
     opts, args = parser.parse_args()
 
-    # Get timestamp from root directory
+    # the top level directory should contain all the data for a flight
     flight_dir = args[0]
-    flight_dir_timestamp = get_timestamp_from_dirname(flight_dir)
-    if flight_dir_timestamp is None:
+
+    # just the final directory name, not the full path to it
+    # have to accommodate the path ending in '/' or not
+    flight_dir_parts = flight_dir.split('/')
+    basename = flight_dir_parts[-1]
+    if not basename:
+        basename = flight_dir_parts[-2]
+
+    # Get start time from root directory
+    start_time = get_timestamp_from_dirname(flight_dir)
+    if start_time is None:
         raise ValueError('Cannot get a valid timestamp from source root %s' % flight_dir)
+    print 'Flight dir timestamp is %s' % start_time
 
-    print 'Flight dir timestamp is %s' % flight_dir_timestamp
-
-    # If we were given a timestamp validation config, go validate timestamps
+    # If we were given a timestamp validation config, go validate timestamps for all data
     if opts.configfile is not None:
         validator = TimestampValidator(opts.configfile)
         validator.find_files(flight_dir)
         if not opts.test:
             validator.process_files()
         validator.print_stats()
-        start_time = flight_dir_timestamp
-        earliest_time = min(validator.timestamps)
-        end_time = max(validator.timestamps)
-        print 'start time:   ', start_time
-        print 'earliest time:', earliest_time
-        print 'end time:     ', end_time
+        timestamps = [t[1] for t in validator.timestamps]
+        first_data_time = min(timestamps)
+        last_data_time = max(timestamps)
+        print 'Timestamps for', basename
+        print 'start time:     ', start_time
+        print 'first data time:', first_data_time
+        print 'last data time: ', last_data_time
 
         # If we were asked to create a flight, create it
+        # Note that we cannot make a flight with an end time if we didn't get a config
         if opts.make_flight:
             try:
                 # get or create a flight for that source root directory
@@ -209,5 +299,12 @@ if __name__ == '__main__':
                 from xgds_core.flightUtils import get_or_create_flight_with_source_root
                 flight = get_or_create_flight_with_source_root(flight_dir,start_time,end_time)
                 print 'Created or got flight %s' % flight
-            except ImportError:
-                print 'No django, cannot create a flight'
+            except ImportError as e:
+                print 'Error: Cannot create a flight'
+                print e
+
+        # If we were asked to make a plot, make it
+        if opts.plot:
+            pdffile = 'timestamps_%s.pdf' % basename
+            print 'plotting to', pdffile
+            validator.plot_times(pdffile)
