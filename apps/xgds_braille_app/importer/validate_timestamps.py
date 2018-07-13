@@ -127,7 +127,7 @@ class TimestampValidator:
 
                 # Aggregate outputs
                 for line in stdout.splitlines():
-                    print line
+                    #print line
                     try:
                         timestamp = dateparser(line)
                         if timestamp is not None:
