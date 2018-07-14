@@ -297,6 +297,9 @@ if __name__ == '__main__':
         print 'start time:     ', start_time
         print 'first data time:', first_data_time
         print 'last data time: ', last_data_time
+        for name, timestamp in validator.timestamps:
+            if timestamp < start_time:
+                print 'Error: %s in %s is before start time %s' % (timestamp, name, start_time)
 
         # If we were asked to create a flight, create it
         # Note that we cannot make a flight with an end time if we didn't get a config
