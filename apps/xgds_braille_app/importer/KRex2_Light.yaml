@@ -7,7 +7,7 @@ delimiter: ","
 flight_required: true
 fields:
   timestamp:
-    type: unixtime_float_second
+    type: unixtime_int_microsecond
   light0:
     type : integer
   light1:
