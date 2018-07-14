@@ -36,7 +36,6 @@ registry:
     auth: false
   - name: 'Lights'
     filepath_pattern: 'LGHT/[\d\-\.]+_LGHT\.csv$'
-    ignore: true
     importer: '/home/irg/xgds_braille/apps/xgds_core/importer/csvImportRunner.py'
     arguments: '-i %(filename)s -c /home/irg/xgds_braille/apps/xgds_braille_app/importer/KRex2_Light.yaml -v KRex2'
     timeout: 300
