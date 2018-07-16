@@ -22,6 +22,8 @@ from json import dumps
 colors = list(Color("blue").range_to(Color("red"), 100))
 
 def lat_lon_to_utm(row):
+    assert -85  <= row['latitude']  <= 85,  "Got a latitude of %s which is out of bounds"  % row['latitude']
+    assert -180 <= row['longitude'] <= 180, "Got a longitude of %s which is out of bounds" % row['longitude']
     return from_latlon(row['latitude'], row['longitude'])
 
 def clip_to_range(minimum, maximum, x):
@@ -45,6 +47,9 @@ def create_feature_collection(collection):
 def create_geojson(easting, northing, zone_number, zone_letter, band_depth, confidence, stddev):
     clipped_confidence = clip_to_range(0, 150, confidence) / 150.0
     radius = scale_between(0.25, 0.5, clipped_confidence)
+
+    # temporary fix
+    radius = 0.5
 
     lat_minus_radius, lng_minus_radius = to_latlon(easting - radius, northing - radius, zone_number, zone_letter)
     lat_plus_radius,  lng_plus_radius  = to_latlon(easting + radius, northing + radius, zone_number, zone_letter)
@@ -98,8 +103,8 @@ def create_geojson_for_flight(flight, band_depth_definition):
     for ftp in flight_track_positions:
         gps.append({
             "timestamp": ftp.timestamp,
-            "latitude": ftp.latitude,
-            "longitude": ftp.longitude,
+            "latitude": float(ftp.latitude),
+            "longitude": float(ftp.longitude),
         })
     gps = pd.DataFrame(data=gps)
     if len(gps) == 0:
