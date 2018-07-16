@@ -111,9 +111,9 @@ registry:
     order: 7
     auth: true
   - name: 'NavCam'
-    filepath_pattern: 'NAV[LR]/HazCam[\d\-\.]+\.TIFF$'
+    filepath_pattern: 'NAV[LR]/RPCam(0|1)-\d+\.\d+\.tiff$'
     importer: '/home/irg/xgds_braille/apps/xgds_braille_app/importer/import_image.py'
-    arguments: '--navcam %(filename)s'
+    arguments: '--camera NAV %(filename)s'
     timeout: 300
     order: 3
     auth: true

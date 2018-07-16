@@ -71,7 +71,7 @@ registry:
     filepath_pattern: 'MAPS/[\d\-\.]+_(pc|sfm)\.txt'
     ignore: true
   - name: 'NavCam'
-    filepath_pattern: 'NAV[LR]/HazCam[\d\-\.]+\.TIFF'
+    filepath_pattern: 'NAV[LR]/RPCam(0|1)-\d+\.\d+\.tiff$'
   - name: 'RGBD Camera'
     filepath_pattern: 'r-[\d\.]+\.ppm'
   - name: 'RGBD PointCloud'
