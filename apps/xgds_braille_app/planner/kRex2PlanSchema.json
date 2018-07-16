@@ -367,7 +367,9 @@
           "minimum": 0,
           "maximum": 2,
           "valueType": "number",
-          "notes": "1 for science.  2 for scouting."
+          "duration": 180,
+          "notes": "1 for science.  2 for scouting.",
+          "onChange": "if ($.isNumeric(value)){ var newDuration = 180; if (value == 0) { newDuration = 384;} else if (value == 2) {newDuration = 120;} model.set('duration', newDuration);}"
         },
         {
           "type": "ParamSpec",
