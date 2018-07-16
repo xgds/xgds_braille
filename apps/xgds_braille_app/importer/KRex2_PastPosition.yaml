@@ -18,16 +18,19 @@ fields:
     min: -math.pi
     max: math.pi
     units: radians
+    storage_units: degrees
   pitch:
     type: float
     min: -math.pi
     max: math.pi
     units: radians
+    storage_units: degrees
   roll:
     type: float
     min: -math.pi
     max: math.pi
     units: radians
+    storage_units: degrees
   depth:
     type: float
     units: meters
