@@ -25,7 +25,7 @@ from xgds_core.models import Flight
 from xgds_braille_app.models import NirvssSpectrometerDataProduct, BandDepthTimeSeries, BandDepthDefinition
 
 
-def calculate_band_depth(data_frame, wavelengths, sampling_rate="1T"):
+def calculate_band_depth(data_frame, wavelengths, sampling_rate="1S"):
     reflectances = [
         data_frame
             .loc[data_frame['wavelength'] == r]

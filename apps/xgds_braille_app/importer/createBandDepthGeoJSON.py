@@ -136,7 +136,7 @@ def create_geojson_for_flight(flight, band_depth_definition):
         "latitude",
         "longitude",
         "value",
-    ]]
+    ]].dropna()
 
     if len(merged_df) == 0:
         return None
