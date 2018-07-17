@@ -310,7 +310,13 @@ if __name__ == '__main__':
                 django.setup()
                 from django.conf import settings
                 from xgds_core.flightUtils import get_or_create_flight_with_source_root
-                flight = get_or_create_flight_with_source_root(flight_dir,start_time,last_data_time)
+
+                dirname = os.path.basename(os.path.normpath(flight_dir))
+                suffix = dirname[dirname.find('_'):]
+                local_start_time = start_time.astimezone(pytz.timezone(settings.TIME_ZONE))
+                name = '%s%s' % (local_start_time.strftime('%Y%m%d'), suffix)
+
+                flight = get_or_create_flight_with_source_root(flight_dir, start_time, last_data_time, name)
                 print 'Created or got flight %s' % flight
             except ImportError as e:
                 print 'Error: Cannot create a flight'
