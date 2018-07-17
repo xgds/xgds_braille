@@ -56,8 +56,8 @@ def parse_timestamp(string):
 
 def import_image(filename,camera, username, password):
     data ={
-        'timezone':'utc',
-        'vehicle':'',
+        'timezone': settings.TIME_ZONE,
+        'vehicle': '',
         'username': username,
         'camera': camera
     }

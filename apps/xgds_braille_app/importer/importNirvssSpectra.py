@@ -91,7 +91,7 @@ def importNirvssSpectra(filename):
         nsdp.portable_mime_type = 'text/plain'
         nsdp.portable_file_format_name = 'ASCII'
         nsdp.acquisition_time = epochTime
-        nsdp.acquisition_timezone = 'UTC'
+        nsdp.acquisition_timezone = settings.TIME_ZONE
         nsdp.creation_time = datetime.datetime.utcnow().replace(tzinfo=pytz.utc)
         nsdp.track_position = track_position
         nsdp.user_position = None
