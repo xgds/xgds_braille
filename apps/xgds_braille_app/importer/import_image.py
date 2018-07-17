@@ -54,18 +54,23 @@ def parse_timestamp(string):
     return None
 
 
-def import_image(filename,camera, username, password):
+def import_image(filename, camera, username, password, camera_serial):
     data ={
         'timezone': settings.TIME_ZONE,
         'vehicle': '',
-        'username': username,
-        'camera': camera
+        'username': username
     }
     # If we get a timestamp from filename then add it to exifData:
     timestamp = parse_timestamp(filename)
+    exifData = {}
     if timestamp is not None:
-        exifData = {'DateTimeOriginal':timestamp.isoformat()}
-        data['exifData'] = json.dumps(exifData)
+        exifData['DateTimeOriginal'] = timestamp.isoformat()
+    if camera:
+        exifData['Model'] = camera
+    if camera_serial:
+        exifData['BodySerialNumber'] = camera_serial
+
+    data['exifData'] = json.dumps(exifData)
 
     fp = open(filename)
     files = {'file': fp}
@@ -93,12 +98,13 @@ if __name__=='__main__':
     parser = optparse.OptionParser('usage: %prog')
     parser.add_option('-c', '--camera',
                       help='Name of the camera this image came from')
+    parser.add_option('-s', '--serial',
+                      help='Serial number of the camera this image came from')
     parser.add_option('-u', '--username', default='irg', help='username for xgds auth')
     parser.add_option('-p', '--password', help='authtoken for xgds authentication.  Can get it from https://xgds_server_name/accounts/rest/genToken/<username>')
 
     opts, args = parser.parse_args()
-    print opts.camera
     camera = opts.camera
     filename = args[0]
-    retval = import_image(filename, camera=camera, username=opts.username, password=opts.password)
+    retval = import_image(filename, camera=camera, username=opts.username, password=opts.password, camera_serial=opts.serial)
     sys.exit(retval)
