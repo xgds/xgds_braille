@@ -64,7 +64,6 @@
       "heading_offset_degrees": 0.0
     }
   },
-  ,
   {
     "model": "xgds_image.camera",
     "pk": 6,
