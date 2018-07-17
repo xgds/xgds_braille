@@ -57,6 +57,8 @@ def importNirvssSpectra(filename):
 
     reader = DictReader(open(filename,'r'))
     for row in reader:
+        if not row['Epoch Time']:
+            continue
         epochTime = datetime.datetime.utcfromtimestamp(float(row['Epoch Time'])).replace(tzinfo=pytz.UTC)
 
         flight = getFlight(epochTime, None)
