@@ -92,51 +92,9 @@
       "right": false
     },
     {
-      "type": "NirvssCaptureCommand",
-      "presetName": "NIRVSS One Shot",
-      "presetCode": "NOS",
-      "resolution": "tbdxtbdmed"
-    },
-    {
-      "type": "NirvssContinuousCommand",
-      "presetName": "NIRVSS Continuous",
-      "presetCode": "NCS",
-      "resolution": "tbdxtbdmed"
-    },
-    {
-      "type": "NirvssDOCConfigureCommand",
-      "presetName": "NIRVSS DOC Configure",
+      "type": "NirvssDOCCommand",
+      "presetName": "NIRVSS DOC",
       "presetCode": "DOC"
-    },
-    {
-      "type": "NirvssDOCLED410Command",
-      "presetName": "NIRVSS DOC 410nm",
-      "presetCode": "410"
-    },
-    {
-      "type": "NirvssDOCLED540Command",
-      "presetName": "NIRVSS DOC 540nm",
-      "presetCode": "540"
-    },
-    {
-      "type": "NirvssDOCLED640Command",
-      "presetName": "NIRVSS DOC 640nm",
-      "presetCode": "640"
-    },
-    {
-      "type": "NirvssDOCLED740Command",
-      "presetName": "NIRVSS DOC 740nm",
-      "presetCode": "740"
-    },
-    {
-      "type": "NirvssDOCLED905Command",
-      "presetName": "NIRVSS DOC 905nm",
-      "presetCode": "905"
-    },
-    {
-      "type": "NirvssDOCLED940Command",
-      "presetName": "NIRVSS DOC 940nm",
-      "presetCode": "940"
     },
     {
       "type": "RealSenseCommand",

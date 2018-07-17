@@ -333,6 +333,7 @@ XGDS_PLANNER_PLAN_EXPORTERS = (
 GEOCAM_TRACK_POSITION_MODEL = 'geocamTrack.ResourcePoseDepth'
 GEOCAM_TRACK_PAST_POSITION_MODEL = 'geocamTrack.PastResourcePoseDepth'
 GEOCAM_TRACK_OPS_TIME_ZONE = TIME_ZONE
+GEOCAM_TRACK_CLOSEST_POSITION_MAX_DIFFERENCE_SECONDS = 360  # our data does not come in very frequently so set this to 6 minutes.
 
 
 # XGDS_INSTRUMENT_IMPORT_MODULE_PATH = 'xgds_baseline_app.instrumentDataImporters'

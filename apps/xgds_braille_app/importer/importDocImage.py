@@ -82,16 +82,16 @@ def get_doc_metadata(filename):
                     metadata['DateTimeOriginal'] = timestr
                 elif 'modify' in txt:
                     metadata['Modify Time'] = timestr
+    metadata['Model'] = 'NRVD' # hardcode the camera identifier
     return metadata
 
 
 def import_doc_image(filename, username, password):
     metadata = get_doc_metadata(filename)
     data ={
-        'timezone':'utc',
-        'vehicle':'',
+        'timezone': settings.TIME_ZONE,
+        'vehicle': '',
         'username': username,
-        'camera': 'NRVD',
         'exifData': json.dumps(metadata)
     }
     fp = open(filename)

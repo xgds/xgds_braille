@@ -53,8 +53,8 @@
         "model": "xgds_map_server.MapLink",
         "fields": {
                 "creator": "root",
-                "name": " Flights",
-                "description": "Will contain all flight data.  Do not select this node; expand and select its children.",
+                "name": " Traverses",
+                "description": "Will contain all traverse data.  Do not select this node; expand and select its children.",
                 "childNodesUrl": "/xgds_core/completedFlightsTreeNodes",
                 "parent": "mg1"
         }
@@ -106,8 +106,8 @@
         "fields": {
             "name": "LAB",
             "displayName": "Lava Beds",
-           	"east0": 626640.78,
-           	"north0": 4618612.41,
+           	"east0": 626864.33,
+           	"north0": 4618347.04,
            	"zone": "10T",
            	"zoneNumber": 10,
            	"south": 0,

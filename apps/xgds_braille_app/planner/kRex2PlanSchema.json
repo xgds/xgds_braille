@@ -330,54 +330,8 @@
     },
     {
       "type": "CommandSpec",
-      "id": "NirvssCaptureCommand",
-      "notes": "Control NIRVSS Capture",
-      "parent": "KnRoverCommand",
-      "color": "#c3f89c",
-      "params": [
-        {
-          "type": "ParamSpec",
-          "id": "duration",
-          "parent": "duration",
-          "default": 240
-        },
-
-        {
-          "type": "ParamSpec",
-          "id": "resolution",
-          "parent": "resolution_nirvss"
-        },
-        {
-          "type": "ParamSpec",
-          "id": "scale",
-          "parent": "scale_nirvss"
-        },
-        {
-          "type": "ParamSpec",
-          "id": "instrument",
-          "parent": "instrument",
-          "default": "Nirvss"
-        }
-      ]
-    },
-    {
-      "type": "CommandSpec",
-      "id": "NirvssContinuousCommand",
-      "notes": "Control NIRVSS Continuous Capture",
-      "parent": "NirvssCaptureCommand",
-      "color": "#c3f89c",
-      "params": [
-        {
-          "type": "ParamSpec",
-          "id": "continuous",
-          "parent": "continuous"
-        }
-      ]
-    },
-    {
-      "type": "CommandSpec",
-      "id": "NirvssDOCConfigureCommand",
-      "notes": "Configure NIRVSS DOC imager",
+      "id": "NirvssDOCCommand",
+      "notes": "NIRVSS DOC imager",
       "parent": "KnRoverCommand",
       "color": "#c3f89c",
       "params": [
@@ -394,14 +348,16 @@
           "default": 8,
           "choices": [[8, "8"],
             [16,"16"]],
-          "valueType": "number"
+          "valueType": "number",
+          "visible": false
         },
         {
           "type": "ParamSpec",
           "id": "compression",
           "name": "Compression",
           "default": true,
-          "valueType": "boolean"
+          "valueType": "boolean",
+          "visible": false
         },
         {
           "type": "ParamSpec",
@@ -409,137 +365,47 @@
           "name": "Scale",
           "default": 1,
           "minimum": 0,
-          "maximum": 4,
+          "maximum": 2,
           "valueType": "number",
-          "notes": "0,1,2 recommended.  3 & 4 for rapid evaluation"
+          "duration": 180,
+          "notes": "1 for science.  2 for scouting.",
+          "onChange": "if ($.isNumeric(value)){ var newDuration = 180; if (value == 0) { newDuration = 384;} else if (value == 2) {newDuration = 120;} model.set('duration', newDuration);}"
         },
-        {
-          "type": "ParamSpec",
-          "id": "combine_images",
-          "name": "Combine Images",
-          "default": 0,
-          "minimum": 0,
-          "maximum": 8,
-          "valueType": "number",
-          "notes": "Exposure time for each image will be averaged."
-        }
-      ]
-    },
-    {
-      "type": "CommandSpec",
-      "id": "NirvssDOCLEDCommand",
-      "notes": "Configure NIRVSS DOC LED",
-      "parent": "KnRoverCommand",
-      "color": "#c3f89c",
-      "abstract": true,
-      "params": [
-        {
-          "type": "ParamSpec",
-          "id": "instrument",
-          "parent": "instrument",
-          "default": "DOC"
-        }
-      ]
-    },
-  {
-      "type": "CommandSpec",
-      "id": "NirvssDOCLED410Command",
-      "notes": "NIRVSS DOC LED 410nm",
-      "parent": "NirvssDOCLEDCommand",
-      "color": "#c3f89c",
-      "params": [
         {
           "type": "ParamSpec",
           "id": "410nm",
           "parent": "DOCLED",
-          "name": "410 nm",
-          "default": 100,
-          "notes": "TODO get correct default"
-        }
-      ]
-    },
-    {
-      "type": "CommandSpec",
-      "id": "NirvssDOCLED540Command",
-      "notes": "NIRVSS DOC LED 540nm",
-      "parent": "NirvssDOCLEDCommand",
-      "color": "#c3f89c",
-      "params": [
+          "name": "410 nm"
+        },
         {
           "type": "ParamSpec",
           "id": "540nm",
           "parent": "DOCLED",
-          "name": "540 nm",
-          "default": 100,
-          "notes": "TODO get correct default"
-        }
-      ]
-    },
-    {
-      "type": "CommandSpec",
-      "id": "NirvssDOCLED640Command",
-      "notes": "NIRVSS DOC LED 640nm",
-      "parent": "NirvssDOCLEDCommand",
-      "color": "#c3f89c",
-      "params": [
+          "name": "540 nm"
+        },
         {
           "type": "ParamSpec",
           "id": "640nm",
           "parent": "DOCLED",
-          "name": "640 nm",
-          "default": 100,
-          "notes": "TODO get correct default"
-        }
-      ]
-    },
-    {
-      "type": "CommandSpec",
-      "id": "NirvssDOCLED740Command",
-      "notes": "NIRVSS DOC LED 740nm",
-      "parent": "NirvssDOCLEDCommand",
-      "color": "#c3f89c",
-      "params": [
+          "name": "640 nm"
+        },
         {
           "type": "ParamSpec",
           "id": "740nm",
           "parent": "DOCLED",
-          "name": "740 nm",
-          "default": 100,
-          "notes": "TODO get correct default"
-        }
-      ]
-    },
-    {
-      "type": "CommandSpec",
-      "id": "NirvssDOCLED905Command",
-      "notes": "NIRVSS DOC LED 905nm",
-      "parent": "NirvssDOCLEDCommand",
-      "color": "#c3f89c",
-      "params": [
+          "name": "740 nm"
+        },
         {
           "type": "ParamSpec",
           "id": "905nm",
           "parent": "DOCLED",
-          "name": "905 nm",
-          "default": 100,
-          "notes": "TODO get correct default"
-        }
-      ]
-    },
-    {
-      "type": "CommandSpec",
-      "id": "NirvssDOCLED940Command",
-      "notes": "NIRVSS DOC LED 940nm",
-      "parent": "NirvssDOCLEDCommand",
-      "color": "#c3f89c",
-      "params": [
+          "name": "905 nm"
+        },
         {
           "type": "ParamSpec",
           "id": "940nm",
           "parent": "DOCLED",
-          "name": "940 nm",
-          "default": 100,
-          "notes": "TODO get correct default"
+          "name": "940 nm"
         }
       ]
     },
@@ -657,15 +523,7 @@
   "stationSequenceCommands": [
     "TiltCommand",
     "IlluminateCommand",
-    "NirvssCaptureCommand",
-    "NirvssContinuousCommand",
-    "NirvssDOCConfigureCommand",
-    "NirvssDOCLED410Command",
-    "NirvssDOCLED540Command",
-    "NirvssDOCLED640Command",
-    "NirvssDOCLED740Command",
-    "NirvssDOCLED905Command",
-    "NirvssDOCLED940Command",
+    "NirvssDOCCommand",
     "RealSenseCommand",
     "DslrCommand",
     "Pause",
