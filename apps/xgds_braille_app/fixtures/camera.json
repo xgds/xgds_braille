@@ -1,1 +1,81 @@
-[{"model": "xgds_image.camera", "pk": 1, "fields": {"notes": null, "type": "", "extras": "{}", "primary": false, "serial": null, "name": "NIKON D7000", "heading_offset_degrees": 0.0}}, {"model": "xgds_image.camera", "pk": 2, "fields": {"notes": null, "type": "", "extras": "{}", "primary": false, "serial": "344054001060", "name": "Canon EOS 5DS R", "heading_offset_degrees": 90.0}}, {"model": "xgds_image.camera", "pk": 3, "fields": {"notes": null, "type": "", "extras": "{}", "primary": false, "serial": "344054001065", "name": "Canon EOS 5DS R", "heading_offset_degrees": 90.0}}, {"model": "xgds_image.camera", "pk": 4, "fields": {"notes": "NIRVSS Doc Imager", "type": "", "extras": "{}", "primary": false, "serial": null, "name": "NRVD", "heading_offset_degrees": 90.0}}, {"model": "xgds_image.camera", "pk": 5, "fields": {"notes": "NavCam Left", "type": "", "extras": "{}", "primary": false, "serial": null, "name": "NAV", "heading_offset_degrees": 0.0}}]
+[
+  {
+    "model": "xgds_image.camera",
+    "pk": 1,
+    "fields": {
+      "notes": null,
+      "type": "",
+      "extras": "{}",
+      "primary": false,
+      "serial": null,
+      "name": "NIKON D7000",
+      "heading_offset_degrees": 0.0
+    }
+  },
+  {
+    "model": "xgds_image.camera",
+    "pk": 2,
+    "fields": {
+      "notes": null,
+      "type": "",
+      "extras": "{}",
+      "primary": false,
+      "serial": "344054001060",
+      "name": "Canon EOS 5DS R",
+      "heading_offset_degrees": 90.0
+    }
+  },
+  {
+    "model": "xgds_image.camera",
+    "pk": 3,
+    "fields": {
+      "notes": null,
+      "type": "",
+      "extras": "{}",
+      "primary": false,
+      "serial": "344054001065",
+      "name": "Canon EOS 5DS R",
+      "heading_offset_degrees": 90.0
+    }
+  },
+  {
+    "model": "xgds_image.camera",
+    "pk": 4,
+    "fields": {
+      "notes": "NIRVSS Doc Imager",
+      "type": "",
+      "extras": "{}",
+      "primary": false,
+      "serial": null,
+      "name": "NRVD",
+      "heading_offset_degrees": 90.0
+    }
+  },
+  {
+    "model": "xgds_image.camera",
+    "pk": 5,
+    "fields": {
+      "notes": "NavCam Left",
+      "type": "",
+      "extras": "{}",
+      "primary": false,
+      "serial": null,
+      "name": "NAV",
+      "heading_offset_degrees": 0.0
+    }
+  },
+  ,
+  {
+    "model": "xgds_image.camera",
+    "pk": 6,
+    "fields": {
+      "notes": "Wall Camera images computed by mapping",
+      "type": "",
+      "extras": "{}",
+      "primary": false,
+      "serial": null,
+      "name": "WallCam",
+      "heading_offset_degrees": 90.0
+    }
+  }
+]
