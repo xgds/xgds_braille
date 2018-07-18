@@ -83,14 +83,14 @@ registry:
   - name: 'SLR Stereo - Left'
     filepath_pattern: 'SLRL/[\d\-\.]+_SLRL_.+\.(?i)(JPE?G)'
     importer: '/home/xgds/xgds_braille/apps/xgds_braille_app/importer/import_image.py'
-    arguments: '--camera SLRL %(filename)s'
+    arguments: '--camera SLRL --serial 344054001060 %(filename)s'
     timeout: 300
     order: 5
     auth: true
   - name: 'SLR Stereo - Right'
     filepath_pattern: 'SLRR/[\d\-\.]+_SLRR_.+\.(?i)(JPE?G)'
     importer: '/home/xgds/xgds_braille/apps/xgds_braille_app/importer/import_image.py'
-    arguments: '--camera SLRR %(filename)s'
+    arguments: '--camera SLRR --serial 344054001065 %(filename)s'
     timeout: 300
     order: 5
     auth: true
