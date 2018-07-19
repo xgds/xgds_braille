@@ -4,6 +4,8 @@
 This script requires some additional dependencies, which are installed using:
 pip install pandas utm colour
 '''
+import datetime
+import pytz
 
 import django
 
@@ -81,13 +83,11 @@ def create_geojson(easting, northing, zone_number, zone_letter, band_depth, conf
         }
     }
 
-def create_geojson_for_flight(flight, band_depth_definition):
-    band_depth_time_series = BandDepthTimeSeries.objects.filter(
-        time_stamp__gte=flight.start_time,
-        time_stamp__lte=flight.end_time,
-        band_depth_definition=band_depth_definition,
-        flight=flight,
-    )
+def create_geojson_for_flight(flight, band_depth_definition, time_series_objects):
+    band_depth_time_series = [x for x in time_series_objects if x.band_depth_definition == band_depth_definition]
+    if len(band_depth_time_series) == 0:
+        return None
+
     band_depth = []
     for bdts in band_depth_time_series:
         band_depth.append({
@@ -181,16 +181,21 @@ def create_geojson_for_flight(flight, band_depth_definition):
 
     return dumps(create_feature_collection(geojson_collection))
 
-def create_geojson_for_all_bdd(flight):
+def create_geojson_for_all_bdd(flight, time_series_objects):
     for bdd in BandDepthDefinition.objects.all():
+        print("using the bdd of %s and flight %s" % (bdd, flight))
         geojson_string = create_geojson_for_flight(
             flight=flight,
             band_depth_definition=bdd,
+            time_series_objects=time_series_objects,
         )
         if geojson_string is None:
+            print("error occurred during geojson string creation, skipping")
             continue
+        creation_time = datetime.datetime.utcnow().replace(tzinfo=pytz.utc)
         BandDepthGeoJSON.objects.create(
             flight=flight,
             band_depth_definition=bdd,
             geoJSON=geojson_string,
+            creation_time=creation_time,
         )
