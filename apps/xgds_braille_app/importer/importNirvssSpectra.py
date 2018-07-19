@@ -124,10 +124,10 @@ def importNirvssSpectra(filename):
 
     if flight is not None:
         # for this flight, create one band depth time series for all existing band depth definitions
-        create_band_depth_time_series(flight=flight)
+        created_objects = create_band_depth_time_series(flight=flight, instrument=instrument)
 
         # from each generated band depth time series, create a band depth geojson
-        create_geojson_for_all_bdd(flight=flight)
+        create_geojson_for_all_bdd(flight=flight, time_series_objects=created_objects)
 
     stats = {'num_imported': num_imported,
              'num_rejected_noflight': num_rejected_noflight,

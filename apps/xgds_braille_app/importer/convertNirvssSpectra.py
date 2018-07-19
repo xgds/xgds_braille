@@ -50,11 +50,8 @@ def calculate_band_depth(data_frame, wavelengths, sampling_rate="1S"):
     return reflectances[['band_depth']].resample(sampling_rate).mean().dropna()
 
 
-def convert_nirvss_spectra(start_time, end_time):
-    if end_time is not None:
-        data_products = NirvssSpectrometerDataProduct.objects.filter(acquisition_time__gte=start_time, acquisition_time__lte=end_time)
-    else:
-        data_products = NirvssSpectrometerDataProduct.objects.filter(acquisition_time__gte=start_time)
+def convert_nirvss_spectra(flight, instrument):
+    data_products = NirvssSpectrometerDataProduct.objects.filter(flight=flight, instrument=instrument)
 
     samples = []
 
@@ -78,24 +75,19 @@ def add_band_depth_time_series(data_frame, band_depth_definition, flight):
     return bdts_objects
 
 
-def get_flight(flight_name):
-    return Flight.objects.get(name=flight_name)
-
-
 def get_band_depth_definitions():
     return BandDepthDefinition.objects.all()
 
 # main function to be called from outside this script
-def create_band_depth_time_series(flight):
-    start, end = flight.start_time, flight.end_time
-    data_frame = convert_nirvss_spectra(start, end)
-
+def create_band_depth_time_series(flight, instrument):
+    data_frame = convert_nirvss_spectra(flight, instrument)
+    bdts_objects = []
     for bdd in get_band_depth_definitions():
         reflectances = calculate_band_depth(data_frame, [
             bdd.left_wavelength, bdd.center_wavelength, bdd.right_wavelength,
         ])
-
-        add_band_depth_time_series(reflectances, bdd, flight)
+        bdts_objects += add_band_depth_time_series(reflectances, bdd, flight)
+    return bdts_objects
 
 
 
