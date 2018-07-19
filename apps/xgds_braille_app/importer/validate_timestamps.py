@@ -30,7 +30,6 @@ from PNGinfo import PNGinfo
 import PIL.Image
 import PIL.ExifTags
 
-import traceback
 from csv import DictReader
 from dateutil.parser import parse as dateparser
 
@@ -249,7 +248,7 @@ def get_timestamp_from_dirname(dirname):
 
 if __name__ == '__main__':
     import optparse
-    parser = optparse.OptionParser('usage: %prog')
+    parser = optparse.OptionParser('usage: %prog [options] <source_root_dir_for_flight>')
     parser.add_option('-c', '--configfile',
                       help='yaml config file for getting timestamps from files')
     parser.add_option('-t', '--test',
@@ -263,9 +262,13 @@ if __name__ == '__main__':
                       help='Create a flight for the given directory')
     parser.add_option('-p', '--plot',
                       action='store_true', default=False,
-                      help='Plot results to pdf filename')
+                      help='Plot results to pdf, filename uses the import directory name')
 
     opts, args = parser.parse_args()
+
+    if len(args)<1:
+        parser.print_help()
+        sys.exit(0)
 
     # the top level directory should contain all the data for a flight
     flight_dir = args[0]
@@ -280,6 +283,7 @@ if __name__ == '__main__':
     # Get start time from root directory
     start_time = get_timestamp_from_dirname(flight_dir)
     if start_time is None:
+        print 'ERROR: Expected the source root to be in the form <unixtime microseconds>_<SCOUTING|SCIENCE>_etc'
         raise ValueError('Cannot get a valid timestamp from source root %s' % flight_dir)
     print 'Flight dir timestamp is %s' % start_time
 

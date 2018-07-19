@@ -20,7 +20,7 @@
       "type": "",
       "extras": "{}",
       "primary": false,
-      "serial": "344054001060",
+      "serial": "LEFT",
       "name": "Canon EOS 5DS R",
       "heading_offset_degrees": 90.0
     }
@@ -33,7 +33,7 @@
       "type": "",
       "extras": "{}",
       "primary": false,
-      "serial": "344054001065",
+      "serial": "RIGHT",
       "name": "Canon EOS 5DS R",
       "heading_offset_degrees": 90.0
     }
