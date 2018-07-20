@@ -87,9 +87,6 @@ registry:
   - name: 'DSLR Raw file'
     filepath_pattern: 'SLR./[\d\w]*\.(?i)(CR)2$'
     ignore: true
-  - name: 'RPCam file'
-    filepath_pattern: 'RPCam.*\.tiff'
-    ignore: true
   - name: 'WallCam raw data'
     filepath_pattern: 'wallcam_pcds/[\d\.]*\.pcd'
     ignore: true
