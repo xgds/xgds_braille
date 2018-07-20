@@ -42,7 +42,7 @@ registry:
     order: 2
     auth: false
   - name: 'Cave wall mosaic'
-    filepath_pattern: 'MAPS/ply_list_drg_(side|top).tif'
+    filepath_pattern: 'MAPS/ply_list_drg_(side|top)(_xgds)*.tif'
     importer: '/home/xgds/xgds_braille/apps/xgds_braille_app/importer/import_image.py'
     arguments: '--camera WallCam %(filename)s'
     timeout: 300
@@ -56,7 +56,7 @@ registry:
 #    order: 2
 #    auth: true
   - name: '3D Mapping image files'
-    filepath_pattern: 'MAPS/[\d\-\.]+_pc\.jpg'
+    filepath_pattern: 'MAPS/[\d\-\.]+_(pc|\d+)\.jpg$'
     importer: '/home/xgds/xgds_braille/apps/xgds_braille_app/importer/import_image.py'
     arguments: '--camera WallCam %(filename)s'
     timeout: 300
@@ -137,6 +137,9 @@ registry:
     auth: true
   - name: 'Resource forks'
     filepath_pattern: '/\._'
+    ignore: true
+  - name: 'Emacs backups'
+    filepath_pattern: '~$'
     ignore: true
   - name: 'DS Store'
     filepath_pattern: '/\.?_?DS_Store'

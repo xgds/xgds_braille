@@ -35,9 +35,6 @@ registry:
     from: 'csv'
     column_number: 0
     format: 'microseconds'
-  - name: 'MAPS mosaic'
-    filepath_pattern: 'MAPS/ply_list_drg_(side|top).tif'
-    ignore: true
   - name: 'MAPS jpg'
     filepath_pattern: 'MAPS/[\d\-\.]+_pc\.jpg'
     from: 'filename'
@@ -101,6 +98,9 @@ registry:
     ignore: true
   - name: 'Mapping files we should ignore'
     filepath_pattern: 'localizations_xyz.txt'
+    ignore: true
+  - name: 'MAPS mosaic'
+    filepath_pattern: 'MAPS/ply_list_drg_(side|top).tif'
     ignore: true
   - name: 'Debug map'
     filepath_pattern: 'MAPS/ply_list_drg_(side|top)_xgds.tif'
