@@ -81,14 +81,14 @@ registry:
     order: 4
     auth: true
   - name: 'SLR Stereo - Left'
-    filepath_pattern: 'SLRL/[\d\-\.]+_SLRL_.+\.(?i)(JPE?G)'
+    filepath_pattern: 'SLRL/[\d\-\.]+_SLRL_.+\.(?i)(JPE?G)$'
     importer: '/home/xgds/xgds_braille/apps/xgds_braille_app/importer/import_image.py'
     arguments: '--serial LEFT %(filename)s'
     timeout: 300
     order: 5
     auth: true
   - name: 'SLR Stereo - Right'
-    filepath_pattern: 'SLRR/[\d\-\.]+_SLRR_.+\.(?i)(JPE?G)'
+    filepath_pattern: 'SLRR/[\d\-\.]+_SLRR_.+\.(?i)(JPE?G)$'
     importer: '/home/xgds/xgds_braille/apps/xgds_braille_app/importer/import_image.py'
     arguments: '--serial RIGHT %(filename)s'
     timeout: 300
@@ -103,6 +103,7 @@ registry:
     auth: true
   - name: '3D Mapping point cloud'
     filepath_pattern: 'MAPS/[\d\-\.]+_(pc|sfm)\.txt'
+    ignore: true
     importer: '/home/xgds/xgds_braille/apps/xgds_braille_app/importer/import_file.py'
     arguments: '--instrument WallCam %(filename)s'
     timeout: 300
