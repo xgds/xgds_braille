@@ -36,7 +36,7 @@ registry:
     column_number: 0
     format: 'microseconds'
   - name: 'MAPS jpg'
-    filepath_pattern: 'MAPS/[\d\-\.]+_pc\.jpg'
+    filepath_pattern: 'MAPS/[\d\-\.]+_(pc|\d+)\.jpg$'
     from: 'filename'
     format: 'seconds'
   - name: 'NRVS'
