@@ -72,7 +72,7 @@ class testDocImport(TransactionTestCase):
     def setUp(self):
         self.test_db_name = 'test_xgds_braille_couchdb'
         settings.COUCHDB_FILESTORE_NAME = self.test_db_name
-        self.couchdb_server = couchdb.Server()
+        self.couchdb_server = couchdb.server(settings.COUCHDB_URL)
         # if tests didn't end cleanly the old one could still be around; trying to create one will cause an error
         if self.test_db_name in self.couchdb_server:
             del self.couchdb_server[self.test_db_name]
