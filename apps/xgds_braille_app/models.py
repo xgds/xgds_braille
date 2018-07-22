@@ -114,6 +114,10 @@ class NirvssSpectrometerDataProduct(AbstractInstrumentDataProduct, NoteLinksMixi
     notes = DEFAULT_NOTES_GENERIC_RELATION()
 
     @classmethod
+    def cls_type(cls):
+        return 'Spectrometer'
+
+    @classmethod
     def get_info_json(cls, flight_pk):
         found = NirvssSpectrometerDataProduct.objects.filter(flight__id=flight_pk)
         result = None

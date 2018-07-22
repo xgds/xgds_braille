@@ -21,6 +21,15 @@ from colour import Color
 from utm import from_latlon, to_latlon
 from json import dumps
 
+class EmptyFlightTrack(Exception):
+    pass
+
+class EmptyTimeSeries(Exception):
+    pass
+
+class NoOverlap(Exception):
+    pass
+
 colors = list(Color("blue").range_to(Color("red"), 100))
 
 def lat_lon_to_utm(row):
@@ -86,7 +95,7 @@ def create_geojson(easting, northing, zone_number, zone_letter, band_depth, conf
 def create_geojson_for_flight(flight, band_depth_definition, time_series_objects):
     band_depth_time_series = [x for x in time_series_objects if x.band_depth_definition == band_depth_definition]
     if len(band_depth_time_series) == 0:
-        return None
+        raise EmptyTimeSeries()
 
     band_depth = []
     for bdts in band_depth_time_series:
@@ -96,7 +105,7 @@ def create_geojson_for_flight(flight, band_depth_definition, time_series_objects
         })
     band_depth = pd.DataFrame(data=band_depth)
     if len(band_depth) == 0:
-        return None
+        raise EmptyTimeSeries()
 
     flight_track_positions = flight.track.getPositions()
     gps = []
@@ -108,7 +117,7 @@ def create_geojson_for_flight(flight, band_depth_definition, time_series_objects
         })
     gps = pd.DataFrame(data=gps)
     if len(gps) == 0:
-        return None
+        raise EmptyFlightTrack()
 
     band_depth.index = pd.to_datetime(
         band_depth['timestamp'],
@@ -139,7 +148,7 @@ def create_geojson_for_flight(flight, band_depth_definition, time_series_objects
     ]].dropna()
 
     if len(merged_df) == 0:
-        return None
+        raise NoOverlap()
 
     post_df = merged_df.apply(lat_lon_to_utm, axis=1)
 
@@ -183,14 +192,15 @@ def create_geojson_for_flight(flight, band_depth_definition, time_series_objects
 
 def create_geojson_for_all_bdd(flight, time_series_objects):
     for bdd in BandDepthDefinition.objects.all():
-        print("using the bdd of %s and flight %s" % (bdd, flight))
-        geojson_string = create_geojson_for_flight(
-            flight=flight,
-            band_depth_definition=bdd,
-            time_series_objects=time_series_objects,
-        )
-        if geojson_string is None:
-            print("error occurred during geojson string creation, skipping")
+        print("Using the bdd of %s and flight %s" % (bdd, flight))
+        try:
+            geojson_string = create_geojson_for_flight(
+                flight=flight,
+                band_depth_definition=bdd,
+                time_series_objects=time_series_objects,
+            )
+        except Exception as e:
+            print("Error of type %s occurred during geojson string creation" % e.__class__.__name__)
             continue
         creation_time = datetime.datetime.utcnow().replace(tzinfo=pytz.utc)
         BandDepthGeoJSON.objects.create(
