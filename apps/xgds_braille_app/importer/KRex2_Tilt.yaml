@@ -5,6 +5,7 @@ superclass: xgds_timeseries.TimeSeriesModel
 extension: csv
 delimiter: ","
 flight_required: true
+stateful: true
 fields:
   timestamp:
     type: unixtime_int_microsecond
