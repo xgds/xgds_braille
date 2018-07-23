@@ -76,7 +76,7 @@ class BandDepthDefinition(models.Model):
 
 
 class BandDepthTimeSeries(TimeSeriesModel):
-    time_stamp = models.DateTimeField(db_index=True, null=False, blank=False)
+    timestamp = models.DateTimeField(db_index=True, null=False, blank=False)
     band_depth = models.FloatField(null=True, blank=True)
     band_depth_definition = models.ForeignKey('xgds_braille_app.BandDepthDefinition', blank=True, null=True)
     flight = models.ForeignKey(settings.XGDS_CORE_FLIGHT_MODEL, on_delete=models.SET_NULL, null=True, blank=True)
@@ -90,10 +90,10 @@ class BandDepthTimeSeries(TimeSeriesModel):
     def get_all_band_depth_defs():
         return list(BandDepthDefinition.objects.all())
 
-    @property
-    def channel_description(self):
+    @classmethod
+    def get_channel_descriptions(cls):
         descriptions = {}
-        for bdd in self.get_all_band_depth_defs():
+        for bdd in cls.get_all_band_depth_defs():
             descriptions[bdd.name] = ChannelDescription(bdd.name, global_min=-15.0, global_max=15.0)
         return descriptions
 
@@ -106,7 +106,7 @@ class BandDepthTimeSeries(TimeSeriesModel):
         return self.band_depth_definition.name
 
     def __unicode__ (self):
-        return "ts: %s, band depth %s, bd name: %s" % (self.time_stamp, self.band_depth, self.band_depth_definition.name)
+        return "ts: %s, band depth %s, bd name: %s" % (self.timestamp, self.band_depth, self.band_depth_definition.name)
 
 
 class NirvssSpectrometerDataProduct(AbstractInstrumentDataProduct, NoteLinksMixin, NoteMixin, HasFlight, IsFlightData):
