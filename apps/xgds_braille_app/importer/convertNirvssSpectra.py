@@ -30,11 +30,22 @@ class EmptyReflectancesError(Exception):
 class CannotFindColumnError(Exception):
     pass
 
+# fired when the desired wavelength is not found (and nothing within 10nm of it either)
+class NoAvailableWavelength(Exception):
+    pass
+
 def get_closest_number(number, list_of_numbers):
-    return min(list_of_numbers, key=lambda x: abs(x - number))
+    closest_number = int(min(list_of_numbers, key=lambda x: abs(x - number)))
+    if abs(number - closest_number) > 10:
+        raise NoAvailableWavelength()
+    return closest_number
 
 def correct_wavelength_list(wavelength_list, all_possible_wavelengths):
-    return [get_closest_number(wl, all_possible_wavelengths) for wl in wavelength_list]
+    created_list = [get_closest_number(wl, all_possible_wavelengths) for wl in wavelength_list]
+    # ensure list has 3 unique wavelengths, otherwise burn and die
+    if len(created_list) != len(set(created_list)):
+        raise NoAvailableWavelength()
+    return created_list
 
 def calculate_band_depth(data_frame, wavelengths, sampling_rate="1S"):
     '''
@@ -52,7 +63,7 @@ def calculate_band_depth(data_frame, wavelengths, sampling_rate="1S"):
     '''
 
     # we must first correct the wavelength list
-    wavelengths = correct_wavelength_list(wavelengths, list(data_frame['wavelength']))
+    wavelengths = correct_wavelength_list(wavelengths, data_frame['wavelength'].values.astype(int).tolist())
 
     reflectances = [
         data_frame
@@ -73,6 +84,7 @@ def calculate_band_depth(data_frame, wavelengths, sampling_rate="1S"):
 
     for r in wavelengths:
         if (str(r) + 'nm') not in list(reflectances):
+            print ("validation", str(r), list(reflectances))
             raise CannotFindColumnError()
 
     reflectances.index = to_datetime(reflectances.index, infer_datetime_format=True, utc=True)
