@@ -24,8 +24,30 @@ from pandas import DataFrame, merge, to_datetime
 from xgds_core.models import Flight
 from xgds_braille_app.models import NirvssSpectrometerDataProduct, BandDepthTimeSeries, BandDepthDefinition
 
+def get_closest_number(number, list_of_numbers):
+    return min(list_of_numbers, key=lambda x: abs(x - number))
+
+def correct_wavelength_list(wavelength_list, all_possible_wavelengths):
+    return [get_closest_number(wl, all_possible_wavelengths) for wl in wavelength_list]
 
 def calculate_band_depth(data_frame, wavelengths, sampling_rate="1S"):
+    '''
+    This function will use the following formula:
+
+    RB#### = (RC#### - R####) / RC####.
+    RC denotes the value of a point at a wavelength of
+    #### nm along a modelled line that follows the
+    average slope of the spectrum.
+
+    :param data_frame: input Pandas DataFrame
+    :param wavelengths: list of exactly three wavelengths (nm)
+    :param sampling_rate: resampling rate, usually is 1 second (= 1 hertz)
+    :return: Pandas DataFrame containing one column (band depth) indexed by time
+    '''
+
+    # we must first correct the wavelength list
+    wavelengths = correct_wavelength_list(wavelengths, list(data_frame['wavelength']))
+
     reflectances = [
         data_frame
             .loc[data_frame['wavelength'] == r]
@@ -44,8 +66,10 @@ def calculate_band_depth(data_frame, wavelengths, sampling_rate="1S"):
 
     left, right = reflectances[str(wavelengths[0]) + 'nm'], reflectances[str(wavelengths[2]) + 'nm']
 
-    reflectances['predicted'] = ((right - left) / (wavelengths[2] - wavelengths[0])) * (wavelengths[1] - wavelengths[0]) + left
-    reflectances['band_depth'] = 1.0 - (reflectances[str(wavelengths[1]) + 'nm'] / reflectances['predicted'])
+    reflectances['continuum'] = ((right - left) / (wavelengths[2] - wavelengths[0])) * (wavelengths[1] - wavelengths[0]) + left
+
+    # band depth = continuum - actual / continuum
+    reflectances['band_depth'] = (reflectances['continuum'] - reflectances[str(wavelengths[1]) + 'nm']) / (reflectances['continuum'])
 
     return reflectances[['band_depth']].resample(sampling_rate).mean().dropna()
 
