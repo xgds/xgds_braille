@@ -1,0 +1,50 @@
+[
+  {
+    "model": "xgds_image.annotationcolor",
+    "pk": 1,
+    "fields": {
+      "name": "red",
+      "hex": "#FF0000"
+    }
+  },
+  {
+    "model": "xgds_image.annotationcolor",
+    "pk": 2,
+    "fields": {
+      "name": "green",
+      "hex": "#00FF00"
+    }
+  },
+  {
+    "model": "xgds_image.annotationcolor",
+    "pk": 3,
+    "fields": {
+      "name": "blue",
+      "hex": "#0000FF"
+    }
+  },
+  {
+    "model": "xgds_image.annotationcolor",
+    "pk": 4,
+    "fields": {
+      "name": "cyan",
+      "hex": "#00FFFF"
+    }
+  },
+  {
+    "model": "xgds_image.annotationcolor",
+    "pk": 5,
+    "fields": {
+      "name": "yellow",
+      "hex": "#FFFF00"
+    }
+  },
+  {
+    "model": "xgds_image.annotationcolor",
+    "pk": 6,
+    "fields": {
+      "name": "orange",
+      "hex": "#FF9900"
+    }
+  }
+]
