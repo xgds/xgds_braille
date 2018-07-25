@@ -71,7 +71,7 @@ def convert_nirvss_spectra(flight, instrument):
 def add_band_depth_time_series(data_frame, band_depth_definition, flight):
     bdts_objects = []
     for time, band_depth in data_frame.itertuples(name=None):
-        bdts_objects.append(BandDepthTimeSeries.objects.create(time_stamp=time, band_depth=band_depth, band_depth_definition=band_depth_definition, flight=flight))
+        bdts_objects.append(BandDepthTimeSeries.objects.create(timestamp=time, band_depth=band_depth, band_depth_definition=band_depth_definition, flight=flight))
     return bdts_objects
 
 
