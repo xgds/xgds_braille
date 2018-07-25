@@ -42,7 +42,7 @@ registry:
     order: 2
     auth: false
   - name: 'Cave wall mosaic'
-    filepath_pattern: 'MAPS/ply_list_drg_(side|top)(_xgds)*.tif$'
+    filepath_pattern: 'MAPS/ply_list_drg_(side|top)(_xgds)*.(tif|png)$'
     importer: '/home/irg/xgds_braille/apps/xgds_braille_app/importer/import_image.py'
     arguments: '--camera WallCam %(filename)s'
     timeout: 300
@@ -166,9 +166,6 @@ registry:
     ignore: true
   - name: 'Mapping files we should ignore'
     filepath_pattern: 'localizations_xyz.txt'
-    ignore: true
-  - name: 'Debug map'
-    filepath_pattern: 'MAPS/ply_list_drg_(side|top)_xgds.tif'
     ignore: true
   - name: 'ROS bag file'
     filepath_pattern: '.*\.bag'

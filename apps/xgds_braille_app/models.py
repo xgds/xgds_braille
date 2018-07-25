@@ -218,6 +218,7 @@ class InstrumentPlatformTilt(TimeSeriesModel):
     tilt = models.FloatField(null=True, blank=True)
     flight = models.ForeignKey(settings.XGDS_CORE_FLIGHT_MODEL, on_delete=models.SET_NULL, null=True, blank=True)
 
+    stateful = True
     title = 'Instrument Platform Tilt'
     channel_descriptions = {
                             'tilt': ChannelDescription('Tilt', units='degrees'),
@@ -242,6 +243,7 @@ class InstrumentPlatformLight(TimeSeriesModel):
     light3 = models.IntegerField(null=True, blank=True)
     flight = models.ForeignKey('xgds_core.Flight', on_delete=models.SET_NULL, blank=True, null=True)
 
+    stateful = True
     title = 'Instrument Platform Light'
     channel_descriptions = {
                             'light0': ChannelDescription('Light0'),
