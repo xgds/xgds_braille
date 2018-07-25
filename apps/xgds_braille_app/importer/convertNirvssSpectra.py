@@ -72,7 +72,7 @@ def calculate_band_depth(data_frame, wavelengths, sampling_rate="1S"):
         raise EmptyReflectancesError()
 
     for r in wavelengths:
-        if str(r) + 'nm' not in list(r):
+        if (str(r) + 'nm') not in list(reflectances):
             raise CannotFindColumnError()
 
     reflectances.index = to_datetime(reflectances.index, infer_datetime_format=True, utc=True)
