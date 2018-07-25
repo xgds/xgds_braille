@@ -167,9 +167,6 @@ registry:
   - name: 'Mapping files we should ignore'
     filepath_pattern: 'localizations_xyz.txt'
     ignore: true
-  - name: 'Debug map'
-    filepath_pattern: 'MAPS/ply_list_drg_(side|top)_xgds.tif'
-    ignore: true
   - name: 'ROS bag file'
     filepath_pattern: '.*\.bag'
     ignore: true
