@@ -1,0 +1,82 @@
+[
+    {
+        "model": "xgds_braille_app.banddepthdefinition",
+        "pk": 2,
+        "fields": {
+            "name": "RB1691",
+            "left_wavelength": 1647.0,
+            "center_wavelength": 1691.0,
+            "right_wavelength": 2381.0
+        }
+    },
+    {
+        "model": "xgds_braille_app.banddepthdefinition",
+        "pk": 3,
+        "fields": {
+            "name": "RB1751",
+            "left_wavelength": 1647.0,
+            "center_wavelength": 1751.0,
+            "right_wavelength": 2381.0
+        }
+    },
+    {
+        "model": "xgds_braille_app.banddepthdefinition",
+        "pk": 4,
+        "fields": {
+            "name": "RB1810",
+            "left_wavelength": 1647.0,
+            "center_wavelength": 1810.0,
+            "right_wavelength": 2381.0
+        }
+    },
+    {
+        "model": "xgds_braille_app.banddepthdefinition",
+        "pk": 5,
+        "fields": {
+            "name": "RB1869",
+            "left_wavelength": 1647.0,
+            "center_wavelength": 1869.0,
+            "right_wavelength": 2381.0
+        }
+    },
+    {
+        "model": "xgds_braille_app.banddepthdefinition",
+        "pk": 6,
+        "fields": {
+            "name": "RB2121",
+            "left_wavelength": 1690.0,
+            "center_wavelength": 2121.0,
+            "right_wavelength": 2381.0
+        }
+    },
+    {
+        "model": "xgds_braille_app.banddepthdefinition",
+        "pk": 7,
+        "fields": {
+            "name": "RB2138",
+            "left_wavelength": 1690.0,
+            "center_wavelength": 2138.0,
+            "right_wavelength": 2381.0
+        }
+    },
+    {
+        "model": "xgds_braille_app.banddepthdefinition",
+        "pk": 8,
+        "fields": {
+            "name": "RB2231",
+            "left_wavelength": 1690.0,
+            "center_wavelength": 2231.0,
+            "right_wavelength": 2381.0
+        }
+    },
+    {
+        "model": "xgds_braille_app.banddepthdefinition",
+        "pk": 9,
+        "fields": {
+            "name": "RB2247",
+            "left_wavelength": 1690.0,
+            "center_wavelength": 2247.0,
+            "right_wavelength": 2381.0
+        }
+    }
+]
