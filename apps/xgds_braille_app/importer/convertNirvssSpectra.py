@@ -24,11 +24,28 @@ from pandas import DataFrame, merge, to_datetime
 from xgds_core.models import Flight
 from xgds_braille_app.models import NirvssSpectrometerDataProduct, BandDepthTimeSeries, BandDepthDefinition
 
+class EmptyReflectancesError(Exception):
+    pass
+
+class CannotFindColumnError(Exception):
+    pass
+
+# fired when the desired wavelength is not found (and nothing within 10nm of it either)
+class NoAvailableWavelength(Exception):
+    pass
+
 def get_closest_number(number, list_of_numbers):
-    return min(list_of_numbers, key=lambda x: abs(x - number))
+    closest_number = int(min(list_of_numbers, key=lambda x: abs(x - number)))
+    if abs(number - closest_number) > 10:
+        raise NoAvailableWavelength()
+    return closest_number
 
 def correct_wavelength_list(wavelength_list, all_possible_wavelengths):
-    return [get_closest_number(wl, all_possible_wavelengths) for wl in wavelength_list]
+    created_list = [get_closest_number(wl, all_possible_wavelengths) for wl in wavelength_list]
+    # ensure list has 3 unique wavelengths, otherwise burn and die
+    if len(created_list) != len(set(created_list)):
+        raise NoAvailableWavelength()
+    return created_list
 
 def calculate_band_depth(data_frame, wavelengths, sampling_rate="1S"):
     '''
@@ -46,7 +63,7 @@ def calculate_band_depth(data_frame, wavelengths, sampling_rate="1S"):
     '''
 
     # we must first correct the wavelength list
-    wavelengths = correct_wavelength_list(wavelengths, list(data_frame['wavelength']))
+    wavelengths = correct_wavelength_list(wavelengths, data_frame['wavelength'].values.astype(int).tolist())
 
     reflectances = [
         data_frame
@@ -61,6 +78,14 @@ def calculate_band_depth(data_frame, wavelengths, sampling_rate="1S"):
         merge(reflectances[0], reflectances[1], left_index=True, right_index=True),
         reflectances[2], left_index=True, right_index=True,
     )
+
+    if len(reflectances) == 0:
+        raise EmptyReflectancesError()
+
+    for r in wavelengths:
+        if (str(r) + 'nm') not in list(reflectances):
+            print ("validation", str(r), list(reflectances))
+            raise CannotFindColumnError()
 
     reflectances.index = to_datetime(reflectances.index, infer_datetime_format=True, utc=True)
 
@@ -107,10 +132,17 @@ def create_band_depth_time_series(flight, instrument):
     data_frame = convert_nirvss_spectra(flight, instrument)
     bdts_objects = []
     for bdd in get_band_depth_definitions():
-        reflectances = calculate_band_depth(data_frame, [
-            bdd.left_wavelength, bdd.center_wavelength, bdd.right_wavelength,
-        ])
-        bdts_objects += add_band_depth_time_series(reflectances, bdd, flight)
+        try:
+            reflectances = calculate_band_depth(data_frame, [
+                bdd.left_wavelength, bdd.center_wavelength, bdd.right_wavelength,
+            ])
+            bdts_objects += add_band_depth_time_series(reflectances, bdd, flight)
+        except Exception as e:
+            print(
+                    "Error of type %s occurred during band depth time series creation (bdd: %s)"
+                    % (e.__class__.__name__, bdd.name)
+            )
+            continue
     return bdts_objects
 
 
