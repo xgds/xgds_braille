@@ -42,7 +42,7 @@ registry:
     order: 2
     auth: false
   - name: 'Cave wall mosaic'
-    filepath_pattern: 'MAPS/ply_list_drg_(side|top)(_xgds)*.(tif|png)$'
+    filepath_pattern: 'MAPS/ply_list_drg_side.png$'
     importer: '/home/irg/xgds_braille/apps/xgds_braille_app/importer/import_image.py'
     arguments: '--camera WallCam %(filename)s'
     timeout: 300
@@ -182,3 +182,7 @@ registry:
   - name: 'Mapping output debug file'
     filepath_pattern: 'MAPS/[pointplytransformation]+_list.txt'
     ignore: true
+  - name: 'cave wall products from Ara'
+    filepath_pattern: 'MAPS/ply_list_drg_top(_xgds)*.(tif|png)$'
+    ignore: true
+
