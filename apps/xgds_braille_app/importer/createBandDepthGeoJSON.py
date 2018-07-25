@@ -100,7 +100,7 @@ def create_geojson_for_flight(flight, band_depth_definition, time_series_objects
     band_depth = []
     for bdts in band_depth_time_series:
         band_depth.append({
-            "timestamp": bdts.time_stamp,
+            "timestamp": bdts.timestamp,
             "value": bdts.band_depth,
         })
     band_depth = pd.DataFrame(data=band_depth)
