@@ -42,7 +42,7 @@ registry:
     order: 2
     auth: false
   - name: 'Cave wall mosaic'
-    filepath_pattern: 'MAPS/ply_list_drg_(side|top)(_xgds)*.tif$'
+    filepath_pattern: 'MAPS/ply_list_drg_(side|top)(_xgds)*.(tif|png)$'
     importer: '/home/irg/xgds_braille/apps/xgds_braille_app/importer/import_image.py'
     arguments: '--camera WallCam %(filename)s'
     timeout: 300
