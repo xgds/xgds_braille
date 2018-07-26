@@ -6,7 +6,7 @@ pip install pandas utm colour
 '''
 import datetime
 import pytz
-
+import numpy as np
 import django
 
 from geocamUtil.loader import LazyGetModelByName
@@ -30,7 +30,8 @@ class EmptyTimeSeries(Exception):
 class NoOverlap(Exception):
     pass
 
-colors = list(Color("blue").range_to(Color("red"), 100))
+colors = list(Color("#f00").range_to(Color("#966969"), 50)) + \
+         list(Color("#697596").range_to(Color("#04f"), 50))
 
 def lat_lon_to_utm(row):
     assert -85  <= row['latitude']  <= 85,  "Got a latitude of %s which is out of bounds"  % row['latitude']
@@ -41,12 +42,12 @@ def clip_to_range(minimum, maximum, x):
     return max(minimum, min(x, maximum))
 
 def scale_between(minimum, maximum, x):
-    rng = maximum - minimum
-    return minimum + x * rng
+    rng = float(maximum - minimum)
+    x_rng = float(x - minimum)
+    return x_rng / rng
 
 def get_color(percentage):
-    clipped = clip_to_range(0, 0.5, percentage)
-    clipped *= 2 # it is now between 0 and 1
+    clipped = clip_to_range(0.0, 1.0, percentage)
     return colors[int(clipped * (len(colors) - 1))]
 
 def create_feature_collection(collection):
@@ -55,11 +56,7 @@ def create_feature_collection(collection):
         "features": collection,
     }
 
-def create_geojson(easting, northing, zone_number, zone_letter, band_depth, confidence, stddev):
-    clipped_confidence = clip_to_range(0, 150, confidence) / 150.0
-    radius = scale_between(0.25, 0.5, clipped_confidence)
-
-    # temporary fix
+def create_geojson(easting, northing, zone_number, zone_letter, band_depth, confidence, stddev, p_10, p_90):
     radius = 0.5
 
     lat_minus_radius, lng_minus_radius = to_latlon(easting - radius, northing - radius, zone_number, zone_letter)
@@ -70,7 +67,7 @@ def create_geojson(easting, northing, zone_number, zone_letter, band_depth, conf
         "properties": 
         {
             "stroke-width": 0,
-            "fill": str(get_color(band_depth)),
+            "fill": str(get_color(scale_between(p_10, p_90, band_depth))),
             "fill-opacity": 1,
             "popup-content":
             {
@@ -171,6 +168,9 @@ def create_geojson_for_flight(flight, band_depth_definition, time_series_objects
         .join(groups.std().rename(index=str, columns={"value": "std"}), how="left")
     )
 
+    p_10 = np.percentile(a=grouped_df['mean'].values, q=10)
+    p_90 = np.percentile(a=grouped_df['mean'].values, q=90)
+
     grouped_df.reset_index(inplace=True)
 
     geojson_collection = []
@@ -186,6 +186,8 @@ def create_geojson_for_flight(flight, band_depth_definition, time_series_objects
             band_depth=element.at['mean'],
             confidence=element.at['count'],
             stddev=element.at['std'],
+            p_10=p_10,
+            p_90=p_90,
         ))
 
     return dumps(create_feature_collection(geojson_collection))
