@@ -33,7 +33,8 @@ from xgds_timeseries.models import TimeSeriesModel, ChannelDescription
 from xgds_map_server.models import GeoJSON
 from xgds_instrument.models import ScienceInstrument, AbstractInstrumentDataProduct
 from xgds_notes2.models import NoteLinksMixin, NoteMixin, DEFAULT_NOTES_GENERIC_RELATION
-from xgds_core.models import HasFlight, DEFAULT_FLIGHT_FIELD, IsFlightChild, IsFlightData
+from xgds_core.models import HasFlight, DEFAULT_FLIGHT_FIELD, IsFlightChild, IsFlightData, HasDownloadableFiles, \
+    HasDataFrame
 
 
 class BandDepthGeoJSON(GeoJSON, IsFlightChild):
@@ -109,7 +110,7 @@ class BandDepthTimeSeries(TimeSeriesModel):
         return "ts: %s, band depth %s, bd name: %s" % (self.timestamp, self.band_depth, self.band_depth_definition.name)
 
 
-class NirvssSpectrometerDataProduct(AbstractInstrumentDataProduct, NoteLinksMixin, NoteMixin, HasFlight, IsFlightData):
+class NirvssSpectrometerDataProduct(AbstractInstrumentDataProduct, NoteLinksMixin, NoteMixin, HasFlight, IsFlightData, HasDownloadableFiles, HasDataFrame):
     flight = models.ForeignKey(settings.XGDS_CORE_FLIGHT_MODEL, null=True, blank=True)
     notes = DEFAULT_NOTES_GENERIC_RELATION()
 
@@ -168,6 +169,37 @@ class NirvssSpectrometerDataProduct(AbstractInstrumentDataProduct, NoteLinksMixi
                 'acquisition_timezone',
                 'min_acquisition_time',
                 'max_acquisition_time']
+
+    def getDownloadableFiles(self):
+        class DownloadableCSVFile:
+            def __init__(self, filename, dataframe):
+                self.filename, self.dataframe = filename, dataframe
+
+            def read(self):
+                return self.dataframe.to_csv(index=False)
+
+            def __str__(self):
+                return self.filename
+
+        filename, dataframe = self.getInstrumentDataCsv()
+        return [DownloadableCSVFile(filename, dataframe)]
+
+    def getDataFrame(self):
+        _, dataframe = self.getInstrumentDataCsv()
+        dataframe.acquisition_time = self.acquisition_time
+        return dataframe
+
+    @classmethod
+    def mergeDataFrames(cls, dataframes_list):
+        timestamps = []
+        for d in dataframes_list:
+            d.set_index("Wavelength(nm)", inplace=True)
+            timestamps.append(d.acquisition_time)
+        from functools import reduce
+        dataframe = reduce(lambda x, y: x.merge(y, how='outer', left_index=True, right_index=True), dataframes_list)
+        dataframe = dataframe.transpose()
+        dataframe.index = timestamps
+        return dataframe
 
     def __unicode__(self):
         return "%s @ %s" % (self.instrument.shortName,
