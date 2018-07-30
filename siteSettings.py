@@ -420,8 +420,5 @@ XGDS_MAP_SERVER_JS_MAP['Spectrometer'] = {'ol': 'xgds_instrument/js/olSpectromet
                                           'search_form_class': 'xgds_braille_app.forms.SearchNirvssSpectrometerDataForm'
                                           }
 
-XGDS_MAP_SERVER_JS_MAP['NIRVSS Short Wave'] = XGDS_MAP_SERVER_JS_MAP['Spectrometer']
-XGDS_MAP_SERVER_JS_MAP['NIRVSS Long Wave'] = XGDS_MAP_SERVER_JS_MAP['Spectrometer']
-
 GEOCAM_TRACK_PAST_POSITION_MODEL = 'geocamTrack.PastResourcePoseDepth'
 
