@@ -21,3 +21,8 @@ https://braille-field.xgds.org/xgds_map_server/addWMS/
 wmsUrl: https://localhost/geoserver/braille/wms
 layers: braile:layerName
 
+5. Run the timestamp validator on the science pass to get start/end times for science team
+cd apps/xgds_braille_app/importer
+./run_validate_timestamps.sh <path to parent science data you want to analyze> <optional output file, or it will go in /tmp>
+
+
