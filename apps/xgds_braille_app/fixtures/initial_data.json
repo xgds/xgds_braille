@@ -123,7 +123,7 @@
 	"pk": 1,
 	"fields": {
             "shortName": "NIRVSS SW",
-            "displayName": "NIRVSS Short Wave",
+            "displayName": "Spectrometer",
             "active": true,
             "dataImportFunctionName": "none",
             "brand": "ARC",
@@ -144,7 +144,7 @@
 	"pk": 2,
 	"fields": {
             "shortName": "NIRVSS LW",
-            "displayName": "NIRVSS Long Wave",
+            "displayName": "Spectrometer",
             "active": true,
             "dataImportFunctionName": "none",
             "brand": "ARC",

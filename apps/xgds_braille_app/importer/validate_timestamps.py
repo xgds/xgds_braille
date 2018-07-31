@@ -69,26 +69,32 @@ class TimestampValidator:
                 if 1 == len(matches):
                     if 'ignore' in matches[0] and matches[0]['ignore']:
                         # matched an explicit ignore rule
-                        print 'Ignoring', basename
+                        if not QUIET:
+                            print 'Ignoring', basename
                         self.ignored_files.append(filename)
                         continue
-                    print 'Adding', basename
+                    if not QUIET:
+                        print 'Adding', basename
                     # unique match, add to the list of things to import
                     self.files_to_process.append((filename,matches[0]))
                 elif 0 == len(matches):
-                    print 'Warning: file %s does not match any importer config' % filename
+                    if not QUIET:
+                        print 'Warning: file %s does not match any importer config' % filename
                     self.unmatched_files.append(filename)
                 else:
-                    print 'Warning: file %s matches more than one importer config' % filename
-                    for m in matches:
-                        print m
+                    if not QUIET:
+                        print 'Warning: file %s matches more than one importer config' % filename
+                        for m in matches:
+                            print m
                     self.ambiguous_files.append(filename)
 
-        print 'Identified files to process:'
+        if not QUIET:
+            print 'Identified files to process:'
         for item in self.files_to_process:
             filename = item[0]
             registry = item[1]
-            print '%s' % (filename)
+            if not QUIET:
+                print '%s' % (filename)
 
     def process_files(self, username=None, password=None):
         for pair in self.files_to_process:
@@ -263,12 +269,18 @@ if __name__ == '__main__':
     parser.add_option('-p', '--plot',
                       action='store_true', default=False,
                       help='Plot results to pdf, filename uses the import directory name')
+    parser.add_option('-q', '--quiet',
+                      action='store_true', default=False,
+                      help='Silence most printouts, only include times')
 
     opts, args = parser.parse_args()
 
     if len(args)<1:
         parser.print_help()
         sys.exit(0)
+
+    global QUIET
+    QUIET = opts.quiet
 
     # the top level directory should contain all the data for a flight
     flight_dir = args[0]
@@ -285,7 +297,8 @@ if __name__ == '__main__':
     if start_time is None:
         print 'ERROR: Expected the source root to be in the form <unixtime microseconds>_<SCOUTING|SCIENCE>_etc'
         raise ValueError('Cannot get a valid timestamp from source root %s' % flight_dir)
-    print 'Flight dir timestamp is %s' % start_time
+    if not QUIET:
+        print 'Flight dir timestamp is %s' % start_time
 
     # If we were given a timestamp validation config, go validate timestamps for all data
     if opts.configfile is not None:
@@ -293,7 +306,8 @@ if __name__ == '__main__':
         validator.find_files(flight_dir)
         if not opts.test:
             validator.process_files()
-        validator.print_stats()
+        if not QUIET:
+            validator.print_stats()
         timestamps = [t[1] for t in validator.timestamps]
         first_data_time = min(timestamps)
         last_data_time = max(timestamps)

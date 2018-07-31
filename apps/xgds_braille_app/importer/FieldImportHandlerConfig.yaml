@@ -66,33 +66,33 @@ registry:
     filepath_pattern: 'NRVS/[\d]*_NRVS_[LS]W.*\.csv$'
     importer: '/home/irg/xgds_braille/apps/xgds_braille_app/importer/importNirvssSpectra.py'
     timeout: 600
-    order: 4
+    order: 6
     auth: false
   - name: 'NIRVSS Spectrometer'
     filepath_pattern: 'NRVS/NIRVSS_[LS]W[\d\w_]*\.csv$'
     importer: '/home/irg/xgds_braille/apps/xgds_braille_app/importer/importNirvssSpectra.py'
     timeout: 600
-    order: 4
+    order: 6
     auth: false
   - name: 'NIRVSS DOC'
     filepath_pattern: 'NRVD/DOC[\dx_OFF]*\.png$'
     importer: '/home/irg/xgds_braille/apps/xgds_braille_app/importer/importDocImage.py'
     timeout: 300
-    order: 4
+    order: 3
     auth: true
   - name: 'SLR Stereo - Left'
     filepath_pattern: 'SLRL/[\d\-\.]+_SLRL_.+\.(?i)(JPE?G)$'
     importer: '/home/irg/xgds_braille/apps/xgds_braille_app/importer/import_image.py'
     arguments: '--serial LEFT %(filename)s'
     timeout: 300
-    order: 5
+    order: 4
     auth: true
   - name: 'SLR Stereo - Right'
     filepath_pattern: 'SLRR/[\d\-\.]+_SLRR_.+\.(?i)(JPE?G)$'
     importer: '/home/irg/xgds_braille/apps/xgds_braille_app/importer/import_image.py'
     arguments: '--serial RIGHT %(filename)s'
     timeout: 300
-    order: 5
+    order: 4
     auth: true
   - name: '3D Mapping mesh'
     filepath_pattern: 'MAPS/[\d\-\.]+_pc_mesh\.ply$'
