@@ -96,6 +96,7 @@ registry:
     auth: true
   - name: '3D Mapping mesh'
     filepath_pattern: 'MAPS/[\d\-\.]+_pc_mesh\.ply'
+    ignore: true
     importer: '/home/xgds/xgds_braille/apps/xgds_braille_app/importer/import_file.py'
     arguments: '--instrument WallCam %(filename)s'
     timeout: 300

@@ -10,7 +10,7 @@ cd apps/xgds_braille_app/importer
 
 3. import geotiff
 manually add the geotiff to geoserver in workspace braille, with name layerName
-https://braille-field.xgds.org/geoserver/web/wicket/page?6
+https://braille-field.xgds.org/geoserver/web/wicket/page?13
 publish the store
 Update transparent color to black
 Update tile size to 256, 256
@@ -19,7 +19,7 @@ add EPSG:3857 to tile caching
 4. add geotiff layer to xGDS
 https://braille-field.xgds.org/xgds_map_server/addWMS/
 wmsUrl: https://localhost/geoserver/braille/wms
-layers: braile:layerName
+layers: braille:layerName
 
 5. Run the timestamp validator on the science pass to get start/end times for science team
 cd apps/xgds_braille_app/importer
