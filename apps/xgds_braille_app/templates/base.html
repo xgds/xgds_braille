@@ -53,10 +53,7 @@
 					<a class="nav-link {% currentnav xgds_core_import %}" href="{% url 'xgds_core_import' %}" title="Import">Import</a>
 				</li>
 				{% if settings.GEOCAM_UTIL_LIVE_MODE %}
-				<li class='nav-item {% currentnav *tatus* %}'>
-	            	<a class="nav-link {% currentnav *tatus* %}" href="{% url 'xgds_status_board_showSubsystemStatus' %}">Status</a>
-	            </li>
-	            {% endif %}
+    	            {% endif %}
 	            {% if settings.NOTEBOOK_URL %}
 	            <li class='nav-item'>
 	              <a href="{{ settings.NOTEBOOK_URL }}"

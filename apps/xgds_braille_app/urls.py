@@ -21,6 +21,7 @@ from xgds_core.register import renderTemplate
 import restUrls
 
 urlpatterns = [url(r'^$', renderTemplate, {'template_name':'xgds_app/index.html'}, 'index'),
+               url(r'^live', renderTemplate, {'template_name':'xgds_app/index.html'}, 'braille_live'),
                # Including these in this order ensures that reverse will return the non-rest urls for use in our server
                url(r'^rest/', include(restUrls)),
                url('', include(restUrls)),
