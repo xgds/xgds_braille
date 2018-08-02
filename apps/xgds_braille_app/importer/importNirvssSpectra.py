@@ -48,9 +48,10 @@ def importNirvssSpectra(filename):
     # The only current way to know which instrument this is from is the filename
     if 'LW' in filename:
         instrumentName = 'NIRVSS LW'
+        instrument = ScienceInstrument.objects.get(pk=2)
     elif 'SW' in filename:
         instrumentName = 'NIRVSS SW'
-    instrument = ScienceInstrument.getInstrument(instrumentName)
+        instrument = ScienceInstrument.objects.get(pk=1)
 
     # Use this to store objects and bulk create in groups
     queue = []
