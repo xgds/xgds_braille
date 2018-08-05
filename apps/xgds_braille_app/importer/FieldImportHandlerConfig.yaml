@@ -153,7 +153,7 @@ registry:
     filepath_pattern: 'SLR./[\d\w]*\.(?i)(CR)2$'
     ignore: true
   - name: 'WallCam raw data'
-    filepath_pattern: 'wallcam_pcds/[\d\.]*\.pcd'
+    filepath_pattern: 'wallcam_pcds[_1fps]*/[\d\.]*\.pcd'
     ignore: true
   - name: 'CeilCam raw data'
     filepath_pattern: 'ceilcam_pcds/[\d\.]*\.pcd'
