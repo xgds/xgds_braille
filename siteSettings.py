@@ -427,4 +427,3 @@ XGDS_MAP_SERVER_JS_MAP['Spectrometer'] = {'ol': 'xgds_instrument/js/olSpectromet
 
 GEOCAM_TRACK_PAST_POSITION_MODEL = 'geocamTrack.PastResourcePoseDepth'
 
-GEOCAM_UTIL_LIVE_MODE = True
