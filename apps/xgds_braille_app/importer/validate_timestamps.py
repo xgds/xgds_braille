@@ -76,7 +76,7 @@ class TimestampValidator:
                     if not QUIET:
                         print 'Adding', basename
                     # unique match, add to the list of things to import
-                    self.files_to_process.append((filename,matches[0]))
+                    self.files_to_process.append((filename, matches[0]))
                 elif 0 == len(matches):
                     if not QUIET:
                         print 'Warning: file %s does not match any importer config' % filename
@@ -111,8 +111,10 @@ class TimestampValidator:
                 else:
                     raise ValueError('Invalid from argument: %s' % registry['from'])
 
-    def get_timestamp_from_filename(self, filename, registry):
+    def get_timestamp_from_filename(self, full_filename, registry):
         # Some filenames contain float seconds, some int microseconds
+
+        filename = os.path.basename(full_filename)
         if registry['format'] == 'seconds':
             timestamp_pattern = '(\d{10}\.\d{4,10})'
             match = re.search(timestamp_pattern, filename)
@@ -193,7 +195,7 @@ class TimestampValidator:
         print 'Found %d files configured to ignore' % len(self.ignored_files)
         print 'Found %d ambiguous files, matched more than one config rule' % len(self.ambiguous_files)
         print 'Found %d unmatched files, matched no config rule' % len(self.unmatched_files)
-        if len(self.files_to_process)>0:
+        if len(self.files_to_process) > 0:
             print 'Found %d files to process' % len(self.files_to_process)
 
     def plot_times(self,pdffile):
