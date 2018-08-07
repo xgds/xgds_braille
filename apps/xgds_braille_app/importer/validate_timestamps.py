@@ -53,9 +53,9 @@ class TimestampValidator:
         # The actual timestamps
         self.timestamps = []
 
-    def find_files(self,root_dir):
+    def find_files(self, root_dir):
         for dirName, subdirList, fileList in os.walk(root_dir):
-            #print('Found directory: %s' % dirName)
+            # print('Found directory: %s' % dirName)
             for basename in fileList:
                 filename = os.path.join(dirName, basename)
 
@@ -133,7 +133,7 @@ class TimestampValidator:
         else:
             raise ValueError('invalid type for filename timestamp: %s' % options.type)
 
-        self.timestamps.append((registry['name'],timestamp))
+        self.timestamps.append(('%s: %s' % (registry['name'], filename), timestamp))
 
     def get_timestamps_from_csv(self, filename, registry):
         if 'delimiter' in registry:
@@ -163,7 +163,7 @@ class TimestampValidator:
                 else:
                     raise ValueError('Invalid type for csv timestamp: %s' % registry['format'])
 
-                self.timestamps.append((registry['name'],timestamp))
+                self.timestamps.append((registry['name'], timestamp))
 
     def get_timestamp_from_exif(self, filename, registry):
         img = PIL.Image.open(filename)
@@ -177,7 +177,7 @@ class TimestampValidator:
         # although there is a standard for GPS time in GPSInfo,
         # but our robot is in a cave so none of the cameras will have GPSInfo
         timestamp = dateparser(exif['DateTimeOriginal']).replace(tzinfo=pytz.utc)
-        self.timestamps.append((registry['name'],timestamp))
+        self.timestamps.append((registry['name'], timestamp))
 
     def get_timestamp_from_doc(self, filename, registry):
         info = PNGinfo(filename)
@@ -185,7 +185,7 @@ class TimestampValidator:
             match = re.search('date:(\D+)([\d\-T\:]+)', entry)
         if match:
             timestamp = dateparser(match.group(2)).astimezone(pytz.utc)
-            self.timestamps.append((registry['name'],timestamp))
+            self.timestamps.append((registry['name'], timestamp))
         else:
             raise ValueError('Cannot parse DOC timestamp')
 
@@ -232,7 +232,7 @@ class TimestampValidator:
             plt.plot(x,y,'o')
         plt.yticks(locs,labels)
 
-        #ax.format_xdata = mdates.DateFormatter('%Y.%m.%d %H:%M:%S')
+        # ax.format_xdata = mdates.DateFormatter('%Y.%m.%d %H:%M:%S')
         myFmt = mdates.DateFormatter('%Y.%m.%d %H:%M:%S')
         ax.xaxis.set_major_formatter(myFmt)
         ax.margins(0.05)
@@ -246,14 +246,12 @@ def get_timestamp_from_dirname(dirname, from_stations=False):
     if not from_stations:
         pattern = '(\d{16})_(SCIENCE|SCOUTING)_(\d{2})'
     else:
-        #1533597686451884_SCIENCE_ST_2
         pattern = '(\d{16})_SCIENCE_(ST_(\d+)|CONT)'
     match = re.search(pattern, dirname)
     if match:
         timestamp = datetime.datetime.utcfromtimestamp(1e-6*int(match.group(1))).replace(tzinfo=pytz.utc)
         return timestamp
     return None
-
 
 
 if __name__ == '__main__':
