@@ -120,3 +120,6 @@ registry:
   - name: 'Mapping output debug file'
     filepath_pattern: 'MAPS/[pointplytransformation]+_list.txt'
     ignore: true
+  - name: 'CR2'
+    filepath_pattern: '.*\.CR2'
+    ignore: true
