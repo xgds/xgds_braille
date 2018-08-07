@@ -241,10 +241,14 @@ class TimestampValidator:
         plt.savefig(pdffile)
 
 
-def get_timestamp_from_dirname(dirname):
+def get_timestamp_from_dirname(dirname, from_stations=False):
     # Our convention for BRAILLE is that the dirname contains time in int microseconds
-    pattern = '(\d{16})_(SCIENCE|SCOUTING)_(\d{2})'
-    match = re.search(pattern,dirname)
+    if not from_stations:
+        pattern = '(\d{16})_(SCIENCE|SCOUTING)_(\d{2})'
+    else:
+        #1533597686451884_SCIENCE_ST_2
+        pattern = '(\d{16})_SCIENCE_(ST_(\d+)|CONT)'
+    match = re.search(pattern, dirname)
     if match:
         timestamp = datetime.datetime.utcfromtimestamp(1e-6*int(match.group(1))).replace(tzinfo=pytz.utc)
         return timestamp
@@ -272,6 +276,9 @@ if __name__ == '__main__':
     parser.add_option('-q', '--quiet',
                       action='store_true', default=False,
                       help='Silence most printouts, only include times')
+    parser.add_option('-s', '--stations',
+                      action='store_true', default=False,
+                      help='Analyze science stations instead of parent folder')
 
     opts, args = parser.parse_args()
 
@@ -293,7 +300,7 @@ if __name__ == '__main__':
         basename = flight_dir_parts[-2]
 
     # Get start time from root directory
-    start_time = get_timestamp_from_dirname(flight_dir)
+    start_time = get_timestamp_from_dirname(flight_dir, opts.stations)
     if start_time is None:
         print 'ERROR: Expected the source root to be in the form <unixtime microseconds>_<SCOUTING|SCIENCE>_etc'
         raise ValueError('Cannot get a valid timestamp from source root %s' % flight_dir)

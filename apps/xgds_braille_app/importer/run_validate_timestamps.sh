@@ -18,6 +18,6 @@ touch $timefile
 echo "writing to: $timefile"
 
 for d in $dir*/; do
-  echo "./validate_timestamps.py -q -c timestamp_validator_config.yaml $d >> $timefile"
-  ./validate_timestamps.py -q -c timestamp_validator_config.yaml $d >> $timefile
+  echo "./validate_timestamps.py -s -q -c timestamp_validator_config.yaml $d >> $timefile"
+  ./validate_timestamps.py -s -q -c timestamp_validator_config.yaml $d >> $timefile
 done
