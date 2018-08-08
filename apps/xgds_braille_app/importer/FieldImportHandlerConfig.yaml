@@ -118,7 +118,6 @@ registry:
     timeout: 300
     order: 3
     auth: true
-    ignore: true
   - name: 'RGBD Camera'
     filepath_pattern: 'r-[\d\.]+\.ppm$'
     importer: '/home/irg/xgds_braille/apps/xgds_braille_app/importer/import_image.py'
