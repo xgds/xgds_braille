@@ -21,3 +21,6 @@ for d in $dir*/; do
   echo "./validate_timestamps.py -s -q -c timestamp_validator_config.yaml $d >> $timefile"
   ./validate_timestamps.py -s -q -c timestamp_validator_config.yaml $d >> $timefile
 done
+
+echo "adding links to station searches"
+./link_station_searches.py $timefile
