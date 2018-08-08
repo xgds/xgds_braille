@@ -48,13 +48,20 @@ registry:
     timeout: 300
     order: 3
     auth: true
-#  - name: 'GeoTiff Map Layer'
-#    filepath_pattern: 'MAPS/ply_list_drg_top\.tif'
-#    importer: '/home/irg/xgds_braille/apps/xgds_braille_app/importer/import_map.py'
-#    arguments: '%(filename)s'
-#    timeout: 300
-#    order: 2
-#    auth: true
+  - name: 'Cave wall mosaic v2'
+    filepath_pattern: 'MAPS/[\w]*MOSAIC[\w]*.png$'
+    importer: '/home/irg/xgds_braille/apps/xgds_braille_app/importer/import_image.py'
+    arguments: '--camera WallCam %(filename)s'
+    timeout: 300
+    order: 3
+    auth: true
+  - name: 'GeoTiff Map Layer'
+    filepath_pattern: 'MAPS/[\w]+\.tif[f]*'
+    importer: '/home/irg/xgds_braille/apps/xgds_braille_app/importer/import_image.py'
+    arguments: '--camera WallCam %(filename)s'
+    timeout: 300
+    order: 3
+    auth: true
   - name: '3D Mapping image files'
     filepath_pattern: 'MAPS/[\d\-\.]+_(pc|\d+)\.jpg$'
     importer: '/home/irg/xgds_braille/apps/xgds_braille_app/importer/import_image.py'
@@ -181,7 +188,7 @@ registry:
   - name: 'Mapping output debug file'
     filepath_pattern: 'MAPS/[pointplytransformation]+_list.txt'
     ignore: true
-  - name: 'cave wall products from Ara'
-    filepath_pattern: 'MAPS/ply_list_drg_top(_xgds)*.(tif|png)$'
-    ignore: true
+#  - name: 'cave wall products from Ara'
+#    filepath_pattern: 'MAPS/ply_list_drg_top(_xgds)*.(tif|png)$'
+#    ignore: true
 
